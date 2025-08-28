@@ -17,19 +17,19 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
     /// </summary>
     internal class PetConsole : MonoBehaviour
     {
-        public Button petListButtonTemplate;
-        public GameObject petsScrollViewContent;
-        public Button killAllButton;
-        public Button killAllConfirmButton;
-        public Button killButton;
-        public Button killConfirmButton;
-        public Button renameButton;
-        public TMP_InputField petNameTextInput;
+        [SerializeField] private Button petListButtonTemplate;
+        [SerializeField] private GameObject petsScrollViewContent;
+        [SerializeField] private Button killAllButton;
+        [SerializeField] private Button killAllConfirmButton;
+        [SerializeField] private Button killButton;
+        [SerializeField] private Button killConfirmButton;
+        [SerializeField] private Button renameButton;
+        [SerializeField] private TMP_InputField petNameTextInput;
 
         // This is the base root of the base n which the console was created
-        public Base Base { get; set; }
+        internal Base Base { get; set; }
 
-        public string BaseId
+        internal string BaseId
         {
             get
             {
@@ -100,6 +100,22 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
             petNameTextInput.onValueChanged.RemoveListener(RenameTextChangedHandler);
         }
 
+        /// <summary>
+        /// Set up the UI component properties
+        /// </summary>
+        internal void ConfigureUi(Button newRenameButton, Button newKillButton, Button newKillConfirmButton, Button newKillAllButton,
+            Button newKillAllConfirmButton, TMP_InputField newPetNameTextInput, Button newButtonTemplate, GameObject newScrollView)
+        {
+            renameButton = newRenameButton;
+            killButton = newKillButton;
+            killConfirmButton = newKillConfirmButton;
+            killAllButton = newKillAllButton;
+            killAllConfirmButton = newKillAllConfirmButton;
+            petNameTextInput = newPetNameTextInput;
+            petListButtonTemplate = newButtonTemplate;
+            petsScrollViewContent = newScrollView;
+        }
+        
         private void SetParentBaseObject()
         {
             // Get the BasePart transform
@@ -126,7 +142,7 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
         /// <summary>
         /// Refresh the PetList UI when pets are added or removed
         /// </summary>
-        public void OnPetsChangedHandler()
+        internal void OnPetsChangedHandler()
         {
             UpdatePetList();
         }
@@ -255,7 +271,7 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
         /// <summary>
         /// Create the Pet List controls
         /// </summary>
-        public void UpdatePetList()
+        internal void UpdatePetList()
         {
             // Get button background
             Sprite backgroundSprite = CustomAssetBundleUtils.GetObjectFromAssetBundle<Sprite>(UiUtils.CustomButtonTexture) as Sprite;

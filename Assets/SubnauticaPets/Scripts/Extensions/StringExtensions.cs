@@ -5,7 +5,7 @@ namespace DaftAppleGames.SubnauticaPets.Extensions
     /// <summary>
     /// Useful static extension methods to String
     /// </summary>
-    public static class StringExtensions
+    internal static class StringExtensions
     {
         /// <summary>
         /// Adds spaces in CaselCase strings.

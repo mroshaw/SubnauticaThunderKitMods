@@ -8,12 +8,12 @@ namespace DaftAppleGames.SubnauticaPets.Utils
     /// </summary>
     internal class AlignToFloorOnStart : MonoBehaviour
     {
-        public Vector3 HitOffset = new Vector3(0.0f, 0.0f, 0.0f);
+        internal Vector3 HitOffset = new Vector3(0.0f, 0.0f, 0.0f);
 
         /// <summary>
         /// Align with the floor
         /// </summary>
-        public void Start()
+        private void Start()
         {
             transform.position = GetFloorPosition();
         }
@@ -21,7 +21,6 @@ namespace DaftAppleGames.SubnauticaPets.Utils
         /// <summary>
         /// Get offset position of floor beneath object
         /// </summary>
-        /// <returns></returns>
         private Vector3 GetFloorPosition()
         {
             bool isHit = Physics.Raycast(transform.position, Vector3.down, out var hit, 5.0f);

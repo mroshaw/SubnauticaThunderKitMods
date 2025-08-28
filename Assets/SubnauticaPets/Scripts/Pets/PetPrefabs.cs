@@ -12,12 +12,12 @@ using UnityEngine;
 
 namespace DaftAppleGames.SubnauticaPets.Pets
 {
-    public static class PetPrefabs
+    internal static class PetPrefabs
     {
         /// <summary>
         /// Set up all the Pet Prefabs
         /// </summary>
-        public static void RegisterAll()
+        internal static void RegisterAll()
         {
             AlienRobotPrefab.Register();
             BloodCrawlerPrefab.Register();
@@ -28,10 +28,10 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// <summary>
         /// Alien Robot
         /// </summary>
-        public static class AlienRobotPrefab
+        internal static class AlienRobotPrefab
         {
             // Init PrefabInfo
-            public static PrefabInfo Info;
+            internal static PrefabInfo Info;
             private const string ClassId = "AlienRobotPet";
             private const string IconTextureAssetName = "AlienRobotTexture.png";
             private const string CloneClassId = "4fae8fa4-0280-43bd-bcf1-f3cba97eed77";
@@ -39,7 +39,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             /// <summary>
             /// Register Alien Robot
             /// </summary>
-            public static void Register()
+            internal static void Register()
             {
                 Info = PrefabInfo
                     .WithTechType(ClassId, null, null, unlockAtStart: true)
@@ -95,10 +95,10 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// <summary>
         /// Blood Crawler
         /// </summary>
-        public static class BloodCrawlerPrefab
+        internal static class BloodCrawlerPrefab
         {
             // Init PrefabInfo
-            public static PrefabInfo Info;
+            internal static PrefabInfo Info;
             private const string ClassId = "BloodCrawlerPet";
             private const string IconTextureAssetName = "BloodCrawlerTexture.png";
             private const string CloneClassId = "830a8fa0-d92d-4683-a193-7531e6968042";
@@ -106,7 +106,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             /// <summary>
             /// Register Blood Crawler
             /// </summary>
-            public static void Register()
+            internal static void Register()
             {
                 Info = PrefabInfo
                     .WithTechType(ClassId, null, null, unlockAtStart: true)
@@ -161,10 +161,10 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// <summary>
         /// Cave Crawler
         /// </summary>
-        public static class CaveCrawlerPrefab
+        internal static class CaveCrawlerPrefab
         {
             // Init PrefabInfo
-            public static PrefabInfo Info;
+            internal static PrefabInfo Info;
             private const string ClassId = "CaveCrawlerPet";
             private const string IconTextureAssetName = "CaveCrawlerTexture.png";
             private const string CloneClassId = "3e0a11f1-e2b2-4c4f-9a8e-0b0a77dcc065";
@@ -172,7 +172,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             /// <summary>
             /// Register Cave Crawler
             /// </summary>
-            public static void Register()
+            internal static void Register()
             {
                 Info = PrefabInfo
                     .WithTechType(ClassId, null, null, unlockAtStart: true)
@@ -226,7 +226,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// <summary>
         /// Crab Squid
         /// </summary>
-        public static class CrabSquidPrefab
+        internal static class CrabSquidPrefab
         {
             // Init PrefabInfo
             public static PrefabInfo Info;
@@ -237,7 +237,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             /// <summary>
             /// Register Crab Squid
             /// </summary>
-            public static void Register()
+            internal static void Register()
             {
                 Info = PrefabInfo
                     .WithTechType(ClassId, null, null, unlockAtStart: true)

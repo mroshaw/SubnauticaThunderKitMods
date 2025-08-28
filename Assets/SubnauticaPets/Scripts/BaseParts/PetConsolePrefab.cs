@@ -93,14 +93,8 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
                 out Button killButton, out Button killConfirmButton,
                 out Button killAllButton, out Button killAllConfirmButton,
                 out TMP_InputField petNameTextInput, out GameObject petsScrollViewContent, out Button petListButtonTemplate);
-            petConsole.renameButton = renameButton;
-            petConsole.killButton = killButton;
-            petConsole.killConfirmButton = killConfirmButton;
-            petConsole.killAllButton = killAllButton;
-            petConsole.killAllConfirmButton = killAllConfirmButton;
-            petConsole.petNameTextInput = petNameTextInput;
-            petConsole.petListButtonTemplate = petListButtonTemplate;
-            petConsole.petsScrollViewContent = petsScrollViewContent;
+            
+            petConsole.ConfigureUi(renameButton, killButton, killConfirmButton, killAllButton, killAllConfirmButton,petNameTextInput, petListButtonTemplate, petsScrollViewContent);
         }
 
         /// <summary>

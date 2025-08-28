@@ -1,6 +1,6 @@
 ﻿namespace DaftAppleGames.SubnauticaPets.Pets
 {
-    public class CustomPet : Creature
+    internal class CustomPet : Creature
     {
         private Pet _pet;
 

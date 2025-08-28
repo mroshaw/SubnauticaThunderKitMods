@@ -15,7 +15,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// <summary>
         /// Initialise the component
         /// </summary>
-        public void Start()
+        internal void Start()
         {
             _pet = GetComponent<Pet>();
             if (!_pet)

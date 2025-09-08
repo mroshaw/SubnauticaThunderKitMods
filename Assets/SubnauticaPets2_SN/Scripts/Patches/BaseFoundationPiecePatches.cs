@@ -71,6 +71,7 @@ namespace DaftAppleGames.SubnauticaPets.Patches
             
             Physics.IgnoreLayerCollision(PetObstacleLayer, LayerMask.NameToLayer("Vehicle"));
             Physics.IgnoreLayerCollision(PetObstacleLayer, LayerMask.NameToLayer("Player"));
+            Physics.IgnoreLayerCollision(PetObstacleLayer, LayerMask.NameToLayer("SubRigidbodyExclude"));
             
             _layerConfigured = true;
         }

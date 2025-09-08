@@ -482,7 +482,6 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             AddPetComponent(prefabGameObject);
             AddCustomPetComponents(prefabGameObject, audioClipName, AudioUtils.BusPaths.SurfaceCreatures, 10.0f);
             AddPetHandTarget(prefabGameObject);
-            AddSubnauticaPetComponents(prefabGameObject);
             
             prefab.SetGameObject(prefabGameObject);
 
@@ -533,22 +532,6 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             LogUtils.LogDebug(LogArea.PetConfigUtils, "DestroyAttackLastTarget started...");
             targetGameObject.DestroyComponentsInChildren<AttackLastTarget>();
             LogUtils.LogDebug(LogArea.PetConfigUtils, "DestroyAttackLastTarget done.");
-        }
-
-        /// <summary>
-        /// Custom components for all Subnautica game pets
-        /// </summary>
-        internal static void AddSubnauticaPetComponents(GameObject targetGameObject)
-        {
-            AddCleanUpSerializer(targetGameObject);
-        }
-
-        /// <summary>
-        /// Ensures the Pet is on the correct Layer for MoonPool collision detection
-        /// </summary>
-        internal static void AddCleanUpSerializer(GameObject targetGameObject)
-        {
-            // targetGameObject.EnsureComponent<CleanUpSerializer>();
         }
     }
 }

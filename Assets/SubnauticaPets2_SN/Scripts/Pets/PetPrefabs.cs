@@ -63,7 +63,6 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                     PetPrefabConfigUtils.ConfigureSkyApplier(obj);
                     PetPrefabConfigUtils.ConfigureAnimator(obj, false);
                     PetPrefabConfigUtils.AddPetComponent(obj);
-                    PetPrefabConfigUtils.AddSubnauticaPetComponents(obj);
                     obj.name = ClassId;
                     obj.SetActive(false);
                     LogUtils.LogDebug(LogArea.Prefabs, $"Done modifying {Info.TechType}");
@@ -131,7 +130,6 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                     PetPrefabConfigUtils.ConfigureSkyApplier(obj);
                     PetPrefabConfigUtils.ConfigureAnimator(obj, false);
                     PetPrefabConfigUtils.AddPetComponent(obj);
-                    PetPrefabConfigUtils.AddSubnauticaPetComponents(obj);
                     obj.name = ClassId;
                     obj.SetActive(false);
                     LogUtils.LogDebug(LogArea.Prefabs, $"Done modifying {Info.TechType}");
@@ -196,7 +194,6 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                     PetPrefabConfigUtils.ConfigureSkyApplier(obj);
                     PetPrefabConfigUtils.ConfigureAnimator(obj, false);
                     PetPrefabConfigUtils.AddPetComponent(obj);
-                    PetPrefabConfigUtils.AddSubnauticaPetComponents(obj);
                     obj.name = ClassId;
                     obj.SetActive(false);
                     LogUtils.LogDebug(LogArea.Prefabs, $"Done modifying {Info.TechType}");
@@ -266,7 +263,6 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                     PetPrefabConfigUtils.AddScaleOnStart(obj, 0.07f);
                     PetPrefabConfigUtils.ConfigureAnimator(obj, false);
                     PetPrefabConfigUtils.AddPetComponent(obj);
-                    PetPrefabConfigUtils.AddSubnauticaPetComponents(obj);
                     obj.name = ClassId;
                     obj.SetActive(false);
                     LogUtils.LogDebug(LogArea.Prefabs, $"Done modifying {Info.TechType}");

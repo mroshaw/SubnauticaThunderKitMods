@@ -13,30 +13,30 @@ TagManager:
   - UI
   - 
   - 
+  - Viewmodel
+  - OnlyVehicle
+  - BuildPreview
+  - BuiltEntities
+  - HardPoints
+  - Useable
+  - IgnoreDepthWorldUI
+  - Minimap
+  - HUDRenderTexture
+  - Vehicle
+  - FrontEnd
+  - Player
+  - TouchScreen
+  - Trigger
+  - NotUseable
+  - SubRigidbodyExclude
+  - RenderForAllCameras
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - DiveReel
+  - Occluder
+  - BaseClipProxy
+  - Sky
+  - TerrainCollider
+  - DebugOverlays
   m_SortingLayers:
   - name: Default
     uniqueID: 0

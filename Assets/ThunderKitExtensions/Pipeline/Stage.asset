@@ -17,6 +17,28 @@ MonoBehaviour:
   releaseBuild: 1
   assemblyArtifactPath: <AssemblyStaging>
   buildTarget: 5
+--- !u!114 &-4990331957957568292
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03063c7a6ec04cc4c82c75cf9bcc8db8, type: 3}
+  m_Name: Copy
+  m_EditorClassIdentifier: 
+  Active: 1
+  PerManifest: 1
+  ListType: 0
+  Manifests: []
+  ReplaceDirectory: 1
+  Recursive: 1
+  SourceRequired: 1
+  EstablishDestination: 1
+  Source: <ModAssetRootPath>/<LocalisationPath>
+  Destination: <ManifestPluginStaging>/<LocalisationPath>
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -30,25 +52,13 @@ MonoBehaviour:
   m_Name: Stage
   m_EditorClassIdentifier: 
   Data:
-  - {fileID: 114520525572577756}
   - {fileID: -5202041662821876658}
-  - {fileID: 114537630434205182}
-  - {fileID: 114366308522735304}
+  - {fileID: 114520525572577756}
+  - {fileID: -4990331957957568292}
+  - {fileID: 4156783945345151082}
+  - {fileID: 7963844026012339470}
   QuickAccess: 1
   manifest: {fileID: 11400000, guid: 1046126c490d7384799f2de26323218c, type: 2}
---- !u!114 &114366308522735304
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3570c76eb7a5c3c45942d9295a150917, type: 3}
-  m_Name: StageManifestFiles
-  m_EditorClassIdentifier: 
-  Active: 0
 --- !u!114 &114520525572577756
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -64,24 +74,9 @@ MonoBehaviour:
   Active: 1
   AssetBundleBuildOptions: 1
   buildTarget: 5
-  recurseDirectories: 1
+  recurseDirectories: 0
   simulate: 0
   BundleArtifactPath: <AssetBundleStaging>
---- !u!114 &114537630434205182
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b4f4581088b47744a114c282abc085d, type: 3}
-  m_Name: StageDependencies
-  m_EditorClassIdentifier: 
-  Active: 0
-  StagingPath: <StagingRoot>
-  ExcludedManifests: []
 --- !u!114 &114888345249068578
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -95,3 +90,43 @@ MonoBehaviour:
   m_Name: StageThunderstoreManifest
   m_EditorClassIdentifier: 
   Active: 1
+--- !u!114 &4156783945345151082
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32aab264a642c8a41a88bc3296249a6d, type: 3}
+  m_Name: DeleteFiles
+  m_EditorClassIdentifier: 
+  Active: 1
+  PerManifest: 0
+  ListType: 0
+  Manifests: []
+  fileExtensions:
+  - pdb
+  Path: <ManifestPluginStaging>
+  IsFatal: 0
+--- !u!114 &7963844026012339470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32aab264a642c8a41a88bc3296249a6d, type: 3}
+  m_Name: DeleteFiles
+  m_EditorClassIdentifier: 
+  Active: 1
+  PerManifest: 0
+  ListType: 0
+  Manifests: []
+  fileExtensions:
+  - '*.meta'
+  Path: <ManifestPluginStaging>/<LocalisationPath>
+  IsFatal: 0

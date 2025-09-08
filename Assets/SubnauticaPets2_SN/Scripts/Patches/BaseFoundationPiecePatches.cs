@@ -53,19 +53,12 @@ namespace DaftAppleGames.SubnauticaPets.Patches
             Object.Destroy(petColliderGameObject.GetComponent<MeshFilter>());
         }
         
+        /// <summary>
+        /// Configures the new 'PetAvoidance' layer, allowing Players and Vehicles
+        /// to pass through unaffected by collisions or physics
+        /// </summary>
         private static void ConfigureLayerMatrix()
         {
-            /*
-            for (int currLayer = 0; currLayer <= 31; currLayer++)
-            {
-                if (currLayer == PetObstacleLayer)
-                {
-                    continue;
-                }
-                
-                Physics.IgnoreLayerCollision(currLayer, PetObstacleLayer);
-            }
-            */
             Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Vehicle"), PetObstacleLayer);
             Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), PetObstacleLayer);
             

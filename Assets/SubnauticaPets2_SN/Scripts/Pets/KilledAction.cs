@@ -1,7 +1,4 @@
-﻿using UnityEngine;
-using Random = UnityEngine.Random;
-
-namespace DaftAppleGames.SubnauticaPets.Pets
+﻿namespace DaftAppleGames.SubnauticaPets.Pets
 {
     /// <summary>
     /// Simple action to kill pet

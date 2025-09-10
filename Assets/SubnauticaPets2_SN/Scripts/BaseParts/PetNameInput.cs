@@ -4,6 +4,9 @@ using UnityEngine.EventSystems;
 
 namespace DaftAppleGames.SubnauticaPets.BaseParts 
 {
+    /// <summary>
+    /// Providers simple functionality on the Rename text control on the Pet Console
+    /// </summary>
     public class PetNameInput : uGUI_InputGroup, IPointerHoverHandler
     {
         [SerializeField] private TMP_InputField petNameInput;

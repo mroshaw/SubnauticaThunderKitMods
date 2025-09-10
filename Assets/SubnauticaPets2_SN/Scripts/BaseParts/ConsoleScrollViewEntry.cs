@@ -1,10 +1,12 @@
-﻿using System;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace DaftAppleGames.SubnauticaPets.BaseParts 
 {
+    /// <summary>
+    /// An entry in the Pet Console scroll list view
+    /// </summary>
     public class ConsoleScrollViewEntry : MonoBehaviour
     {
         [SerializeField] private Image backgroundImage;

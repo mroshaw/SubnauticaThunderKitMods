@@ -1,5 +1,4 @@
-﻿using DaftAppleGames.SubnauticaPets.Pets;
-using DaftAppleGames.SubnauticaPets.Utils;
+﻿using DaftAppleGames.SubnauticaPets.Utils;
 using HarmonyLib;
 using UnityEngine;
 

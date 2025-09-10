@@ -6,7 +6,6 @@ using DaftAppleGames.SubnauticaPets.Extensions;
 using DaftAppleGames.SubnauticaPets.Utils;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using Button = UnityEngine.UI.Button;
 
 namespace DaftAppleGames.SubnauticaPets.BaseParts
@@ -89,10 +88,10 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
                 return;
             }
 
+            UpdateVersionText();
             SetPetButtonsInteractable();
             SetParentBaseObject();
             StartCoroutine(UpdatePetListAsync());
-            UpdateVersionText();
             SetEmitters();
             
             // Clean up, as the UWE serializer has a habit of adding stuff back in when loading a save
@@ -130,6 +129,9 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
             petNameTextInput.onValueChanged.RemoveListener(RenameTextChangedHandler);
         }
 
+        /// <summary>
+        /// Continue to check for loss of power and set the state appropriately
+        /// </summary>
         private void Update()
         {
             // Check for loss / restoration of power

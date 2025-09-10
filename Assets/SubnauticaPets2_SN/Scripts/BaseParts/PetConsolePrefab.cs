@@ -4,6 +4,7 @@ using Nautilus.Assets;
 using Nautilus.Assets.Gadgets;
 using Nautilus.Assets.PrefabTemplates;
 using Nautilus.Crafting;
+using Nautilus.Utility;
 using UnityEngine;
 
 namespace DaftAppleGames.SubnauticaPets.BaseParts
@@ -20,8 +21,10 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
         private const string EncPath = "Tech/Habitats";
         private const string DatabankPopupImageAssetName = "PetConsoleDataBankPopupImageTexture.png";
         private const string DatabankMainImageAssetName = "PetConsoleDataBankMainImageTexture.png";
-        private const string RotatingIconAssetName = "PetConsoleRotatingIconTexture.png";
         private const string ConsolePrefabAssetName = "PetConsoleUI.prefab";
+        
+        private const string ConsoleAlertAudioAssetName = "ConsoleAlert.wav";
+        private const string ConsoleRenameAudioAssetName = "ConsoleRename.wav";
         
         /// <summary>
         /// Register Pet Console
@@ -90,6 +93,35 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
             petConsoleInstance.transform.localPosition = new Vector3(0, 0, 0.018f);
             petConsoleInstance.transform.localRotation = new Quaternion(0, 180, 0, 1);
             petConsoleInstance.transform.localScale = new Vector3(0.002f, 0.002f, 1f);
+            
+            // Add a Constructable Listener and enable the console screen when constructed
+            prefabGameObject.EnsureComponent<ConsoleConstructedNotifier>();
+            LogUtils.LogDebug(LogArea.Prefabs, "ConsoleConstructedNotifier added...");
+            
+            // Add Audio FMOD components
+            GameObject alertEmitterGo = new GameObject("AlertEmitter")
+            {
+                transform =
+                {
+                    parent = petConsoleInstance.transform,
+                    localPosition = Vector3.zero
+                }
+            };
+
+            GameObject renameEmitterGo = new GameObject("RenameEmitter")
+            {
+                transform =
+                {
+                    parent = petConsoleInstance.transform,
+                    localPosition = Vector3.zero
+                }
+            };
+
+            FMOD_CustomEmitter alertEmitter = alertEmitterGo.AddComponent<FMOD_CustomEmitter>();
+            CustomAudioUtils.ConfigureEmitter(alertEmitter, ConsoleAlertAudioAssetName, AudioUtils.BusPaths.SurfaceAmbient, 5.0f);
+            
+            FMOD_CustomEmitter renameEmitter = renameEmitterGo.AddComponent<FMOD_CustomEmitter>();
+            CustomAudioUtils.ConfigureEmitter(renameEmitter, ConsoleRenameAudioAssetName, AudioUtils.BusPaths.SurfaceAmbient, 5.0f);
         }
     }
 }

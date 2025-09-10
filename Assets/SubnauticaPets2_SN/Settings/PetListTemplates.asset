@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76abc436d7c2f6b4aa0882b1762176d7, type: 3}
+  m_Name: PetListTemplates
+  m_EditorClassIdentifier: 
+  petTemplates:
+  - petTechType: AlienRobotPet
+    listTemplatePrefab: {fileID: 0}
+  - petTechType: BloodCrawlerPet
+    listTemplatePrefab: {fileID: 0}
+  - petTechType: CaveCrawlerPet
+    listTemplatePrefab: {fileID: 0}
+  - petTechType: CrabSquidPet
+    listTemplatePrefab: {fileID: 0}
+  - petTechType: CatPet
+    listTemplatePrefab: {fileID: 0}
+  - petTechType: DogPet
+    listTemplatePrefab: {fileID: 0}
+  - petTechType: RabbitPet
+    listTemplatePrefab: {fileID: 0}
+  - petTechType: SealPet
+    listTemplatePrefab: {fileID: 0}
+  - petTechType: FoxPet
+    listTemplatePrefab: {fileID: 0}
+  - petTechType: WalrusPet
+    listTemplatePrefab: {fileID: 0}

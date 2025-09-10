@@ -1,4 +1,5 @@
-﻿using DaftAppleGames.SubnauticaPets.Utils;
+﻿using DaftAppleGames.SubnauticaPets.UserInterface;
+using DaftAppleGames.SubnauticaPets.Utils;
 using Nautilus.Json;
 using Nautilus.Options;
 using Nautilus.Options.Attributes;
@@ -17,6 +18,8 @@ namespace DaftAppleGames.SubnauticaPets
         private const string AboutGameObjectName = "AboutCanvas.prefab";
         private static GameObject _aboutGameObject;
 
+        private ModButtonOption _optionButton;
+        
         /// <summary>
         /// Used to enable the "bonus pets" (cat, dog, seal, etc)
         /// </summary>
@@ -44,8 +47,7 @@ namespace DaftAppleGames.SubnauticaPets
         public void ShowCredits(ButtonClickedEventArgs e)
         {
             InitAboutUi();
-            _aboutGameObject.SetActive(true);
-            _aboutGameObject.GetComponentInChildren<AudioSource>().Play();
+            _aboutGameObject.GetComponentInChildren<AboutCanvas>().Show();
         }
 
         /// <summary>
@@ -56,10 +58,6 @@ namespace DaftAppleGames.SubnauticaPets
             if (_aboutGameObject == null)
             {
                 _aboutGameObject = CustomAssetBundleUtils.GetPrefabInstanceFromAssetBundle(AboutGameObjectName, true);
-                _aboutGameObject.AddComponent<CloseOnAnyInput>();
-                _aboutGameObject.AddComponent<ApplySnFont>();
-                Vector2 newSizeDelta = new Vector2(-1000, -400);
-                _aboutGameObject.GetComponentInChildren<CanvasRenderer>(true).GetComponent<RectTransform>().sizeDelta = newSizeDelta;
             }
         }
     }

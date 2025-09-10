@@ -107,8 +107,6 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             _fmodEmitter = GetComponent<FMOD_CustomEmitter>();
             _rigidBody = GetComponent<Rigidbody>();
             _petAnimator = GetComponent<PetAnimator>();
-            
-            ModUtils.DumpLayerCollisionMatrix();
         }
 
         /// <summary>
@@ -369,6 +367,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             }
 
             IsDead = true;
+            _rigidBody.collisionDetectionMode = CollisionDetectionMode.ContinuousSpeculative;
             _rigidBody.isKinematic = true;
             if (_petStateController)
             {

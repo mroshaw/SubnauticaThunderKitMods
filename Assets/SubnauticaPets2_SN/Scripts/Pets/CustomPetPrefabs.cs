@@ -23,7 +23,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             internal static PrefabInfo Info;
             private const string ClassId = "CatPet";
             private const string PrefabAssetName = "PetCat.prefab";
-            private const string IconTextureAssetName = "CatTexture.png";
+            private const string IconTextureAssetName = "CatIcon_Small.png";
             private const string AudioAssetName = "CatMeow.wav";
             
             /// <summary>
@@ -46,7 +46,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             internal static PrefabInfo Info;
             private const string ClassId = "DogPet";
             private const string PrefabAssetName = "PetDog.prefab";
-            private const string IconTextureAssetName = "DogTexture.png";
+            private const string IconTextureAssetName = "DogIcon_Small.png";
             private const string AudioAssetName = "DogBark.wav";
             
             internal static void Register()
@@ -66,7 +66,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             internal static PrefabInfo Info;
             private const string ClassId = "RabbitPet";
             private const string PrefabAssetName = "PetRabbit.prefab";
-            private const string IconTextureAssetName = "RabbitTexture.png";
+            private const string IconTextureAssetName = "RabbitIcon_Small.png";
             private const string AudioAssetName = "RabbitSqueak.wav";
             
             /// <summary>
@@ -89,7 +89,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             internal static PrefabInfo Info;
             private const string ClassId = "SealPet";
             private const string PrefabAssetName = "PetSeal.prefab";
-            private const string IconTextureAssetName = "SealTexture.png";
+            private const string IconTextureAssetName = "SealIcon_Small.png";
             private const string AudioAssetName = "SealBark.wav";
 
             /// <summary>
@@ -112,7 +112,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             internal static PrefabInfo Info;
             private const string ClassId = "WalrusPet";
             private const string PrefabAssetName = "PetWalrus.prefab";
-            private const string IconTextureAssetName = "WalrusTexture.png";
+            private const string IconTextureAssetName = "WalrusIcon_Small.png";
             private const string AudioAssetName = "WalrusSound.wav";
             
             /// <summary>
@@ -136,7 +136,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             internal static PrefabInfo Info;
             private const string ClassId = "FoxPet";
             private const string PrefabAssetName = "PetFox.prefab";
-            private const string IconTextureAssetName = "FoxTexture.png";
+            private const string IconTextureAssetName = "FoxIcon_Small.png";
             private const string AudioAssetName = "FoxSound.wav";
             
             /// <summary>

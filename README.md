@@ -10,9 +10,9 @@ You can find non-ThunderKit Subnautica mods in my [Subnautica Mods](https://gith
 
 ## Mods
 
-- [Subnautica Pets](https://github.com/mroshaw/SubnauticaThunderKitMods/tree/main/Assets/Mods/SubnauticaPets2_SN) - adds craftable creatures to the game via new game lore, fragments, resources and base parts.
-- [Cuddlefish Recall](https://github.com/mroshaw/SubnauticaThunderKitMods/tree/main/Assets/Mods/CuddlefishRecall_SN) - adds a keyboard shortcut to call a friendly Cuddlefish to the player's location
-- [Subnautica Cheater](https://github.com/mroshaw/SubnauticaThunderKitMods/tree/main/Assets/Mods/SubnauticaCheater_SN) - adds cheats for infinite oxygen and health, mainly for use in debugging and testing other mods.
+- [Subnautica Pets SN](https://github.com/mroshaw/SubnauticaThunderKitMods/tree/main/Assets/Mods/SubnauticaPets2_SN) - adds craftable creatures to the game via new game lore, fragments, resources and base parts.
+- [Cuddlefish Recall SN](https://github.com/mroshaw/SubnauticaThunderKitMods/tree/main/Assets/Mods/CuddlefishRecall_SN) - adds a keyboard shortcut to call a friendly Cuddlefish to the player's location
+- [Subnautica Cheater SN](https://github.com/mroshaw/SubnauticaThunderKitMods/tree/main/Assets/Mods/SubnauticaCheater_SN) - adds cheats for infinite oxygen and health, mainly for use in debugging and testing other mods.
 
 ## Make your own mods
 

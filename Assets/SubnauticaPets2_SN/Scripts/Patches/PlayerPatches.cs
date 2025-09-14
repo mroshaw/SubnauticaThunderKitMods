@@ -16,6 +16,13 @@ namespace DaftAppleGames.SubnauticaPets.Patches
         public static void Start_Postfix(Player __instance)
         {
             __instance.StartCoroutine(CheckUnlockStateSync(__instance));
+            
+            // FOR DEV ONLY! REMOVE BEFORE BUILD!!
+            /*
+            Debug.Log("In Player Start");
+            LogUtils.LogInfo("Added FragmentSpawner to player!");
+            __instance.gameObject.AddComponent<FragmentSpawner>();
+            */
         }
 
         private static IEnumerator CheckUnlockStateSync(Player player)

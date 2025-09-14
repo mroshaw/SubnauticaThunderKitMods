@@ -18,7 +18,7 @@ MonoBehaviour:
   Manifests: []
   ArchiveType: 1
   Source: <ManifestStagingRoot>/plugins/<ManifestName>
-  Output: <NexusStage>/<ManifestName>.ZIP
+  Output: <NexusStage>/<ManifestName>.zip
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0

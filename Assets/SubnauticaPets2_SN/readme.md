@@ -11,11 +11,11 @@ You can scan for Pet DNA via a Scanner Room. Upgrade the range and don't forget 
 If you're really stuck, you can use console commands to spawn DNA in your inventory:
 
 ```
-item 5 AlienRobotPetDna
-item 5 BloodCrawlerPetDna
-item 5 CaveCrawlerPetDna
-item 5 CrabSquidPetDna
-item 5 CatPetDna
+item AlienRobotPetDna 5
+item BloodCrawlerPetDna 5
+item CaveCrawlerPetDna 5
+item CrabSquidPetDna 5
+item CatPetDna 5
 ```
 
 ## Base Part Fragments

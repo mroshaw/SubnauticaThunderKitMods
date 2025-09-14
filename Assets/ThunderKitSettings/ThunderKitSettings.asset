@@ -27,14 +27,16 @@ MonoBehaviour:
   CachedImageCount: 11
   CacheSize: 0.51
   MarkdownOpenMode: 1
-  SelectedPipeline: {fileID: 11400000, guid: 741448fb2afca194f8dd1c2360792c6a, type: 2}
+  SelectedPipeline: {fileID: 11400000, guid: 89eed8e7c6029014489a91df2b3e3f65, type: 2}
   SelectedManifest: {fileID: 11400000, guid: 1046126c490d7384799f2de26323218c, type: 2}
   QuickAccessPipelines:
   - {fileID: 11400000, guid: 89eed8e7c6029014489a91df2b3e3f65, type: 2}
   - {fileID: 11400000, guid: 89793f049bf8dad4cb972b24037457db, type: 2}
-  - {fileID: 11400000, guid: 741448fb2afca194f8dd1c2360792c6a, type: 2}
+  - {fileID: 11400000, guid: 1c58ca820d639e64488d96df44db16a5, type: 2}
   - {fileID: 11400000, guid: fa17dc9a02592f14b91a28a9c945a010, type: 2}
-  - {fileID: 11400000, guid: b1055352ac6da344ebb2c04104bd487d, type: 2}
+  - {fileID: 11400000, guid: a26a710d612a2c14d92361131311514d, type: 2}
   QuickAccessManifests:
+  - {fileID: 11400000, guid: 613d843feae198348800e55bdbc2c415, type: 2}
+  - {fileID: 11400000, guid: 88684e864d224d74294af197b09cb8e8, type: 2}
   - {fileID: 11400000, guid: 1046126c490d7384799f2de26323218c, type: 2}
   ImportConfiguration: {fileID: 0}

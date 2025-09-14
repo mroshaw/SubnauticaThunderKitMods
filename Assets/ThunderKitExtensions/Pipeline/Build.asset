@@ -17,28 +17,6 @@ MonoBehaviour:
   releaseBuild: 1
   assemblyArtifactPath: <AssemblyStaging>
   buildTarget: 5
---- !u!114 &-4990331957957568292
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03063c7a6ec04cc4c82c75cf9bcc8db8, type: 3}
-  m_Name: Copy
-  m_EditorClassIdentifier: 
-  Active: 1
-  PerManifest: 1
-  ListType: 0
-  Manifests: []
-  ReplaceDirectory: 1
-  Recursive: 1
-  SourceRequired: 1
-  EstablishDestination: 1
-  Source: <ModAssetRootPath>/<LocalisationPath>
-  Destination: <ManifestPluginStaging>/<LocalisationPath>
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -49,16 +27,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a3695521163bdd74fa2845bbd3438240, type: 3}
-  m_Name: Stage
+  m_Name: Build
   m_EditorClassIdentifier: 
   Data:
   - {fileID: -5202041662821876658}
   - {fileID: 114520525572577756}
-  - {fileID: -4990331957957568292}
   - {fileID: 4156783945345151082}
   - {fileID: 7963844026012339470}
+  - {fileID: 7782552347644210410}
   QuickAccess: 1
-  manifest: {fileID: 11400000, guid: 1046126c490d7384799f2de26323218c, type: 2}
+  manifest: {fileID: 11400000, guid: 88684e864d224d74294af197b09cb8e8, type: 2}
 --- !u!114 &114520525572577756
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -110,6 +88,28 @@ MonoBehaviour:
   - pdb
   Path: <ManifestPluginStaging>
   IsFatal: 0
+--- !u!114 &7782552347644210410
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f220fc3a17645674f8580edf35829088, type: 3}
+  m_Name: CopyExt
+  m_EditorClassIdentifier: 
+  Active: 1
+  PerManifest: 0
+  ListType: 0
+  Manifests: []
+  ReplaceDirectory: 1
+  Recursive: 1
+  SourceRequired: 0
+  EstablishDestination: 1
+  Source: <ModAssetRootPath>/<LocalisationPath>
+  Destination: <ManifestPluginStaging>/<LocalisationPath>
 --- !u!114 &7963844026012339470
 MonoBehaviour:
   m_ObjectHideFlags: 0

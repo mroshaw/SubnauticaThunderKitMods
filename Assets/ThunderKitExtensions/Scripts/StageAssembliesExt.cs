@@ -17,7 +17,7 @@ using UnityEngine.Networking;
 namespace ThunderKit.Core.Pipelines.Jobs
 {
     [PipelineSupport(typeof(Pipeline)), ManifestProcessor]
-    public class StageAssembliesFixed : PipelineJob
+    public class StageAssembliesExt : PipelineJob
     {
         static string Combine(params string[] component) => Path.Combine(component).Replace('\\', '/');
 #pragma warning disable CS0649 

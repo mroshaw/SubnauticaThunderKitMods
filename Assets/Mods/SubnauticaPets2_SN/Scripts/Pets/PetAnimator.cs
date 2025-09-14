@@ -8,9 +8,11 @@ namespace DaftAppleGames.SubnauticaPets.Pets
     {
         private Animator _animator;
         private Pet _pet;
-        private bool _inRandomAnim = false;
+        private bool _inRandomAnim;
 
         private static readonly int IsMovingAnimParameter = Animator.StringToHash("IsMoving");
+        private static readonly int IsSleepingAnimParameter = Animator.StringToHash("IsSleeping");
+        
         private static readonly string[] BodyAnims = { "Sit", "Spin", "Roll", "Flinch" };
         private static readonly string[] FaceAnims =  { "Eyes_Annoyed",
                                                 "Eyes_Blink",
@@ -78,14 +80,9 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                 return;
             }
 
-            if (_pet.IsDead)
+            if (_pet.IsDead && !_animator.GetBool(DeadAnim))
             {
                 _animator.SetBool(DeadAnim, true);
-                return;
-            }
-            if (!_inRandomAnim)
-            {
-                SetFaceAnimState();
             }
         }
 
@@ -113,45 +110,34 @@ namespace DaftAppleGames.SubnauticaPets.Pets
 
         internal void PlayRandomFaceAnim()
         {
-            if(!_animator || _faceAnimHashKeys == null || _faceAnimHashKeys.Length == 0)
+            if(!_animator || _faceAnimHashKeys == null || _faceAnimHashKeys.Length == 0 || _animator.GetBool(IsSleepingAnimParameter))
             {
                 return;
             }
             int animIndex = Random.Range(0, _numFaceAnims);
-            LogUtils.LogDebug(LogArea.MonoPets, $"Playing random face anim at index: {animIndex}");
+            // LogUtils.LogDebug(LogArea.MonoPets, $"Playing random face anim at index: {animIndex}");
             _animator.Play(_faceAnimHashKeys[animIndex]);
         }
 
         private IEnumerator PlayRandomFaceAnimAsync(float duration)
         {
+
             _inRandomAnim = true;
             PlayRandomFaceAnim();
             yield return new WaitForSeconds(duration);
             _inRandomAnim = false;
         }
-
-        private void SetFaceAnimState()
+        
+        internal void SetSleeping(bool isSleeping)
         {
-            switch (_pet.Happiness)
+            _animator.SetBool(IsSleepingAnimParameter, isSleeping);
+            if (isSleeping)
             {
-                case PetHappiness.Ecstatic:
-                    _animator.Play(EyesEcstatic);
-                    break;
-                case PetHappiness.Happy:
-                    _animator.Play(EyesHappy);
-                    break;
-                case PetHappiness.Neutral:
-                    _animator.Play(EyesHappy);
-                    break;
-                case PetHappiness.Sad:
-                    _animator.Play(EyesSad);
-                    break;
-                case PetHappiness.Devastated:
-                    _animator.Play(EyesHappy);
-                    break;
-                case PetHappiness.Dead:
-                    _animator.Play(EyesHappy);
-                    break;
+                _animator.Play(EyesSleep);
+            }
+            else
+            {
+                _animator.Play(EyesHappy);
             }
         }
         

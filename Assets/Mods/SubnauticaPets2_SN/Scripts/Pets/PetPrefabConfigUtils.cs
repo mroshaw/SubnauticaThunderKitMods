@@ -24,7 +24,8 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             targetGameObject.EnsureComponent<WanderAction>();
             targetGameObject.EnsureComponent<MoveToAction>();
             targetGameObject.EnsureComponent<KilledAction>();
-
+            targetGameObject.EnsureComponent<SleepAction>();
+            
             LiveMixin liveMixin = targetGameObject.EnsureComponent<LiveMixin>();
             liveMixin.data = ScriptableObject.CreateInstance<LiveMixinData>();
             liveMixin.data.maxHealth = 50;

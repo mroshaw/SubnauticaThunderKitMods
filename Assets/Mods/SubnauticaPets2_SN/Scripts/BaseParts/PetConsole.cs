@@ -88,6 +88,9 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
                 return;
             }
 
+            // Set initial screen state
+            _hasPower = _powerConsumer.IsPowered();
+            
             UpdateVersionText();
             SetPetButtonsInteractable();
             SetParentBaseObject();
@@ -185,6 +188,18 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
         private void SetParentBaseObject()
         {
             // Get the BasePart transform
+            if (!transform.parent)
+            {
+                LogUtils.LogDebug(LogArea.MonoBaseParts, $"PetConsole has no parent, so isn't in base!");
+                return;
+            }
+
+            if (!transform.parent.parent)
+            {
+                LogUtils.LogDebug(LogArea.MonoBaseParts, $"PetConsole parent has no parent, so isn't in base!");
+                return;
+            }
+            
             Base = transform.parent.parent.GetComponent<Base>();
             if (Base)
             {

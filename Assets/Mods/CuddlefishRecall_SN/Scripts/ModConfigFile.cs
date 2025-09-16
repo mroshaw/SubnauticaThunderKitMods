@@ -19,7 +19,7 @@ namespace DaftAppleGames.CuddlefishRecall_SN
         public KeyCode RecallKeyboardShortcut = KeyCode.R;
 
         [Choice("Recall Method", "Teleport", "Swim")]
-        public RecallMoveMethod RecallMoveMethod = RecallMoveMethod.Teleport;
+        public RecallMoveMethod RecallMoveMethod = RecallMoveMethod.SwimTo;
 
         /// <summary>
         /// Health regen
@@ -27,7 +27,7 @@ namespace DaftAppleGames.CuddlefishRecall_SN
         [Slider("Health Regen Multiplier", Step = 0.1f, Format = "{0:F2}", Min = 0.0f, Max = 1.0f, DefaultValue = 0.01f)]
         public float HealthRegenModifier = 0.01f;
 
-        [Slider("Recall Swim Velocity", Step = 0.1f, Format = "{0:F2}", Min = 1.0f, Max = 10.0f, DefaultValue = 1.5f)]
-        public float RecallSwimVelocity = 1.5f;
+        [Slider("Recall Swim Velocity", Step = 0.1f, Format = "{0:F2}", Min = 1.0f, Max = 10.0f, DefaultValue = 3.0f)]
+        public float RecallSwimVelocity = 3.0f;
     }
 }

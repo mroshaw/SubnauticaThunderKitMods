@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using static DaftAppleGames.CuddlefishRecall_SN.CuddlefishRecallPlugin;
 
-namespace DaftAppleGames.CuddlefishRecall_SN.MonoBehaviours
+namespace DaftAppleGames.CuddlefishRecall_SN
 {
     internal class HealthRegen : MonoBehaviour
     {

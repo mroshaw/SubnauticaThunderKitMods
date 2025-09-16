@@ -1,5 +1,4 @@
-﻿using DaftAppleGames.CuddlefishRecall_SN.MonoBehaviours;
-using HarmonyLib;
+﻿using HarmonyLib;
 
 namespace DaftAppleGames.CuddlefishRecall_SN.Patches
 {
@@ -21,7 +20,7 @@ namespace DaftAppleGames.CuddlefishRecall_SN.Patches
 
                 // Add the Mod Input Manager to the Player GameObject.
                 // Ensures there is only one component, monitoring keyboard input.
-                __instance.gameObject.AddComponent<ModInputManager>();
+                __instance.gameObject.AddComponent<CreatureRecallerInputManager>();
                 CuddlefishRecallPlugin.Log.LogDebug("Added ModInputManager component.");
             }
         }

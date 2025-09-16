@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 using static DaftAppleGames.CuddlefishRecall_SN.CuddlefishRecallPlugin;
 
-namespace DaftAppleGames.CuddlefishRecall_SN.MonoBehaviours
+namespace DaftAppleGames.CuddlefishRecall_SN
 {
     /// <summary>
     /// Simple helper MonoBehaviour to monitor for Keyboard Input
     /// </summary>
-    internal class ModInputManager : MonoBehaviour
+    internal class CreatureRecallerInputManager : MonoBehaviour
     {
         private CreatureRecaller _creatureRecaller;
 
@@ -14,14 +14,7 @@ namespace DaftAppleGames.CuddlefishRecall_SN.MonoBehaviours
         {
             Log.LogDebug("Getting CreatureRecaller...");
             _creatureRecaller = GetComponent<CreatureRecaller>();
-            if (_creatureRecaller)
-            {
-                Log.LogDebug("CreatureRecaller found.");
-            }
-            else
-            {
-                Log.LogDebug("CreatureRecaller not found!");
-            }
+            Log.LogDebug(_creatureRecaller ? "CreatureRecaller found." : "CreatureRecaller not found!");
         }
 
         /// <summary>

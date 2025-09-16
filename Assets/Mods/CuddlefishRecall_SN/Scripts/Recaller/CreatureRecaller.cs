@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace DaftAppleGames.CuddlefishRecall_SN.MonoBehaviours
+namespace DaftAppleGames.CuddlefishRecall_SN
 {
     /// <summary>
     /// MonoBehaviour to recall all CreatureRecallListeners to current transform location
@@ -28,13 +28,21 @@ namespace DaftAppleGames.CuddlefishRecall_SN.MonoBehaviours
             CuddlefishRecallPlugin.Log.LogDebug($"Recalling all RecallCreatureListeners ({_allCreatureRecallListeners.Length})");
             float buffer = 1.0f;
 
+            int numCreatures = 0;
+            
             foreach (CreatureRecallListener listener in _allCreatureRecallListeners)
             {
                 CuddlefishRecallPlugin.Log.LogDebug($"Recalling {listener.gameObject.name}...");
                 
-                listener.RecallCreature(buffer);
+                listener.RecallCreature(buffer, numCreatures + 1);
                 buffer++;
                 CuddlefishRecallPlugin.Log.LogDebug($"{listener.gameObject.name} recalled.");
+                numCreatures++;
+            }
+
+            if (numCreatures > 0)
+            {
+                ErrorMessage.AddMessage($"Attempting to recall {numCreatures} Cuddlefish...");
             }
         }
     }

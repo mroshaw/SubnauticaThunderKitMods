@@ -2,7 +2,7 @@
 
 ## Introduction
 
-This repository contains all of my Subnautica [ThunderKit](https://github.com/PassivePicasso/ThunderKit) Mods in a single Unity 2019.4.36f1 project. It includes the mods themselves, and high level ThunderKit settings and extensions, as well as Unity helpers utilities.
+This repository contains all of my Subnautica [ThunderKit](https://github.com/PassivePicasso/ThunderKit) Mods in a single Unity 2019.4.36f1 project. It includes the mods themselves, and high level ThunderKit settings and extensions, as well as Unity helpers and utilities.
 
 I also maintain an equivalent [Subnautica: Below Zero repository](https://github.com/mroshaw/SubnauticaThunderKitMods/), with ThunderKit mods for the Subnautica: Below Zero game.
 

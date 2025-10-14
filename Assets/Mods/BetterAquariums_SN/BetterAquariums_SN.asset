@@ -1,0 +1,80 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-6872063687626615479
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17d1008b78cb6e846889b7778282fbef, type: 3}
+  m_Name: AssetBundleDefinitions
+  m_EditorClassIdentifier: 
+  StagingPaths:
+  - <ManifestPluginStaging>/Assets
+  assetBundles:
+  - assetBundleName: betteraquariumsassetbundle
+    assets:
+    - {fileID: 1901438420583079910, guid: 4db648c0b9094e541994e488513cc8e7, type: 3}
+    - {fileID: 2800000, guid: a0121f3b624625b40a43065122c93995, type: 3}
+    - {fileID: 1516499723775686, guid: 1ea143e6f1746034aa54ea2428ed411c, type: 3}
+    - {fileID: 1758434646072074, guid: f5db859bd59d61140ade0f32cdaf599f, type: 3}
+    - {fileID: 1164787547524044, guid: c7fc1cb03afd8254c909d374c146f7ff, type: 3}
+    - {fileID: 1866847595583792, guid: a3c677e212e9867479f030b8980310c6, type: 3}
+    - {fileID: 1778015100106606, guid: c8b53f9196c7bda40a7550b399d4e3d6, type: 3}
+    - {fileID: 1497851771556770, guid: 44d7e2c2a52549643850289fa10216bb, type: 3}
+--- !u!114 &-121899452589423327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f22bb7fd1d3b56a48bc52f8e407901d6, type: 3}
+  m_Name: ManifestIdentity
+  m_EditorClassIdentifier: 
+  StagingPaths: []
+  Author: Daft Apple Games
+  Name: BetterAquariums_SN
+  Description: Adds a double sized aquarium to the builder
+  Version: 1.0.0
+  Dependencies: []
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e563561e08b6a3642a487177f5cfbb37, type: 3}
+  m_Name: BetterAquariums_SN
+  m_EditorClassIdentifier: 
+  Data:
+  - {fileID: -121899452589423327}
+  - {fileID: 8876472120765660631}
+  - {fileID: -6872063687626615479}
+  identity: {fileID: -121899452589423327}
+  QuickAccess: 1
+--- !u!114 &8876472120765660631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b7e13dda513544419a89926bd12ad8a, type: 3}
+  m_Name: AssemblyDefinitions
+  m_EditorClassIdentifier: 
+  StagingPaths:
+  - <ManifestPluginStaging>
+  definitions:
+  - {fileID: 5897886265953266890, guid: a8101a7f788ddab4d835833e6de817ac, type: 3}
+  - {fileID: 5897886265953266890, guid: 224286437dfc28847b133efcbb5059cc, type: 3}

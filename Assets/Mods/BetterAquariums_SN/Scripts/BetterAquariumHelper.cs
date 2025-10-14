@@ -136,6 +136,7 @@ namespace DaftAppleGames.BetterAquariums_SN
                 
                 // Reposition to the new position
                 origCoral.transform.localPosition = coralTransform.localPosition;
+                origCoral.SetActive(coralTransform.gameObject.activeSelf);
             }
         }
     }

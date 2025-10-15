@@ -26,9 +26,11 @@ namespace DaftAppleGames.BetterAquariums_SN
             // Set up logging and asset bundle
             ModDebugLog =  new ModLog(Logger, ConfigFile.DetailedLogging);
             ModAssetUtils = new ModAssetBundleUtils(AssetBundleName, Assembly.GetExecutingAssembly(),true, ModDebugLog);
-            
+
             // Register our prefabs
-            DoubleAquariumPrefab.Register();
+            DoubleAquarium.Register();
+            CurvedAquarium.Register();
+            LShapedAquarium.Register();
             
             // Patch in our MOD
             Harmony.PatchAll();

@@ -30,30 +30,10 @@ namespace DaftAppleGames.BetterAquariums_SN
         [Header("Fish Attach Points")]
         [SerializeField] private Animator animator1;
         [SerializeField] private Animator animator2;
-        [SerializeField] private FishTrackContainer[] existingTrackObjects;
-        [SerializeField] private FishTrackContainer[] newTrackObjects;
-
-        internal FishTrackContainer[] ExistingContainer => existingTrackObjects;
-        
-        [Serializable]
-        public class FishTrackContainer
-        {
-            [SerializeField] private GameObject trackObject;
-            [SerializeField] private GameObject trackAttachObject;
-            
-            public string TrackName => trackObject.name;
-            public string AttachName => trackAttachObject.name;
-            
-            public Vector3 TrackPosition => trackObject.transform.position;
-            public Vector3 TrackLocalPosition => trackObject.transform.localPosition;
-            public Vector3 AttachPosition => trackAttachObject.transform.position;
-            public Vector3 AttachLocalPosition => trackAttachObject.transform.localPosition;
-            
-            public override string ToString()
-            {
-                return ($"{trackObject.name}/{trackAttachObject.name}");
-            }
-        }
+        [SerializeField] private GameObject[] existingTrackObjects;
+        [SerializeField] private GameObject[] existingAttachObjects;
+        [SerializeField] private GameObject[] newTrackObjects;
+        [SerializeField] private GameObject[] newAttachObjects;
         
         /// <summary>
         /// Takes the "vanilla" aquarium prefab, and reconfigures it as the "Bigger" aquarium 
@@ -101,8 +81,10 @@ namespace DaftAppleGames.BetterAquariums_SN
 
             GameObject newBubbles = Instantiate(bubbles, bubbles.transform.parent, true);
             bubbles.transform.localPosition = bubbles1Transform.localPosition;
-            newBubbles.transform.localRotation = bubbles1Transform.localRotation;
-            // newBubbles.transform.RotateAround (newBubbles.transform.position, newBubbles.transform.up, 180f);
+            bubbles.transform.localRotation = bubbles1Transform.localRotation;
+            
+            newBubbles.transform.localPosition = bubbles2Transform.localPosition;
+            newBubbles.transform.localRotation = bubbles2Transform.localRotation;
             newBubbles.transform.localScale = bubbles1Transform.localScale;
 
             // Duplicate and reposition coral
@@ -171,10 +153,11 @@ namespace DaftAppleGames.BetterAquariums_SN
 
             // Existing coral moves, no rotation changes
             coral.transform.localPosition = coral1Transform.localPosition;
-
+            coral.transform.localRotation = coral1Transform.localRotation;
+            
             // New coral moved to new location, rotation and scale matches existing coral model
             newCoral.transform.localPosition = coral2Transform.localPosition;
-            newCoral.transform.localRotation = coral.transform.localRotation;
+            newCoral.transform.localRotation = coral2Transform.localRotation;
             newCoral.transform.localScale = coral.transform.localScale;
 
             // Iterate through each coral game object, find it and reposition it
@@ -196,7 +179,7 @@ namespace DaftAppleGames.BetterAquariums_SN
         }
 
         /// <summary>
-        /// Reconfigures existing Fish Tracks (spawn points) and adds new ones
+        /// Reconfigures existing Fish Tracks (animation bones) and adds new ones
         /// </summary>
         private void ConfigureTracks(GameObject vanillaAquariumGo)
         {
@@ -221,34 +204,43 @@ namespace DaftAppleGames.BetterAquariums_SN
             GameObject geometry2 = animatorGo2.transform.Find("Aquarium_geo").gameObject;
             ModDebugLog.LogDebug($"Found geometry");
 
-            if (existingTrackObjects == null)
-            {
-                ModDebugLog.LogError($"ExistingTrackObjects is null!");
-                return;
-            }
+            // Update the animators
+            // Move the animator gameobject, unparent/reparent children to avoid move
+            // trackRoot1To4.transform.SetParent(null);
+            geometry1.transform.SetParent(null);
+            // trackRoot5To8.transform.SetParent(null);
+            geometry2.transform.SetParent(null);
             
-            if (existingTrackObjects[0] == null)
-            {
-                ModDebugLog.LogError($"ExistingTrackObjects items are null!");
-                return;
-            }
+            // Position Animators
+            animatorGo1.transform.localPosition = animator1.transform.localPosition;
+            animatorGo1.transform.localRotation = animator1.transform.localRotation;
+            
+            animatorGo2.transform.localPosition = animator2.transform.localPosition;
+            animatorGo2.transform.localRotation = animator2.transform.localRotation;
+            
+            geometry1.transform.SetParent(animatorGo1.transform, true);
+            // trackRoot5To8.transform.SetParent(animatorGo2.transform);
+            geometry2.transform.SetParent(animatorGo2.transform, true);
             
             // Update positions of existing track objects
             int currTrackIndex = 0;
-            foreach (FishTrackContainer existingContainer in existingTrackObjects)
+            foreach (GameObject existingTrack in existingTrackObjects)
             {
+                GameObject existingAttach =existingAttachObjects[currTrackIndex]; 
                 ModDebugLog.LogDebug("Processing track containers...");
                 
-                ModDebugLog.LogDebug($"Configuring track: {existingContainer.ToString()}");
+                ModDebugLog.LogDebug($"Configuring track: {existingTrack.name}");
                 GameObject trackRoot = currTrackIndex < 4 ? trackRoot1To4 : trackRoot5To8;
                 
-                ModDebugLog.LogDebug($"Looking for track in root: {existingContainer.TrackName}");
-                GameObject existingTrackGo = trackRoot.transform.Find(existingContainer.TrackName).gameObject;
-                existingTrackGo.transform.localPosition = existingContainer.TrackLocalPosition;
+                ModDebugLog.LogDebug($"Looking for track in root: {existingTrack.name}");
+                GameObject existingTrackGo = trackRoot.transform.Find(existingTrack.name).gameObject;
+                existingTrackGo.transform.localPosition = existingTrack.transform.localPosition;
+                existingTrackGo.transform.localRotation = existingTrack.transform.localRotation;
                 
-                ModDebugLog.LogDebug($"Looking for attach in track: {existingContainer.AttachName}");
-                GameObject existingAttachGo = existingTrackGo.transform.Find(existingContainer.AttachName).gameObject;
-                existingAttachGo.transform.localPosition = existingContainer.AttachLocalPosition;
+                ModDebugLog.LogDebug($"Looking for attach in track: {existingAttach.name}");
+                GameObject existingAttachGo = existingTrackGo.transform.Find(existingAttach.name).gameObject;
+                existingAttachGo.transform.localPosition = existingAttach.transform.localPosition;
+                existingAttachGo.transform.localRotation = existingAttach.transform.localRotation;
                 
                 updatedTrackObjects[currTrackIndex] = existingAttachGo;
                 currTrackIndex++;
@@ -257,18 +249,19 @@ namespace DaftAppleGames.BetterAquariums_SN
             // Create new Fish Tracks
             ModDebugLog.LogDebug($"Creating new tracks...");
             currTrackIndex = 0;
-            foreach (FishTrackContainer newContainer in newTrackObjects)
+            foreach (GameObject newTrack in newTrackObjects)
             {
+                GameObject newAttach = newAttachObjects[currTrackIndex];
                 GameObject trackRoot = currTrackIndex < 4 ? trackRoot1To4 : trackRoot5To8;
                 
-                ModDebugLog.LogDebug($"Creating track: {trackRoot.name}/{newContainer.ToString()}");
-                GameObject newTrackGo = new GameObject(newContainer.TrackName);
+                ModDebugLog.LogDebug($"Creating track: {trackRoot.name}/{newTrack.name}/{newAttach.name}");
+                GameObject newTrackGo = new GameObject(newTrack.name);
                 newTrackGo.transform.SetParent(trackRoot.transform);
-                newTrackGo.transform.localPosition = newContainer.TrackLocalPosition;
+                newTrackGo.transform.localPosition = newTrack.transform.localPosition;
                 
-                GameObject newAttachGo = new GameObject(newContainer.AttachName);
+                GameObject newAttachGo = new GameObject(newAttach.name);
                 newAttachGo.transform.SetParent(newTrackGo.transform);
-                newAttachGo.transform.localPosition = newContainer.AttachLocalPosition;
+                newAttachGo.transform.localPosition = newAttach.transform.localPosition;
                 
                 ModDebugLog.LogDebug($"Track created successfully");
                 
@@ -279,22 +272,7 @@ namespace DaftAppleGames.BetterAquariums_SN
             // Now set the trackObjects on the Aquarium component
             vanillaAquarium.trackObjects = updatedTrackObjects;
             
-            // Update the animators
-            // Move the animator gameobject, unparent/reparent children to avoid move
-            trackRoot1To4.transform.SetParent(null);
-            geometry1.transform.SetParent(null);
-            trackRoot5To8.transform.SetParent(null);
-            geometry2.transform.SetParent(null);
 
-            // Move
-            animatorGo1.transform.localPosition = animator1.gameObject.transform.position;
-            animatorGo2.transform.localPosition = animator2.gameObject.transform.position;
-            
-            // Reparent
-            trackRoot1To4.transform.SetParent(animatorGo1.transform);
-            geometry1.transform.SetParent(animatorGo1.transform);
-            trackRoot5To8.transform.SetParent(animatorGo2.transform);
-            geometry2.transform.SetParent(animatorGo2.transform);
             
             // Get current prefab animators
             ModDebugLog.LogDebug($"Updating animators...");

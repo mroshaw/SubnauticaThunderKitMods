@@ -644,14 +644,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 371915291626897959}
-  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: -1.62, y: 0, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.4, y: 0, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2775199040537325717}
   m_Father: {fileID: 5747813556211692667}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: -0, y: -89.99999, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &7706466400797541727
 Animator:
   serializedVersion: 3
@@ -854,7 +854,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1282220290991329950}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.182, y: 0.3, z: 0}
+  m_LocalPosition: {x: 1.2, y: 0.3, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3897524039821756380}
@@ -1202,39 +1202,41 @@ MonoBehaviour:
   animator1: {fileID: 7706466400797541725}
   animator2: {fileID: 7706466400797541727}
   existingTrackObjects:
-  - trackObject: {fileID: 8156383844603039454}
-    trackAttachObject: {fileID: 1656750303829338946}
-  - trackObject: {fileID: 3851560329281534964}
-    trackAttachObject: {fileID: 5503556752286820565}
-  - trackObject: {fileID: 7432112586117589458}
-    trackAttachObject: {fileID: 5716920601968566334}
-  - trackObject: {fileID: 8898896741013152771}
-    trackAttachObject: {fileID: 7464638133771528939}
-  - trackObject: {fileID: 7535771728503997889}
-    trackAttachObject: {fileID: 7464638133771528939}
-  - trackObject: {fileID: 5835054877968100266}
-    trackAttachObject: {fileID: 8454039533025366721}
-  - trackObject: {fileID: 4761037079699592988}
-    trackAttachObject: {fileID: 2173351682997133219}
-  - trackObject: {fileID: 2910777622857528714}
-    trackAttachObject: {fileID: 8128416624197755989}
+  - {fileID: 7535771728503997889}
+  - {fileID: 5835054877968100266}
+  - {fileID: 4761037079699592988}
+  - {fileID: 2910777622857528714}
+  - {fileID: 8156383844603039454}
+  - {fileID: 3851560329281534964}
+  - {fileID: 7432112586117589458}
+  - {fileID: 8898896741013152771}
+  existingAttachObjects:
+  - {fileID: 7464638133771528939}
+  - {fileID: 8454039533025366721}
+  - {fileID: 2173351682997133219}
+  - {fileID: 8128416624197755989}
+  - {fileID: 1656750303829338946}
+  - {fileID: 5503556752286820565}
+  - {fileID: 5716920601968566334}
+  - {fileID: 4426432788689507014}
   newTrackObjects:
-  - trackObject: {fileID: 155364302}
-    trackAttachObject: {fileID: 1604437902}
-  - trackObject: {fileID: 679270170}
-    trackAttachObject: {fileID: 333060334}
-  - trackObject: {fileID: 1004060684}
-    trackAttachObject: {fileID: 740564214}
-  - trackObject: {fileID: 1887916140}
-    trackAttachObject: {fileID: 1276248592}
-  - trackObject: {fileID: 2003336095}
-    trackAttachObject: {fileID: 549131461}
-  - trackObject: {fileID: 522464921}
-    trackAttachObject: {fileID: 357146643}
-  - trackObject: {fileID: 193668388}
-    trackAttachObject: {fileID: 286559766}
-  - trackObject: {fileID: 558979549}
-    trackAttachObject: {fileID: 966551499}
+  - {fileID: 2003336095}
+  - {fileID: 522464921}
+  - {fileID: 193668388}
+  - {fileID: 558979549}
+  - {fileID: 155364302}
+  - {fileID: 679270170}
+  - {fileID: 1004060684}
+  - {fileID: 1887916140}
+  newAttachObjects:
+  - {fileID: 549131461}
+  - {fileID: 357146643}
+  - {fileID: 286559766}
+  - {fileID: 966551499}
+  - {fileID: 1604437902}
+  - {fileID: 333060334}
+  - {fileID: 740564214}
+  - {fileID: 1276248592}
 --- !u!1 &1943698378417909192
 GameObject:
   m_ObjectHideFlags: 0
@@ -1338,7 +1340,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2025784429358991638}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.054, y: 0.3, z: 0}
+  m_LocalPosition: {x: -0.947, y: 0.3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 3897524039821756380}
@@ -1558,14 +1560,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2902822668457972403}
-  m_LocalRotation: {x: -8.881784e-16, y: -0.7071068, z: -0, w: 0.7071067}
-  m_LocalPosition: {x: 1.01, y: -0, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.1, y: -0, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5422861249347751999}
   m_Father: {fileID: 5747813556211692667}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: -7.196773e-14, y: 89.99999, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &7706466400797541725
 Animator:
   serializedVersion: 3
@@ -2126,15 +2128,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5243165939626391385}
-  m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0.299999, z: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1429994391581237902}
   - {fileID: 6904374226870065367}
   m_Father: {fileID: 5747813556211692667}
   m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: -90, y: -0, z: -0}
+  m_LocalEulerAnglesHint: {x: 0, y: -0, z: -0}
 --- !u!1 &5253723191083267903
 GameObject:
   m_ObjectHideFlags: 0

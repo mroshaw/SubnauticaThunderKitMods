@@ -59,8 +59,6 @@ namespace DaftAppleGames.BetterAquariums_SN
             // Get new model from the asset bundle
             GameObject newModelInstance =
                 ModAssetUtils.GetPrefabInstanceFromAssetBundle(prefabData.PrefabAssetName, false);
-
-            GameObject.Instantiate(newModelInstance);
             
             // Call the helper to replace and reconfigure the prefab
             BetterAquariumHelper helper = newModelInstance.GetComponent<BetterAquariumHelper>();

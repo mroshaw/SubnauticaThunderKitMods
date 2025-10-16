@@ -29,8 +29,9 @@ namespace DaftAppleGames.BetterAquariums_SN
 
             // Register our prefabs
             DoubleAquarium.Register();
-            CurvedAquarium.Register();
-            LShapedAquarium.Register();
+            // CornerAquarium.Register();
+            // CurvedAquarium.Register();
+            // LShapedAquarium.Register();
             
             // Patch in our MOD
             Harmony.PatchAll();

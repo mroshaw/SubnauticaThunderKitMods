@@ -20,9 +20,9 @@ namespace DaftAppleGames.BiggerAquariums_SN
             
             // Recipe for the builder
             Recipe = new RecipeData(
-                new Ingredient(TechType.Titanium, 3),
-                new Ingredient(TechType.CopperWire, 2),
-                new Ingredient(TechType.Glass, 5)),
+                new Ingredient(TechType.Titanium, 2),
+                new Ingredient(TechType.CopperWire, 1),
+                new Ingredient(TechType.Glass, 4)),
         };
         
         public static void Register() => RegisterInternal(Data);

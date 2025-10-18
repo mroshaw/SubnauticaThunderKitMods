@@ -9,11 +9,11 @@ namespace DaftAppleGames.BiggerAquariums_SN
     [BepInPlugin(MyGuid, PluginName, VersionString)]
     public class BiggerAquariumsPlugin : BaseUnityPlugin
     {
-        private const string MyGuid = "com.mroshaw.BiggerAquariumssn";
-        private const string PluginName = "Better Aquariums SN";
+        private const string MyGuid = "com.mroshaw.biggeraquariumssn";
+        private const string PluginName = "Bigger Aquariums SN";
         private const string VersionString = "1.0.0";
 
-        private const string AssetBundleName = "BiggerAquariumsassetbundle";
+        private const string AssetBundleName = "biggeraquariumsassetbundle";
         internal static ModAssetBundleUtils ModAssetUtils;
         
         // Config file / UI initialisation

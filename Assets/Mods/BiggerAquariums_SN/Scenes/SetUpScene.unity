@@ -223,7 +223,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 5c73989efa60eba4f820c9cb23a697ad,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 5c73989efa60eba4f820c9cb23a697ad,
         type: 3}
@@ -768,6 +768,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: UShapedAquariumPrefab
       objectReference: {fileID: 0}
+    - target: {fileID: 2293220446433274752, guid: 8ca8d3287caf6da40ad85dbf1b98ea33,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4965567800316433459, guid: 8ca8d3287caf6da40ad85dbf1b98ea33,
         type: 3}
       propertyPath: m_RootOrder
@@ -895,7 +900,7 @@ PrefabInstance:
     - target: {fileID: 7232378941774742560, guid: f388b4cc4c64a494088e9eb6f94cd101,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f388b4cc4c64a494088e9eb6f94cd101, type: 3}
@@ -983,7 +988,7 @@ PrefabInstance:
     - target: {fileID: 2740781490689482543, guid: 6614e55e5a95fd84482ecdae561a23ed,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9021603394190106780, guid: 6614e55e5a95fd84482ecdae561a23ed,
         type: 3}

@@ -4,7 +4,7 @@ using DaftAppleGames.ModUtils;
 using HarmonyLib;
 using Nautilus.Handlers;
 
-namespace DaftAppleGames.BiggerAquariums_SN
+namespace DaftAppleGames.BiggerAquariums
 {
     [BepInPlugin(MyGuid, PluginName, VersionString)]
     public class BiggerAquariumsPlugin : BaseUnityPlugin

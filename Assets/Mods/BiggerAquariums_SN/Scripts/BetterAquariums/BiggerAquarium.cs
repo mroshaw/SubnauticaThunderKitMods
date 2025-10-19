@@ -3,9 +3,9 @@ using Nautilus.Assets.Gadgets;
 using Nautilus.Assets.PrefabTemplates;
 using Nautilus.Crafting;
 using UnityEngine;
-using static DaftAppleGames.BiggerAquariums_SN.BiggerAquariumsPlugin;
+using static DaftAppleGames.BiggerAquariums.BiggerAquariumsPlugin;
 
-namespace DaftAppleGames.BiggerAquariums_SN
+namespace DaftAppleGames.BiggerAquariums
 {
     public abstract class BiggerAquarium : MonoBehaviour
     {

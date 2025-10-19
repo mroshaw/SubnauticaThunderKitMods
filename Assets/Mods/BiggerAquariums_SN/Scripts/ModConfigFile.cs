@@ -2,7 +2,7 @@
 using Nautilus.Options;
 using Nautilus.Options.Attributes;
 
-namespace DaftAppleGames.BiggerAquariums_SN
+namespace DaftAppleGames.BiggerAquariums
 {
     /// <summary>
     /// Nautilus mod config class

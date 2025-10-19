@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
-using static DaftAppleGames.BiggerAquariums_SN.BiggerAquariumsPlugin;
+using static DaftAppleGames.BiggerAquariums.BiggerAquariumsPlugin;
 
-namespace DaftAppleGames.BiggerAquariums_SN
+namespace DaftAppleGames.BiggerAquariums
 {
     public enum BiggerAquariumType
     {

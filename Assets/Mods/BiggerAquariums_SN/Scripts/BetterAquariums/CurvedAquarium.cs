@@ -1,6 +1,6 @@
 ﻿using Nautilus.Crafting;
 
-namespace DaftAppleGames.BiggerAquariums_SN
+namespace DaftAppleGames.BiggerAquariums
 {
     public class CurvedAquarium : BiggerAquarium
     {

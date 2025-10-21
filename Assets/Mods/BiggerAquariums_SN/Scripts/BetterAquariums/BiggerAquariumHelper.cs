@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using static DaftAppleGames.BiggerAquariums.BiggerAquariumsPlugin;
 
 namespace DaftAppleGames.BiggerAquariums
@@ -25,6 +26,7 @@ namespace DaftAppleGames.BiggerAquariums
         [SerializeField] private Transform[] newCoralTransforms;
         [SerializeField] private GameObject rocksObject;
         [SerializeField] private GameObject colliderObject;
+        [SerializeField] private GameObject[] movementColliderObjects;
 
         [Header("Fish Attach Points")] [SerializeField] private Animator animator1;
         [SerializeField] private Animator animator2;
@@ -62,7 +64,7 @@ namespace DaftAppleGames.BiggerAquariums
             ConfigureCollider(vanillaAquariumGo);
             
             // Reposition tracks and add new
-            ConfigureTracks(vanillaAquariumGo);
+            ConfigureTracks(vanillaAquariumGo, true);
 
             // Add the new component
             AddAquariumComponent(vanillaAquariumGo, aquariumType);
@@ -150,6 +152,7 @@ namespace DaftAppleGames.BiggerAquariums
             newRocks.transform.localPosition = rocksObject.transform.localPosition;
             newRocks.transform.localScale = Vector3.one;
             
+            ModDebugLog.LogDebug("Updating SkyApplier...");
             SkyApplier skyApplier = vanillaAquariumGo.GetComponent<SkyApplier>();
             skyApplier.renderers = vanillaAquariumGo.GetComponentsInChildren<Renderer>(true);
         }
@@ -194,7 +197,7 @@ namespace DaftAppleGames.BiggerAquariums
         /// <summary>
         /// Reconfigures existing Fish Tracks (animation bones) and adds new ones
         /// </summary>
-        private void ConfigureTracks(GameObject vanillaAquariumGo)
+        private void ConfigureTracks(GameObject vanillaAquariumGo, bool customMovement)
         {
             // We'll use this to reset the trackObjects on the Aquarium component
             GameObject[] updatedTrackObjects = new GameObject[16];
@@ -205,23 +208,28 @@ namespace DaftAppleGames.BiggerAquariums
             ModDebugLog.LogDebug($"Finding animators...");
             GameObject animatorGo1 = vanillaAquariumGo.transform.Find("model/Aquarium_animation2").gameObject;
             GameObject animatorGo2 = vanillaAquariumGo.transform.Find("model/Aquarium_animation").gameObject;
-            ModDebugLog.LogDebug($"Found animators");
 
+            List<Collider> movementColliders = null;
+            int numMovementColliders = 0;
+            
+            if (customMovement)
+            {
+                ModDebugLog.LogDebug($"Configuring movement colliders...");
+                movementColliders = ConfigureMovementCollider(vanillaAquariumGo);
+                numMovementColliders = movementColliders.Count;
+            }
+            
             ModDebugLog.LogDebug($"Finding track roots...");
             GameObject trackRoot1To4 = animatorGo1.transform.Find("root").gameObject;
             GameObject trackRoot5To8 = animatorGo2.transform.Find("root").gameObject;
-            ModDebugLog.LogDebug($"Found track roots");
 
             ModDebugLog.LogDebug($"Finding geometry...");
             GameObject geometry1 = animatorGo1.transform.Find("Aquarium_geo").gameObject;
             GameObject geometry2 = animatorGo2.transform.Find("Aquarium_geo").gameObject;
-            ModDebugLog.LogDebug($"Found geometry");
 
             // Update the animators
             // Move the animator gameobject, unparent/reparent children to avoid move
-            // trackRoot1To4.transform.SetParent(null);
             geometry1.transform.SetParent(null);
-            // trackRoot5To8.transform.SetParent(null);
             geometry2.transform.SetParent(null);
 
             // Position Animators
@@ -232,11 +240,13 @@ namespace DaftAppleGames.BiggerAquariums
             animatorGo2.transform.localRotation = animator2.transform.localRotation;
 
             geometry1.transform.SetParent(animatorGo1.transform, true);
-            // trackRoot5To8.transform.SetParent(animatorGo2.transform);
             geometry2.transform.SetParent(animatorGo2.transform, true);
+
             // Update positions of existing track objects
             int currTrackIndex = 0;
 
+            int currColliderIndex = 0;
+            
             foreach (GameObject existingTrack in existingTrackObjects)
             {
                 GameObject existingAttach = existingAttachObjects[currTrackIndex];
@@ -248,13 +258,21 @@ namespace DaftAppleGames.BiggerAquariums
                 ModDebugLog.LogDebug($"Looking for track in root: {existingTrack.name}");
                 GameObject existingTrackGo = trackRoot.transform.Find(existingTrack.name).gameObject;
                 existingTrackGo.transform.localPosition = existingTrack.transform.localPosition;
-                existingTrackGo.transform.localRotation = existingTrack.transform.localRotation;
+                existingTrackGo.transform.localRotation = customMovement ? Quaternion.identity : existingTrack.transform.localRotation;
 
                 ModDebugLog.LogDebug($"Looking for attach in track: {existingAttach.name}");
                 GameObject existingAttachGo = existingTrackGo.transform.Find(existingAttach.name).gameObject;
                 existingAttachGo.transform.localPosition = existingAttach.transform.localPosition;
                 existingAttachGo.transform.localRotation = existingAttach.transform.localRotation;
 
+                if (customMovement)
+                {
+                    // Add custom movement component
+                    ModDebugLog.LogDebug("Adding customer movement script...");
+                    existingTrackGo.AddComponent<BiggerAquariumFish>().SetCollider(movementColliders[currColliderIndex]);
+                    currColliderIndex = currColliderIndex == numMovementColliders -1 ? 0 : currColliderIndex + 1;
+                }
+                
                 updatedTrackObjects[currTrackIndex] = existingAttachGo;
                 currTrackIndex++;
             }
@@ -262,6 +280,7 @@ namespace DaftAppleGames.BiggerAquariums
             // Create new Fish Tracks
             ModDebugLog.LogDebug($"Creating new tracks...");
             currTrackIndex = 0;
+            currColliderIndex = 0;
             foreach (GameObject newTrack in newTrackObjects)
             {
                 GameObject newAttach = newAttachObjects[currTrackIndex];
@@ -277,6 +296,14 @@ namespace DaftAppleGames.BiggerAquariums
                 newAttachGo.transform.localPosition = newAttach.transform.localPosition;
                 ModDebugLog.LogDebug($"Track created successfully");
 
+                if (customMovement)
+                {
+                    // Add custom movement component
+                    ModDebugLog.LogDebug("Adding customer movement script...");
+                    newTrackGo.AddComponent<BiggerAquariumFish>().SetCollider(movementColliders[currColliderIndex]);
+                    currColliderIndex = currColliderIndex == numMovementColliders -1 ? 0 : currColliderIndex + 1;
+                }
+                
                 updatedTrackObjects[currTrackIndex + 8] = newAttachGo;
                 currTrackIndex++;
             }
@@ -294,7 +321,39 @@ namespace DaftAppleGames.BiggerAquariums
             anim2.runtimeAnimatorController = animator2.runtimeAnimatorController;
             ModDebugLog.LogDebug($"Animators updated");
 
+            if (customMovement)
+            {
+                ModDebugLog.LogDebug($"Disabling animators...");
+                anim1.enabled = false;
+                anim2.enabled = false;
+            }
+
             ModDebugLog.LogDebug($"Done configuring new aquarium!");
+        }
+
+        /// <summary>
+        /// Configure the Movement Collider, if custom movement is needed
+        /// </summary>
+        private List<Collider> ConfigureMovementCollider(GameObject vanillaAquariumGo)
+        {
+            GameObject movementColliderContainer = new GameObject("MovementColliders");
+            movementColliderContainer.transform.SetParent(vanillaAquariumGo.transform);
+            movementColliderContainer.transform.localPosition = Vector3.zero;
+            movementColliderContainer.transform.localRotation = Quaternion.identity;
+            movementColliderContainer.transform.localScale = Vector3.one;
+            
+            List<Collider> newMovementColliders = new List<Collider>();
+            foreach (GameObject movementColliderObject in movementColliderObjects)
+            {
+                GameObject newColliderObject = Instantiate(movementColliderObject, movementColliderContainer.transform);
+                newColliderObject.transform.localPosition = movementColliderObject.transform.localPosition;
+                newColliderObject.transform.localRotation = movementColliderObject.transform.localRotation;
+                newColliderObject.transform.localScale = movementColliderObject.transform.localScale;
+
+                newMovementColliders.Add(newColliderObject.GetComponent<Collider>());
+            }
+
+            return newMovementColliders;
         }
         
         /// <summary>

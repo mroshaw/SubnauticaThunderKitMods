@@ -721,6 +721,6 @@ PlayerSettings:
   projectName: SubnauticaPetsThunderKit 2025-08-26_13-55-59
   organizationId: mroshaw
   cloudEnabled: 0
-  enableNativePlatformBackendsForNewInputSystem: 0
+  enableNativePlatformBackendsForNewInputSystem: 1
   disableOldInputManagerSupport: 0
   legacyClampBlendShapeWeights: 0

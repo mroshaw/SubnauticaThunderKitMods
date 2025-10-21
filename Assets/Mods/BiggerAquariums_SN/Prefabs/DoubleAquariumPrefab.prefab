@@ -2662,6 +2662,7 @@ Transform:
   - {fileID: 6763830684495920501}
   - {fileID: 7720573686983163207}
   - {fileID: 106142410}
+  - {fileID: 3526804058470832158}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2697,6 +2698,8 @@ MonoBehaviour:
   - {fileID: 2832486836882445619}
   rocksObject: {fileID: 106142409}
   colliderObject: {fileID: 6842814231332764545}
+  movementColliderObjects:
+  - {fileID: 2735901662410110505}
   animator1: {fileID: 7706466400797541725}
   animator2: {fileID: 7706466400797541727}
   existingTrackObjects:
@@ -2956,6 +2959,50 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!1 &2735901662410110505
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3526804058470832158}
+  - component: {fileID: 7197553021538435517}
+  m_Layer: 0
+  m_Name: MovementCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3526804058470832158
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2735901662410110505}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5747813556211692667}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &7197553021538435517
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2735901662410110505}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 5, y: 1.4, z: 0.45}
+  m_Center: {x: 0, y: 1.13, z: 0}
 --- !u!1 &2809951138075041218
 GameObject:
   m_ObjectHideFlags: 0
@@ -4278,7 +4325,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 5.79, y: 2, z: 0.5}
-  m_Center: {x: -0.92, y: 1, z: 0}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &7432112586117589458
 GameObject:
   m_ObjectHideFlags: 0

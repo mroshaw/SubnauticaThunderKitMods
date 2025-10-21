@@ -10,8 +10,8 @@
         "BepInEx.dll",
         "Nautilus.dll",
         "FMODUnity.dll",
-        "Assembly-CSharp-firstpass.dll",
-        "Assembly-CSharp.dll"
+        "Assembly-CSharp-firstpass_publicized.dll",
+        "Assembly-CSharp_publicized.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],

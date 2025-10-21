@@ -269,7 +269,7 @@ namespace DaftAppleGames.BiggerAquariums
                 {
                     // Add custom movement component
                     ModDebugLog.LogDebug("Adding customer movement script...");
-                    existingTrackGo.AddComponent<BiggerAquariumFish>().SetCollider(movementColliders[currColliderIndex]);
+                    // existingTrackGo.AddComponent<BiggerAquariumFish>().SetCollider(movementColliders[currColliderIndex]);
                     currColliderIndex = currColliderIndex == numMovementColliders -1 ? 0 : currColliderIndex + 1;
                 }
                 
@@ -300,7 +300,7 @@ namespace DaftAppleGames.BiggerAquariums
                 {
                     // Add custom movement component
                     ModDebugLog.LogDebug("Adding customer movement script...");
-                    newTrackGo.AddComponent<BiggerAquariumFish>().SetCollider(movementColliders[currColliderIndex]);
+                    // newTrackGo.AddComponent<BiggerAquariumFish>().SetCollider(movementColliders[currColliderIndex]);
                     currColliderIndex = currColliderIndex == numMovementColliders -1 ? 0 : currColliderIndex + 1;
                 }
                 

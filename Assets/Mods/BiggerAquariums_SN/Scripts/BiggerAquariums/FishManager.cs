@@ -7,7 +7,7 @@ namespace DaftAppleGames.BiggerAquariums
     public class FishManager : MonoBehaviour
     {
         [SerializeField] private FishSettings fishSettings;
-        [SerializeField] private Collider movementCollider;
+        [SerializeField] private List<Collider> movementColliders;
         
         internal List<BiggerAquariumFish> FishList => _fishList;
 
@@ -21,7 +21,7 @@ namespace DaftAppleGames.BiggerAquariums
             // Refresh attached fish
             foreach (BiggerAquariumFish fish in GetComponentsInChildren<BiggerAquariumFish>(true))
             {
-                fish.SetCollider(movementCollider);
+                fish.SetColliders(movementColliders);
                 fish.SetFishSettings(fishSettings);
                 fish.SetFishManager(this);
             }

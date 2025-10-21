@@ -10,9 +10,9 @@
     "precompiledReferences": [
         "BepInEx.dll",
         "0Harmony.dll",
-        "Assembly-CSharp.dll",
+        "Assembly-CSharp_publicized.dll",
         "Nautilus.dll",
-        "Assembly-CSharp-firstpass.dll",
+        "Assembly-CSharp-firstpass_publicized.dll",
         "FMODUnity.dll",
         "Unity.Addressables.dll",
         "Newtonsoft.Json.dll"

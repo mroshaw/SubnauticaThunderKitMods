@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using static DaftAppleGames.BiggerAquariums.BiggerAquariumsPlugin;
 
 namespace DaftAppleGames.BiggerAquariums
@@ -6,7 +7,7 @@ namespace DaftAppleGames.BiggerAquariums
     public class BiggerAquariumFish : MonoBehaviour
     {
         [Header("Settings")]
-        [SerializeField] internal Collider aquariumBounds;
+        [SerializeField] private List<Collider> movementColliders = new List<Collider>();
         [SerializeField] internal FishManager fishManager;
         [SerializeField] private FishSettings fishSettings;
         
@@ -49,7 +50,7 @@ namespace DaftAppleGames.BiggerAquariums
             _noiseOffsetY = Random.value * 100f;
             _noiseOffsetZ = Random.value * 100f;
 
-            if (!aquariumBounds)
+            if (movementColliders.Count == 0)
             {
                 return;
             }
@@ -60,7 +61,7 @@ namespace DaftAppleGames.BiggerAquariums
 
         private void Update()
         {
-            if (!aquariumBounds)
+            if (movementColliders.Count == 0)
                 return;
 
             HandleDarting();
@@ -79,7 +80,7 @@ namespace DaftAppleGames.BiggerAquariums
 
             if (fishSettings.steerFromBounds)
             {
-                directionToTargetModified += GetBoundsDirection();
+                directionToTargetModified += GetBoundsDirectionMulti();
             }
             
             if (fishSettings.avoidOtherFish)
@@ -120,7 +121,7 @@ namespace DaftAppleGames.BiggerAquariums
             // Clamp position to remain inside collider bounds
             if (fishSettings.clampToBounds)
             {
-                transform.position = GetBoundaryClampPosition(transform.position);
+                transform.position = GetNearestValidPoint(transform.position);
             }
 
             // Select new target if needed
@@ -149,52 +150,190 @@ namespace DaftAppleGames.BiggerAquariums
         /// <summary>
         /// Set the bounding collider 
         /// </summary>
-        public void SetCollider(Collider newCollider)
+        public void SetColliders(List<Collider> newColliders)
         {
-            aquariumBounds = newCollider;
+            movementColliders = newColliders;
         }
 
-        /// <summary>
-        /// Sets a new target within the bounds of the collider
-        /// </summary>
         private void PickNewTarget()
         {
-            if (aquariumBounds is BoxCollider box)
+            const int maxAttempts = 20;
+
+            for (int i = 0; i < maxAttempts; i++)
             {
-                // Correctly compute local random point
-                Vector3 localRandom = new Vector3(
-                    Random.Range(-box.size.x * 0.5f, box.size.x * 0.5f),
-                    Random.Range(-box.size.y * 0.5f, box.size.y * 0.5f),
-                    Random.Range(-box.size.z * 0.5f, box.size.z * 0.5f)
-                );
+                Collider randomCol = movementColliders[Random.Range(0, movementColliders.Count)];
+                Vector3 candidate = GetRandomPointInsideCollider(randomCol);
 
-                // Offset by the collider's local center
-                localRandom += box.center;
-
-                // Convert to world space
-                Vector3 newTarget = box.transform.TransformPoint(localRandom);
-
-                if (!atInitialisePosition)
+                if (IsPathContained(transform.position, candidate))
                 {
-                    transform.position = newTarget;
-                    atInitialisePosition = true;
-                    PickNewTarget();
+                    if (!atInitialisePosition)
+                    {
+                        transform.position = candidate;
+                        atInitialisePosition = true;
+                        continue;
+                    }
+
+                    targetPosition = candidate;
                     return;
                 }
+            }
 
-                targetPosition = newTarget;
-            }
-            else if (aquariumBounds is SphereCollider sphere)
-            {
-                Vector3 localRandom = Random.insideUnitSphere * sphere.radius + sphere.center;
-                targetPosition = sphere.transform.TransformPoint(localRandom);
-            }
-            else
-            {
-                targetPosition = aquariumBounds.bounds.center;
-            }
+            // fallback: nearest valid point
+            targetPosition = GetNearestValidPoint(transform.position);
         }
 
+                private bool IsPathContained(Vector3 from, Vector3 to)
+        {
+            const int steps = 10;
+            for (int i = 0; i <= steps; i++)
+            {
+                Vector3 p = Vector3.Lerp(from, to, i / (float)steps);
+                if (!IsPointInsideAnyCollider(p))
+                    return false;
+            }
+            return true;
+        }
+
+        private bool IsPointInsideAnyCollider(Vector3 pos)
+        {
+            foreach (Collider col in movementColliders)
+                if (IsPointInsideCollider(col, pos))
+                    return true;
+
+            return false;
+        }
+
+        private bool IsPointInsideCollider(Collider col, Vector3 worldPos)
+        {
+            if (col is BoxCollider box)
+            {
+                Vector3 local = box.transform.InverseTransformPoint(worldPos);
+                Vector3 c = box.center;
+                Vector3 h = box.size * 0.5f;
+                return local.x >= c.x - h.x && local.x <= c.x + h.x &&
+                       local.y >= c.y - h.y && local.y <= c.y + h.y &&
+                       local.z >= c.z - h.z && local.z <= c.z + h.z;
+            }
+
+            if (col is SphereCollider sphere)
+            {
+                Vector3 center = sphere.transform.TransformPoint(sphere.center);
+                float scaledRadius = sphere.radius * Mathf.Max(sphere.transform.lossyScale.x, sphere.transform.lossyScale.y, sphere.transform.lossyScale.z);
+                return Vector3.Distance(center, worldPos) <= scaledRadius;
+            }
+            return false;
+        }
+
+        private Vector3 GetRandomPointInsideCollider(Collider col)
+        {
+            if (col is BoxCollider box)
+            {
+                Vector3 center = box.center;
+                Vector3 halfSize = box.size * 0.5f;
+                Vector3 local = new Vector3(
+                    Random.Range(center.x - halfSize.x, center.x + halfSize.x),
+                    Random.Range(center.y - halfSize.y, center.y + halfSize.y),
+                    Random.Range(center.z - halfSize.z, center.z + halfSize.z)
+                );
+                return box.transform.TransformPoint(local);
+            }
+
+            if (col is SphereCollider sphere)
+            {
+                Vector3 center = sphere.center;
+                float radius = sphere.radius;
+                Vector3 localTarget = Random.insideUnitSphere * radius + center;
+                return sphere.transform.TransformPoint(localTarget);
+            }
+            return col.bounds.center;
+        }
+
+        private Vector3 GetNearestValidPoint(Vector3 pos)
+        {
+            Vector3 nearest = pos;
+            float nearestDist = float.MaxValue;
+
+            foreach (Collider col in movementColliders)
+            {
+                Vector3 candidate = ClampToCollider(col, pos);
+                float d = Vector3.Distance(pos, candidate);
+                if (d < nearestDist)
+                {
+                    nearestDist = d;
+                    nearest = candidate;
+                }
+            }
+            return nearest;
+        }
+
+        private Vector3 ClampToCollider(Collider col, Vector3 pos)
+        {
+            if (col is BoxCollider box)
+            {
+                Vector3 local = box.transform.InverseTransformPoint(pos);
+                Vector3 c = box.center;
+                Vector3 h = box.size * 0.5f;
+                local.x = Mathf.Clamp(local.x, c.x - h.x, c.x + h.x);
+                local.y = Mathf.Clamp(local.y, c.y - h.y, c.y + h.y);
+                local.z = Mathf.Clamp(local.z, c.z - h.z, c.z + h.z);
+                return box.transform.TransformPoint(local);
+            }
+
+            if (col is SphereCollider sphere)
+            {
+                Vector3 center = sphere.transform.TransformPoint(sphere.center);
+                float radius = sphere.radius * Mathf.Max(sphere.transform.lossyScale.x, sphere.transform.lossyScale.y, sphere.transform.lossyScale.z);
+                Vector3 dir = pos - center;
+                float dist = dir.magnitude;
+                if (dist > radius)
+                {
+                    return center + dir.normalized * (radius - 0.01f);
+                }
+            }
+            return pos;
+        }
+
+        private Vector3 GetBoundsDirectionMulti()
+        {
+            Vector3 steer = Vector3.zero;
+            foreach (Collider col in movementColliders)
+                steer += GetBoundsDirectionForCollider(col);
+            return steer.normalized * fishSettings.boundarySteerStrength;
+        }
+
+        private Vector3 GetBoundsDirectionForCollider(Collider col)
+        {
+            if (col is BoxCollider box)
+            {
+                Vector3 localPos = box.transform.InverseTransformPoint(transform.position);
+                Vector3 halfSize = box.size * 0.5f;
+                Vector3 steer = Vector3.zero;
+
+                if (Mathf.Abs(localPos.x) > halfSize.x - fishSettings.boundaryMargin)
+                    steer.x = -Mathf.Sign(localPos.x);
+                if (Mathf.Abs(localPos.y) > halfSize.y - fishSettings.boundaryMargin)
+                    steer.y = -Mathf.Sign(localPos.y);
+                if (Mathf.Abs(localPos.z) > halfSize.z - fishSettings.boundaryMargin)
+                    steer.z = -Mathf.Sign(localPos.z);
+
+                return box.transform.TransformDirection(steer);
+            }
+            else if (col is SphereCollider sphere)
+            {
+                Vector3 center = sphere.transform.TransformPoint(sphere.center);
+                float radius = sphere.radius * Mathf.Max(sphere.transform.lossyScale.x, sphere.transform.lossyScale.y, sphere.transform.lossyScale.z);
+                Vector3 toCenter = center - transform.position;
+                float dist = toCenter.magnitude;
+
+                if (dist > radius - fishSettings.boundaryMargin)
+                {
+                    float strength = Mathf.InverseLerp(radius, radius - fishSettings.boundaryMargin, dist);
+                    return toCenter.normalized * strength;
+                }
+            }
+            return Vector3.zero;
+        }
+        
         /// <summary>
         /// Gets some Perlin noise direction to add organic movement
         /// </summary>
@@ -242,9 +381,9 @@ namespace DaftAppleGames.BiggerAquariums
         /// <summary>
         /// Returns a direction Vector away from the boundary
         /// </summary>
-        private Vector3 GetBoundsDirection()
+        private Vector3 GetBoundsDirection(Collider boundsCollider)
         {
-            if (aquariumBounds is BoxCollider box)
+            if (boundsCollider is BoxCollider box)
             {
                 Vector3 localPos = box.transform.InverseTransformPoint(transform.position);
                 Vector3 halfSize = box.size * 0.5f;
@@ -261,7 +400,7 @@ namespace DaftAppleGames.BiggerAquariums
                 return box.transform.TransformDirection(steer.normalized * fishSettings.boundarySteerStrength);
             }
 
-            if (aquariumBounds is SphereCollider sphere)
+            if (boundsCollider is SphereCollider sphere)
             {
                 Vector3 center = sphere.transform.TransformPoint(sphere.center);
                 float radius = sphere.radius * Mathf.Max(
@@ -282,6 +421,8 @@ namespace DaftAppleGames.BiggerAquariums
             return Vector3.zero;
         }
 
+        /*
+        
         /// <summary>
         /// Returns a clamped position on the collider bounds
         /// </summary>
@@ -322,6 +463,8 @@ namespace DaftAppleGames.BiggerAquariums
 
             return pos;
         }
+
+        */
 
         /// <summary>
         /// Random darting behaviour

@@ -19936,10 +19936,10 @@ MonoBehaviour:
   newCoralTransforms: []
   rocksObject: {fileID: 0}
   colliderObject: {fileID: 0}
+  constructableBoundsObject: {fileID: 0}
   constructableBoundsPosition: {x: 0, y: 0, z: 0}
   constructableBoundsRotation: {x: 0, y: 0, z: 0, w: 0}
   constructableBoundsExtents: {x: 0, y: 0, z: 0}
-  movementColliderObjects: []
   animator1: {fileID: 0}
   animator2: {fileID: 0}
   existingTrackObjects: []
@@ -19947,6 +19947,7 @@ MonoBehaviour:
   newTrackObjects: []
   newAttachObjects: []
   fishSettings: {fileID: 0}
+  movementColliderObjects: []
 --- !u!4 &1241506574
 Transform:
   m_ObjectHideFlags: 0
@@ -29851,10 +29852,10 @@ MonoBehaviour:
   newCoralTransforms: []
   rocksObject: {fileID: 0}
   colliderObject: {fileID: 0}
+  constructableBoundsObject: {fileID: 0}
   constructableBoundsPosition: {x: 0, y: 0, z: 0}
   constructableBoundsRotation: {x: 0, y: 0, z: 0, w: 0}
   constructableBoundsExtents: {x: 0, y: 0, z: 0}
-  movementColliderObjects: []
   animator1: {fileID: 0}
   animator2: {fileID: 0}
   existingTrackObjects: []
@@ -29862,6 +29863,7 @@ MonoBehaviour:
   newTrackObjects: []
   newAttachObjects: []
   fishSettings: {fileID: 0}
+  movementColliderObjects: []
 --- !u!1001 &1798286442
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -59074,10 +59076,10 @@ MonoBehaviour:
   - {fileID: 5586592285975053168}
   rocksObject: {fileID: 7694562487599991946}
   colliderObject: {fileID: 3764477784059129282}
+  constructableBoundsObject: {fileID: 0}
   constructableBoundsPosition: {x: 0, y: 0, z: 0}
   constructableBoundsRotation: {x: 0, y: 0, z: 0, w: 0}
   constructableBoundsExtents: {x: 0, y: 0, z: 0}
-  movementColliderObjects: []
   animator1: {fileID: 16410816570413854}
   animator2: {fileID: 16410816570413852}
   existingTrackObjects:
@@ -59117,6 +59119,7 @@ MonoBehaviour:
   - {fileID: 7694562487962045109}
   - {fileID: 7694562488501670995}
   fishSettings: {fileID: 0}
+  movementColliderObjects: []
 --- !u!4 &4131096648316855766
 Transform:
   m_ObjectHideFlags: 0
@@ -62442,11 +62445,10 @@ MonoBehaviour:
   - {fileID: 2881004906963289274}
   rocksObject: {fileID: 1326448946868851474}
   colliderObject: {fileID: 770585908328176904}
+  constructableBoundsObject: {fileID: 0}
   constructableBoundsPosition: {x: 0, y: 0, z: 0}
   constructableBoundsRotation: {x: 0, y: 0, z: 0, w: 0}
   constructableBoundsExtents: {x: 0, y: 0, z: 0}
-  movementColliderObjects:
-  - {fileID: 3754173759178903420}
   animator1: {fileID: 2768198504428412639}
   animator2: {fileID: 8006525093239332000}
   existingTrackObjects:
@@ -62486,6 +62488,8 @@ MonoBehaviour:
   - {fileID: 7472066666298832462}
   - {fileID: 7046126275739265621}
   fishSettings: {fileID: 0}
+  movementColliderObjects:
+  - {fileID: 3754173759178903420}
 --- !u!1 &5847012821085001902
 GameObject:
   m_ObjectHideFlags: 0
@@ -70537,12 +70541,10 @@ MonoBehaviour:
   - {fileID: 2532530814587385693}
   rocksObject: {fileID: 3905178178466088459}
   colliderObject: {fileID: 3960292572224750128}
+  constructableBoundsObject: {fileID: 0}
   constructableBoundsPosition: {x: 0, y: 0, z: 0}
   constructableBoundsRotation: {x: 0, y: 0, z: 0, w: 0}
   constructableBoundsExtents: {x: 0, y: 0, z: 0}
-  movementColliderObjects:
-  - {fileID: 61334623689734344}
-  - {fileID: 1654963024472999854}
   animator1: {fileID: 3609023641661551520}
   animator2: {fileID: 108401205283559866}
   existingTrackObjects:
@@ -70582,6 +70584,9 @@ MonoBehaviour:
   - {fileID: 7333524000722588444}
   - {fileID: 8553269002114170381}
   fishSettings: {fileID: 11400000, guid: c88806ab8db3ca94ea92c98cd8dabeb9, type: 2}
+  movementColliderObjects:
+  - {fileID: 61334623689734344}
+  - {fileID: 1654963024472999854}
 --- !u!33 &9170899733721864961
 MeshFilter:
   m_ObjectHideFlags: 0

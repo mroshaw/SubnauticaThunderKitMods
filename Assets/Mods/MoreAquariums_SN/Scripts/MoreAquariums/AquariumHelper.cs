@@ -30,12 +30,14 @@ namespace DaftAppleGames.MoreAquariums
         [SerializeField] private Transform[] newCoralTransforms;
         [SerializeField] private GameObject rocksObject;
         [SerializeField] private GameObject colliderObject;
+        
+        [Header("Constructable")]
+        [SerializeField] private GameObject constructableBoundsObject;
         [SerializeField] private Vector3 constructableBoundsPosition;
         [SerializeField] private Quaternion constructableBoundsRotation;
         [SerializeField] private Vector3 constructableBoundsExtents;
-        [SerializeField] private GameObject[] movementColliderObjects;
 
-        [Header("Fish Attach Points")]
+        [Header("Fish Animation")]
         [SerializeField] private Animator animator1;
         [SerializeField] private Animator animator2;
         [SerializeField] private GameObject[] existingTrackObjects;
@@ -45,7 +47,9 @@ namespace DaftAppleGames.MoreAquariums
 
         [Header("Custom Movement")]
         [SerializeField] private FishSettings fishSettings;
+        [SerializeField] private GameObject[] movementColliderObjects;
         
+        // Used to control the waving animation of the coral and plants
         private static readonly int WaveUpMinParam = Shader.PropertyToID("_WaveUpMin");
         private static readonly int ScaleParam = Shader.PropertyToID("_Scale");
         private static readonly int FrequencyParam = Shader.PropertyToID("_Frequency");
@@ -114,8 +118,19 @@ namespace DaftAppleGames.MoreAquariums
                 ModDebugLog.LogError($"ConstructableBounds not found!");
             }
             
-            ModDebugLog.LogDebug($"Setting bounds to {constructableBoundsPosition}, {constructableBoundsExtents}...");
-            constructableBounds.bounds = new OrientedBounds(constructableBoundsPosition, constructableBoundsRotation , constructableBoundsExtents);
+            // ModDebugLog.LogDebug($"Setting bounds to {constructableBoundsPosition}, {constructableBoundsExtents}...");
+            // constructableBounds.bounds = new OrientedBounds(constructableBoundsPosition, constructableBoundsRotation , constructableBoundsExtents);
+            
+            ModDebugLog.LogDebug($"Removing old ConstructableBounds component...");
+            Destroy(constructableBounds);
+            
+            ModDebugLog.LogDebug($"Adding new ConstructableBounds gameobject...");
+            GameObject newConstructableBoundsGo =  Instantiate(constructableBoundsObject, vanillaAquariumGo.transform, true);
+            newConstructableBoundsGo.name = "ConstructableBounds";
+            newConstructableBoundsGo.transform.localPosition = Vector3.zero;
+            newConstructableBoundsGo.transform.localRotation = Quaternion.identity;
+            newConstructableBoundsGo.transform.localScale = Vector3.one;
+            ModDebugLog.LogDebug($"Done configuring constructable bounds.");
         }
 
         /// <summary>

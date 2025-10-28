@@ -53,6 +53,67 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   applyTo: {fileID: 106142409}
+--- !u!1 &124892669
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 124892670}
+  - component: {fileID: 124892671}
+  - component: {fileID: 124892672}
+  m_Layer: 0
+  m_Name: ConstructableBounds
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &124892670
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 124892669}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5747813556211692667}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &124892671
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 124892669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -578373017, guid: 06dd3d5416bf43ea368cc39ff96e6d5a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bounds:
+    position: {x: -0.011212826, y: 1, z: -0.026595473}
+    rotation: {x: 0, y: 0, z: 0, w: 0}
+    extents: {x: 2.6, y: 0.8, z: 0.3}
+--- !u!114 &124892672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 124892669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ffcce0c6f8ad614fb92c6b6b0dce234, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  renderersObject: {fileID: 1901438420583079910}
 --- !u!1 &155364302
 GameObject:
   m_ObjectHideFlags: 0
@@ -2663,6 +2724,7 @@ Transform:
   - {fileID: 7720573686983163207}
   - {fileID: 106142410}
   - {fileID: 3526804058470832158}
+  - {fileID: 124892670}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2699,11 +2761,10 @@ MonoBehaviour:
   - {fileID: 2832486836882445619}
   rocksObject: {fileID: 106142409}
   colliderObject: {fileID: 6842814231332764545}
+  constructableBoundsObject: {fileID: 124892669}
   constructableBoundsPosition: {x: -0.01121283, y: 1.149481, z: -0.02659547}
   constructableBoundsRotation: {x: 0, y: 0, z: 0, w: 0}
   constructableBoundsExtents: {x: 2.899089, y: 1.147964, z: 0.610125}
-  movementColliderObjects:
-  - {fileID: 2735901662410110505}
   animator1: {fileID: 7706466400797541725}
   animator2: {fileID: 7706466400797541727}
   existingTrackObjects:
@@ -2743,6 +2804,8 @@ MonoBehaviour:
   - {fileID: 740564214}
   - {fileID: 1276248592}
   fishSettings: {fileID: 11400000, guid: c88806ab8db3ca94ea92c98cd8dabeb9, type: 2}
+  movementColliderObjects:
+  - {fileID: 2735901662410110505}
 --- !u!1 &1943698378417909192
 GameObject:
   m_ObjectHideFlags: 0
@@ -4330,7 +4393,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 5.79, y: 2, z: 0.5}
-  m_Center: {x: 0, y: 1, z: 0}
+  m_Center: {x: 0, y: 1.02, z: 0}
 --- !u!1 &7432112586117589458
 GameObject:
   m_ObjectHideFlags: 0

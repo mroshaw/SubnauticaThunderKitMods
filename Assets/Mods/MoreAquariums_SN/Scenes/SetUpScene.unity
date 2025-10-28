@@ -19937,9 +19937,6 @@ MonoBehaviour:
   rocksObject: {fileID: 0}
   colliderObject: {fileID: 0}
   constructableBoundsObject: {fileID: 0}
-  constructableBoundsPosition: {x: 0, y: 0, z: 0}
-  constructableBoundsRotation: {x: 0, y: 0, z: 0, w: 0}
-  constructableBoundsExtents: {x: 0, y: 0, z: 0}
   animator1: {fileID: 0}
   animator2: {fileID: 0}
   existingTrackObjects: []
@@ -29853,9 +29850,6 @@ MonoBehaviour:
   rocksObject: {fileID: 0}
   colliderObject: {fileID: 0}
   constructableBoundsObject: {fileID: 0}
-  constructableBoundsPosition: {x: 0, y: 0, z: 0}
-  constructableBoundsRotation: {x: 0, y: 0, z: 0, w: 0}
-  constructableBoundsExtents: {x: 0, y: 0, z: 0}
   animator1: {fileID: 0}
   animator2: {fileID: 0}
   existingTrackObjects: []
@@ -59077,9 +59071,6 @@ MonoBehaviour:
   rocksObject: {fileID: 7694562487599991946}
   colliderObject: {fileID: 3764477784059129282}
   constructableBoundsObject: {fileID: 0}
-  constructableBoundsPosition: {x: 0, y: 0, z: 0}
-  constructableBoundsRotation: {x: 0, y: 0, z: 0, w: 0}
-  constructableBoundsExtents: {x: 0, y: 0, z: 0}
   animator1: {fileID: 16410816570413854}
   animator2: {fileID: 16410816570413852}
   existingTrackObjects:
@@ -62446,9 +62437,6 @@ MonoBehaviour:
   rocksObject: {fileID: 1326448946868851474}
   colliderObject: {fileID: 770585908328176904}
   constructableBoundsObject: {fileID: 0}
-  constructableBoundsPosition: {x: 0, y: 0, z: 0}
-  constructableBoundsRotation: {x: 0, y: 0, z: 0, w: 0}
-  constructableBoundsExtents: {x: 0, y: 0, z: 0}
   animator1: {fileID: 2768198504428412639}
   animator2: {fileID: 8006525093239332000}
   existingTrackObjects:
@@ -70542,9 +70530,6 @@ MonoBehaviour:
   rocksObject: {fileID: 3905178178466088459}
   colliderObject: {fileID: 3960292572224750128}
   constructableBoundsObject: {fileID: 0}
-  constructableBoundsPosition: {x: 0, y: 0, z: 0}
-  constructableBoundsRotation: {x: 0, y: 0, z: 0, w: 0}
-  constructableBoundsExtents: {x: 0, y: 0, z: 0}
   animator1: {fileID: 3609023641661551520}
   animator2: {fileID: 108401205283559866}
   existingTrackObjects:

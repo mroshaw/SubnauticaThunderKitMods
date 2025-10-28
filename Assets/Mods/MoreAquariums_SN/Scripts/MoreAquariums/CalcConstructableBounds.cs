@@ -1,7 +1,7 @@
 ﻿using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace DaftAppleGames.MoreAquariums.Editor
+namespace DaftAppleGames.MoreAquariums
 {
     public class CalcConstructableBounds : MonoBehaviour
     {

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   baseSpeed: 0.03
   randomSpeedModifier: 0.01
-  turnSpeed: 1
+  turnSpeed: 1.3
   arrivalDistance: 0.015
   stopRoll: 0
   limitPitch: 1
@@ -27,7 +27,7 @@ MonoBehaviour:
   dartIntervalMin: 15
   dartIntervalMax: 60
   avoidOtherFish: 1
-  avoidanceRadius: 0.01
+  avoidanceRadius: 0.005
   avoidanceStrength: 0.5
   applyNoise: 1
   noiseInfluence: 0.5

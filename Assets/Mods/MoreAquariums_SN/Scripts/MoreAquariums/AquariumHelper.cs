@@ -33,9 +33,6 @@ namespace DaftAppleGames.MoreAquariums
         
         [Header("Constructable")]
         [SerializeField] private GameObject constructableBoundsObject;
-        [SerializeField] private Vector3 constructableBoundsPosition;
-        [SerializeField] private Quaternion constructableBoundsRotation;
-        [SerializeField] private Vector3 constructableBoundsExtents;
 
         [Header("Fish Animation")]
         [SerializeField] private Animator animator1;

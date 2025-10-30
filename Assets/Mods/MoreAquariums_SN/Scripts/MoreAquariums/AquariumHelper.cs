@@ -333,6 +333,11 @@ namespace DaftAppleGames.MoreAquariums
             
             ModDebugLog.LogDebug("Updating SkyApplier...");
             SkyApplier skyApplier = vanillaAquariumGo.GetComponent<SkyApplier>();
+            if (!skyApplier)
+            {
+                ModDebugLog.LogDebug("Looking for SkyApplier in children...");
+                skyApplier = vanillaAquariumGo.GetComponentInChildren<SkyApplier>();
+            }
             skyApplier.renderers = vanillaAquariumGo.GetComponentsInChildren<Renderer>(true);
         }
 

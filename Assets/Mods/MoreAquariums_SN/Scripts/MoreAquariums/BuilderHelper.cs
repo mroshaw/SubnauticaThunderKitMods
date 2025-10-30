@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
-using static DaftAppleGames.MoreAquariums.MoreAquariumsPlugin;
 
 namespace DaftAppleGames.MoreAquariums
 {

@@ -30,6 +30,7 @@ namespace DaftAppleGames.MoreAquariums
             public bool AllowConstructionOnConstructables;
             public float WaveScale;
             public Action<GameObject> PostConfigAction;
+            public bool ReplaceModel;
         }
 
         public static PrefabInfo Info;

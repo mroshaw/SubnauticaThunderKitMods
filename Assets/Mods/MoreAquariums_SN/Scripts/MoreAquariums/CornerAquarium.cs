@@ -22,6 +22,7 @@ namespace DaftAppleGames.MoreAquariums
             AllowConstructionOnConstructables = false,
             UseCustomMovement = false,
             WaveScale = 1.0f,
+            ReplaceModel = false,
             
             // Recipe for the builder
             Recipe = new RecipeData(

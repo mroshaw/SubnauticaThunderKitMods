@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using Nautilus.Utility;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using static DaftAppleGames.MoreAquariums.MoreAquariumsPlugin;
+using Nautilus.Utility.ThunderkitUtilities;
 
 namespace DaftAppleGames.MoreAquariums
 {
@@ -11,7 +13,8 @@ namespace DaftAppleGames.MoreAquariums
         Corner,
         Curved,
         LShaped,
-        Desk
+        Desk,
+        Spherical
     }
 
     /// <summary>
@@ -19,9 +22,12 @@ namespace DaftAppleGames.MoreAquariums
     /// </summary>
     public class AquariumHelper : MonoBehaviour
     {
-        [Header("Main Objects")]
+        [Header("Mesh/Model")]
         [SerializeField] private MeshFilter aquariumMesh;
         [SerializeField] private MeshFilter aquariumGlassMesh;
+        [SerializeField] private GameObject newAquariumModel;
+        
+        [Header("Main Objects")]
         [SerializeField] private Transform bubbles1Transform;
         [SerializeField] private Transform bubbles2Transform;
         [SerializeField] private Transform coral1Transform;
@@ -69,7 +75,7 @@ namespace DaftAppleGames.MoreAquariums
             ConfigureStorageContainer(vanillaAquariumGo, prefabData.StorageWidth, prefabData.StorageHeight);
             
             // Replace the model meshes
-            ConfigureMeshes(aquariumModel);
+            ConfigureMeshes(vanillaAquariumGo, aquariumModel, prefabData.ReplaceModel);
             
             // Duplicate and reposition coral
             ConfigureCoral(aquariumModel, prefabData.WaveScale);
@@ -85,7 +91,7 @@ namespace DaftAppleGames.MoreAquariums
            
             // If configured, allow construction on other constructables
             vanillaConstructable.allowedOnConstructables = prefabData.AllowConstructionOnConstructables;
-            ConfigureConstructable(vanillaAquariumGo, prefabData.AllowConstructionOnConstructables);
+            ConfigureConstructable(vanillaAquariumGo, prefabData.AllowConstructionOnConstructables, prefabData.ReplaceModel);
             
             // Reposition tracks and add new
             ConfigureTracks(vanillaAquariumGo, prefabData.UseCustomMovement);
@@ -102,7 +108,7 @@ namespace DaftAppleGames.MoreAquariums
         /// <summary>
         /// Configure the Constructable based on the aquarium prefab data
         /// </summary>
-        private void ConfigureConstructable(GameObject vanillaAquariumGo, bool allowConstructionOnConstructables)
+        private void ConfigureConstructable(GameObject vanillaAquariumGo, bool allowConstructionOnConstructables, bool replaceModel)
         {
             ModDebugLog.LogDebug($"Configuring constructable...");
             Constructable vanillaConstructable = vanillaAquariumGo.GetComponent<Constructable>();
@@ -126,7 +132,7 @@ namespace DaftAppleGames.MoreAquariums
             newConstructableBoundsGo.name = "ConstructableBounds";
             newConstructableBoundsGo.transform.localPosition = Vector3.zero;
             newConstructableBoundsGo.transform.localRotation = Quaternion.identity;
-            newConstructableBoundsGo.transform.localScale = Vector3.one;
+            newConstructableBoundsGo.transform.localScale = constructableBoundsObject.transform.localScale;
             ModDebugLog.LogDebug($"Done configuring constructable bounds.");
         }
 
@@ -142,9 +148,24 @@ namespace DaftAppleGames.MoreAquariums
         }
         
         /// <summary>
+        /// Apply appropriate changes to meshes or game model 
+        /// </summary>
+        private void ConfigureMeshes(GameObject vanillaAquariumGo, GameObject aquariumModel, bool replaceModel)
+        {
+            if (replaceModel)
+            {
+                ReplaceModel(vanillaAquariumGo, aquariumModel);
+            }
+            else
+            {
+                ReplaceMeshes(aquariumModel);
+            }
+        }
+
+        /// <summary>
         /// Replace the meshes with our custom ones
         /// </summary>
-        private void ConfigureMeshes(GameObject aquariumModel)
+        private void ReplaceMeshes(GameObject aquariumModel)
         {
             ModDebugLog.LogDebug("Replacing meshes...");
             MeshFilter[] meshFilters = aquariumModel.GetComponentsInChildren<MeshFilter>(true);
@@ -166,6 +187,33 @@ namespace DaftAppleGames.MoreAquariums
             }
         }
 
+        /// <summary>
+        /// Replace the entire model
+        /// </summary>
+        private void ReplaceModel(GameObject vanillaAquariumGo, GameObject aquariumModel)
+        {
+            // Disable the exist geometry
+            GameObject animatorGo1 = aquariumModel.transform.Find("Aquarium_animation2").gameObject;
+            GameObject animatorGo2 = aquariumModel.transform.Find("Aquarium_animation").gameObject;
+            
+            ModDebugLog.LogDebug($"Finding geometry...");
+            GameObject geometry1 = animatorGo1.transform.Find("Aquarium_geo").gameObject;
+            GameObject geometry2 = animatorGo2.transform.Find("Aquarium_geo").gameObject;
+
+            ModDebugLog.LogDebug($"Disable geometry...");
+            geometry1.SetActive(false);
+            geometry2.SetActive(false);
+            
+            ModDebugLog.LogDebug($"Replacing model...");
+            GameObject newModel = Instantiate(newAquariumModel, aquariumModel.transform.parent, false);
+            newModel.transform.localPosition = Vector3.zero;
+            newModel.transform.localRotation = Quaternion.identity;
+            newModel.transform.localScale = newAquariumModel.transform.localScale;
+            MaterialUtils.ApplySNShaders(newModel);
+            Constructable constructable = vanillaAquariumGo.GetComponent<Constructable>();
+            constructable.model = newModel;
+        }
+        
         /// <summary>
         /// Copies then repositions the second coral object to make things a bit more natural
         /// </summary>
@@ -226,6 +274,7 @@ namespace DaftAppleGames.MoreAquariums
 
                 // Reposition to the new position
                 origCoral.transform.localPosition = coralTransform.localPosition;
+                origCoral.transform.localRotation = coralTransform.localRotation;
                 origCoral.transform.localScale = coralTransform.localScale;
                 origCoral.SetActive(coralTransform.gameObject.activeSelf);
 
@@ -541,6 +590,9 @@ namespace DaftAppleGames.MoreAquariums
                     break;
                 case AquariumType.Desk:
                     vanillaAquariumGo.AddComponent<DeskAquarium>();
+                    break;
+                case AquariumType.Spherical:
+                    vanillaAquariumGo.AddComponent<SphericalAquarium>();
                     break;
             }
         }

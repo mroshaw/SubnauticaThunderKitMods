@@ -2,7 +2,7 @@
 
 namespace DaftAppleGames.MoreAquariums
 {
-    public class DoubleAquarium : AquariumBase
+    public class SphericalAquarium : AquariumBase
     {
         // Non-static properties of the aquarium component
         public override int StorageHeight => 4;
@@ -11,18 +11,18 @@ namespace DaftAppleGames.MoreAquariums
         // Properties of the Aquarium
         private static readonly PrefabData Data = new PrefabData
         {
-            ClassId = "DoubleAquarium",
-            DisplayName = "Double Aquarium",
-            Description = "A double-sized aquarium for use in long rooms.",
-            IconAssetName = "DoubleAquariumIcon.png",
-            PrefabAssetName = "DoubleAquariumPrefab.prefab",
+            ClassId = "SphericalAquarium",
+            DisplayName = "Spherical Aquarium",
+            Description = "A spherical aquarium with capacity for 16 fish.",
+            IconAssetName = "SphericalAquariumIcon.png",
+            PrefabAssetName = "SphericalAquariumPrefab.prefab",
             StorageHeight = 4,
             StorageWidth = 4,
             AllowConstructionOnConstructables = false,
-            AquariumType = AquariumType.Double,
-            UseCustomMovement = false,
+            AquariumType = AquariumType.Spherical,
+            UseCustomMovement = true,
             WaveScale = 1.0f,
-            ReplaceModel = false,
+            ReplaceModel = true,
             
             // Recipe for the builder
             Recipe = new RecipeData(

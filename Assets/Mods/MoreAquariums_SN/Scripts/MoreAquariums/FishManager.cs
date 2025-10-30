@@ -11,9 +11,11 @@ namespace DaftAppleGames.MoreAquariums
 
         internal FishSettings FishSettings => fishSettings;
         internal List<Collider> MovementColliders => movementColliders;
-        internal List<AquariumFishPlus> FishList => _fishList;
-
+        internal List<AquariumFishPlus> ActiveFishList => _activeFishList;
+        
         private readonly List<AquariumFishPlus> _fishList = new List<AquariumFishPlus>();
+        private readonly List<AquariumFishPlus> _activeFishList = new List<AquariumFishPlus>();
+        private bool _isCulled;
         
         /// <summary>
         /// Get and configure all child fish objects
@@ -49,22 +51,65 @@ namespace DaftAppleGames.MoreAquariums
         /// Add a new fish to the manager
         /// </summary>
         /// <param name="newFishPlus"></param>
-        internal void AddFish(AquariumFishPlus newFishPlus)
+        internal void AddActiveFish(AquariumFishPlus newFishPlus)
         {
             if (!_fishList.Contains(newFishPlus))
             {
                 _fishList.Add(newFishPlus);
             }
+
+            if (!_activeFishList.Contains(newFishPlus))
+            {
+                _activeFishList.Add(newFishPlus);
+            }
+            
         }
 
         /// <summary>
         /// Remove a fish from the manager
         /// </summary>
-        internal void RemoveFish(AquariumFishPlus fishPlusToRemove)
+        internal void RemoveActiveFish(AquariumFishPlus fishPlusToRemove)
         {
             if (_fishList.Contains(fishPlusToRemove))
             {
-                _fishList.Remove(fishPlusToRemove);
+                _activeFishList.Remove(fishPlusToRemove);
+            }
+        }
+
+        /// <summary>
+        /// Cull / enable fish based on player distance to avoid unnecessary overhead
+        /// </summary>
+        private void Update()
+        {
+            if (!fishSettings.culling)
+            {
+                return;
+            }
+
+            float distanceFromPlayer = Vector3.Distance(transform.position, Player.main.transform.position);
+            if (distanceFromPlayer < fishSettings.cullingDistanceFromPlayer && _isCulled)
+            {
+                ModDebugLog.LogDebug("FishManager: Enabling fish...");
+                _isCulled = false;
+                SetFishActiveState(true);
+            }
+
+            if (distanceFromPlayer >= fishSettings.cullingDistanceFromPlayer && !_isCulled)
+            {
+                ModDebugLog.LogDebug("FishManager: Disabling fish...");
+                _isCulled = true;
+                SetFishActiveState(false);
+            }
+        }
+
+        /// <summary>
+        /// Sets the active state of all fish in the manager
+        /// </summary>
+        private void SetFishActiveState(bool state)
+        {
+            foreach (AquariumFishPlus fish in _fishList)
+            {
+                fish.gameObject.SetActive(state);
             }
         }
     }

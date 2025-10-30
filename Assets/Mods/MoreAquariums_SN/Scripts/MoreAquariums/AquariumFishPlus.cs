@@ -38,7 +38,7 @@ namespace DaftAppleGames.MoreAquariums
         {
             if (fishManager)
             {
-                fishManager.AddFish(this);
+                fishManager.AddActiveFish(this);
             }
         }
 
@@ -49,7 +49,7 @@ namespace DaftAppleGames.MoreAquariums
         {
             if (fishManager)
             {
-                fishManager.RemoveFish(this);
+                fishManager.RemoveActiveFish(this);
             }
         }
         
@@ -379,7 +379,7 @@ namespace DaftAppleGames.MoreAquariums
             
             int count = 0;
 
-            foreach (AquariumFishPlus fish in fishManager.FishList)
+            foreach (AquariumFishPlus fish in fishManager.ActiveFishList)
             {
                 // Don't avoid self
                 if (fish == this)

@@ -40,5 +40,9 @@ namespace DaftAppleGames.MoreAquariums
         [SerializeField] internal bool steerFromBounds = true;
         [SerializeField] internal float boundaryMargin = 0.05f;
         [SerializeField] internal float boundarySteerStrength = 0.5f;
+        
+        [Header("Culling")]
+        [SerializeField] internal bool culling = true;
+        [SerializeField] internal float cullingDistanceFromPlayer = 20.0f;
     }
 }

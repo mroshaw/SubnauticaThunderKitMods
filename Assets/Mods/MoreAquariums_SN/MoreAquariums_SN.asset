@@ -20,9 +20,11 @@ MonoBehaviour:
     - {fileID: 2800000, guid: 8c81a3642dd621945ad9f52ea2c0dcf0, type: 3}
     - {fileID: 3432708091018669541, guid: b588b5a3b1675a346875d2b7faaf5615, type: 3}
     - {fileID: 2800000, guid: a0121f3b624625b40a43065122c93995, type: 3}
-    - {fileID: 1901438420583079910, guid: 4db648c0b9094e541994e488513cc8e7, type: 3}
+    - {fileID: 1901438420583079910, guid: 54fcf6b8e72158b4894a0663ef7a0e09, type: 3}
     - {fileID: 241501260581000164, guid: 11a7ba02341541649bbf47009d4355b8, type: 3}
     - {fileID: 2800000, guid: 92e4df23474a9af45a851a882dd031b2, type: 3}
+    - {fileID: 5860637205128845850, guid: 4db648c0b9094e541994e488513cc8e7, type: 3}
+    - {fileID: 2800000, guid: 5e21a56d31b24ae42ae014c1f3347f12, type: 3}
 --- !u!114 &-121899452589423327
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -39,7 +41,7 @@ MonoBehaviour:
   Author: Daft Apple Games
   Name: BiggerAquariums_SN
   Description: Adds several new aquariums to the builder
-  Version: 1.0.0
+  Version: 1.3.0
   Dependencies: []
 --- !u!114 &11400000
 MonoBehaviour:

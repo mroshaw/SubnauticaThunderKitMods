@@ -11,7 +11,7 @@ namespace DaftAppleGames.MoreAquariums
     {
         private const string MyGuid = "com.mroshaw.biggeraquariumssn";
         private const string PluginName = "More Aquariums SN";
-        private const string VersionString = "1.0.0";
+        private const string VersionString = "1.3.0";
 
         private const string AssetBundleName = "biggeraquariumsassetbundle";
         internal static ModAssetBundleUtils ModAssetUtils;
@@ -35,8 +35,7 @@ namespace DaftAppleGames.MoreAquariums
             DoubleAquarium.Register();
             CornerAquarium.Register();
             DeskAquarium.Register();
-            // CurvedAquarium.Register();
-            // LShapedAquarium.Register();
+            SphericalAquarium.Register();
             
             // Patch in our MOD
             Harmony.PatchAll();

@@ -10,6 +10,9 @@ namespace DaftAppleGames.MoreAquariums
     [Menu("More Aquariums")]
     internal class ModConfigFile : ConfigFile
     {
+        [Toggle("Bubble Audio (Requires Restart)", Tooltip="If the ambient bubble audio annoys you, turn it off here.")]
+        public bool BubbleAudioEnabled = true;
+
         [Toggle("Detailed Logging", Tooltip="Only check this if you have a problem and need to see the debug output of the mod in the Player.log file"), OnChange(nameof(DetailedLoggingChangedHandler))]
         public bool DetailedLogging = false;
 

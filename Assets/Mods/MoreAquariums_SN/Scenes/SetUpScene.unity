@@ -19386,6 +19386,10 @@ MonoBehaviour:
   dartEndTime: 0
   nextDartTime: 0
   atInitialisePosition: 0
+  _noiseOffsetX: 0
+  _noiseOffsetY: 0
+  _noiseOffsetZ: 0
+  _fishManagerSet: 0
 --- !u!1 &1115400393
 GameObject:
   m_ObjectHideFlags: 0
@@ -38806,6 +38810,10 @@ MonoBehaviour:
   dartEndTime: 0
   nextDartTime: 0
   atInitialisePosition: 0
+  _noiseOffsetX: 0
+  _noiseOffsetY: 0
+  _noiseOffsetZ: 0
+  _fishManagerSet: 0
 --- !u!23 &175013674250745432
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -42633,6 +42641,10 @@ MonoBehaviour:
   dartEndTime: 0
   nextDartTime: 0
   atInitialisePosition: 0
+  _noiseOffsetX: 0
+  _noiseOffsetY: 0
+  _noiseOffsetZ: 0
+  _fishManagerSet: 0
 --- !u!4 &1015059715053172748
 Transform:
   m_ObjectHideFlags: 0
@@ -43142,6 +43154,10 @@ MonoBehaviour:
   dartEndTime: 0
   nextDartTime: 0
   atInitialisePosition: 0
+  _noiseOffsetX: 0
+  _noiseOffsetY: 0
+  _noiseOffsetZ: 0
+  _fishManagerSet: 0
 --- !u!4 &1276798829329619879
 Transform:
   m_ObjectHideFlags: 0
@@ -44410,6 +44426,10 @@ MonoBehaviour:
   dartEndTime: 0
   nextDartTime: 0
   atInitialisePosition: 0
+  _noiseOffsetX: 0
+  _noiseOffsetY: 0
+  _noiseOffsetZ: 0
+  _fishManagerSet: 0
 --- !u!1001 &2039732181001845079
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -56723,6 +56743,10 @@ MonoBehaviour:
   dartEndTime: 0
   nextDartTime: 0
   atInitialisePosition: 0
+  _noiseOffsetX: 0
+  _noiseOffsetY: 0
+  _noiseOffsetZ: 0
+  _fishManagerSet: 0
 --- !u!4 &2635164469167608715
 Transform:
   m_ObjectHideFlags: 0
@@ -57293,6 +57317,10 @@ MonoBehaviour:
   dartEndTime: 0
   nextDartTime: 0
   atInitialisePosition: 0
+  _noiseOffsetX: 0
+  _noiseOffsetY: 0
+  _noiseOffsetZ: 0
+  _fishManagerSet: 0
 --- !u!33 &2951774757982259428
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -59401,6 +59429,10 @@ MonoBehaviour:
   dartEndTime: 0
   nextDartTime: 0
   atInitialisePosition: 0
+  _noiseOffsetX: 0
+  _noiseOffsetY: 0
+  _noiseOffsetZ: 0
+  _fishManagerSet: 0
 --- !u!33 &4198008547679402882
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -60764,6 +60796,10 @@ MonoBehaviour:
   dartEndTime: 0
   nextDartTime: 0
   atInitialisePosition: 0
+  _noiseOffsetX: 0
+  _noiseOffsetY: 0
+  _noiseOffsetZ: 0
+  _fishManagerSet: 0
 --- !u!4 &4812734749192794214
 Transform:
   m_ObjectHideFlags: 0
@@ -63071,6 +63107,10 @@ MonoBehaviour:
   dartEndTime: 0
   nextDartTime: 0
   atInitialisePosition: 0
+  _noiseOffsetX: 0
+  _noiseOffsetY: 0
+  _noiseOffsetZ: 0
+  _fishManagerSet: 0
 --- !u!4 &6245103347751287334
 Transform:
   m_ObjectHideFlags: 0
@@ -63257,6 +63297,10 @@ MonoBehaviour:
   dartEndTime: 0
   nextDartTime: 0
   atInitialisePosition: 0
+  _noiseOffsetX: 0
+  _noiseOffsetY: 0
+  _noiseOffsetZ: 0
+  _fishManagerSet: 0
 --- !u!1 &6315536498092983429
 GameObject:
   m_ObjectHideFlags: 0
@@ -64315,6 +64359,10 @@ MonoBehaviour:
   dartEndTime: 0
   nextDartTime: 0
   atInitialisePosition: 0
+  _noiseOffsetX: 0
+  _noiseOffsetY: 0
+  _noiseOffsetZ: 0
+  _fishManagerSet: 0
 --- !u!33 &6914792809384203593
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -65686,6 +65734,10 @@ MonoBehaviour:
   dartEndTime: 0
   nextDartTime: 0
   atInitialisePosition: 0
+  _noiseOffsetX: 0
+  _noiseOffsetY: 0
+  _noiseOffsetZ: 0
+  _fishManagerSet: 0
 --- !u!4 &7694562487210252372
 Transform:
   m_ObjectHideFlags: 0
@@ -65930,6 +65982,10 @@ MonoBehaviour:
   dartEndTime: 0
   nextDartTime: 0
   atInitialisePosition: 0
+  _noiseOffsetX: 0
+  _noiseOffsetY: 0
+  _noiseOffsetZ: 0
+  _fishManagerSet: 0
 --- !u!4 &7694562487385535334
 Transform:
   m_ObjectHideFlags: 0
@@ -65986,6 +66042,10 @@ MonoBehaviour:
   dartEndTime: 0
   nextDartTime: 0
   atInitialisePosition: 0
+  _noiseOffsetX: 0
+  _noiseOffsetY: 0
+  _noiseOffsetZ: 0
+  _fishManagerSet: 0
 --- !u!4 &7694562487599991945
 Transform:
   m_ObjectHideFlags: 0
@@ -66207,6 +66267,10 @@ MonoBehaviour:
   dartEndTime: 0
   nextDartTime: 0
   atInitialisePosition: 0
+  _noiseOffsetX: 0
+  _noiseOffsetY: 0
+  _noiseOffsetZ: 0
+  _fishManagerSet: 0
 --- !u!1 &7694562487863043412
 GameObject:
   m_ObjectHideFlags: 0
@@ -66449,6 +66513,10 @@ MonoBehaviour:
   dartEndTime: 0
   nextDartTime: 0
   atInitialisePosition: 0
+  _noiseOffsetX: 0
+  _noiseOffsetY: 0
+  _noiseOffsetZ: 0
+  _fishManagerSet: 0
 --- !u!135 &7694562487953808036
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -66722,6 +66790,10 @@ MonoBehaviour:
   dartEndTime: 0
   nextDartTime: 0
   atInitialisePosition: 0
+  _noiseOffsetX: 0
+  _noiseOffsetY: 0
+  _noiseOffsetZ: 0
+  _fishManagerSet: 0
 --- !u!4 &7694562488038785669
 Transform:
   m_ObjectHideFlags: 0
@@ -67616,6 +67688,10 @@ MonoBehaviour:
   dartEndTime: 0
   nextDartTime: 0
   atInitialisePosition: 0
+  _noiseOffsetX: 0
+  _noiseOffsetY: 0
+  _noiseOffsetZ: 0
+  _fishManagerSet: 0
 --- !u!1 &7694562488922828252
 GameObject:
   m_ObjectHideFlags: 0
@@ -67657,6 +67733,10 @@ MonoBehaviour:
   dartEndTime: 0
   nextDartTime: 0
   atInitialisePosition: 0
+  _noiseOffsetX: 0
+  _noiseOffsetY: 0
+  _noiseOffsetZ: 0
+  _fishManagerSet: 0
 --- !u!4 &7694562488922828259
 Transform:
   m_ObjectHideFlags: 0
@@ -69006,6 +69086,10 @@ MonoBehaviour:
   dartEndTime: 0
   nextDartTime: 0
   atInitialisePosition: 0
+  _noiseOffsetX: 0
+  _noiseOffsetY: 0
+  _noiseOffsetZ: 0
+  _fishManagerSet: 0
 --- !u!1 &8325929891126735827
 GameObject:
   m_ObjectHideFlags: 0

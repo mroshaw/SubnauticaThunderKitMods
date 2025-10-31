@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using DaftAppleGames.ModUtils;
 using Nautilus.Utility;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -84,7 +85,7 @@ namespace DaftAppleGames.MoreAquariums
             ConfigureRocks(vanillaAquariumGo);
             
             // Duplicate and reposition bubbles
-            ConfigureBubbles(vanillaAquariumGo);
+            ConfigureBubbles(vanillaAquariumGo, prefabData.AddBubbleAudio);
             
             // Replace the collider
             ConfigureCollider(vanillaAquariumGo);
@@ -344,7 +345,7 @@ namespace DaftAppleGames.MoreAquariums
         /// <summary>
         /// Copy and reposition and second set of bubbles
         /// </summary>
-        private void ConfigureBubbles(GameObject vanillaAquariumGo)
+        private void ConfigureBubbles(GameObject vanillaAquariumGo, bool addBubbleAudio)
         {
             // Duplicate the bubbles
             ModDebugLog.LogDebug("Repositioning bubbles...");
@@ -374,6 +375,27 @@ namespace DaftAppleGames.MoreAquariums
             else
             {
                 ModDebugLog.LogDebug("No additional bubbles to duplicate.");
+            }
+            
+            // Add bubbles audio to the main game object
+            if (addBubbleAudio)
+            {
+                ModDebugLog.LogDebug("Adding bubbles emitter to custom aquarium...");
+                AddCustomEmitter(vanillaAquariumGo);
+            }
+        }
+
+        /// <summary>
+        /// Adds an FMOD Custom Emitter to the bubbles
+        /// </summary>
+        internal static void AddCustomEmitter(GameObject parentGameObject)
+        {
+            if (ConfigFile.BubbleAudioEnabled)
+            {
+                ModDebugLog.LogDebug($"Adding bubbles CustomEmitter to {parentGameObject.name}");
+                FMOD_CustomEmitter customEmitter = parentGameObject.EnsureComponent<FMOD_CustomEmitter>();
+                ModAudioUtils.ConfigureEmitter(customEmitter, BubblesFMODAsset, ModDebugLog);
+                customEmitter.playOnAwake = true;
             }
         }
         
@@ -471,7 +493,7 @@ namespace DaftAppleGames.MoreAquariums
                 {
                     // Add custom movement component
                     ModDebugLog.LogDebug("Adding custom movement script...");
-                    existingTrackGo.AddComponent<AquariumFishPlus>();
+                    existingTrackGo.AddComponent<AquariumFishExt>();
                 }
                 
                 updatedTrackObjects[currTrackIndex] = existingAttachGo;
@@ -506,7 +528,7 @@ namespace DaftAppleGames.MoreAquariums
                     {
                         // Add custom movement component
                         ModDebugLog.LogDebug("Adding customer movement script...");
-                        newTrackGo.AddComponent<AquariumFishPlus>();
+                        newTrackGo.AddComponent<AquariumFishExt>();
                     }
 
                     updatedTrackObjects[currTrackIndex + 8] = newAttachGo;
@@ -585,10 +607,10 @@ namespace DaftAppleGames.MoreAquariums
                     vanillaAquariumGo.AddComponent<DoubleAquarium>();
                     break;
                 case AquariumType.Curved:
-                    vanillaAquariumGo.AddComponent<CurvedAquariumPlus>();
+                    vanillaAquariumGo.AddComponent<CurvedAquarium>();
                     break;
                 case AquariumType.LShaped:
-                    vanillaAquariumGo.AddComponent<LShapedAquariumPlus>();
+                    vanillaAquariumGo.AddComponent<LShapedAquarium>();
                     break;
                 case AquariumType.Corner:
                     vanillaAquariumGo.AddComponent<CornerAquarium>();

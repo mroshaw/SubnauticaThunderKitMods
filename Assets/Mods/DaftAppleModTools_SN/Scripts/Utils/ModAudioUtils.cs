@@ -1,4 +1,6 @@
-﻿using FMOD;
+﻿using System;
+using System.Reflection;
+using FMOD;
 using Nautilus.Extensions;
 using Nautilus.Handlers;
 using Nautilus.Utility;
@@ -14,13 +16,10 @@ namespace DaftAppleGames.ModUtils
         /// <summary>
         /// Configures the given FMOD CustomEmitter
         /// </summary>
-        public static void ConfigureEmitter(FMOD_CustomEmitter emitter, string audioClipName, string busPath, float volume, ModAssetBundleUtils assetBundleUtils, ModLog modLog)
+        public static void ConfigureEmitter(FMOD_CustomEmitter emitter, FMODAsset fmodAsset, ModLog modLog)
         {
             modLog.LogDebug($"Configuring FMOD emitter: {emitter.gameObject.name}");
-            RegisterSound(audioClipName, busPath, assetBundleUtils, modLog, 0.1f, 15.0f, 0);
-            FMODAsset newAsset = AudioUtils.GetFmodAsset(audioClipName);
-            emitter.SetAsset(newAsset);
-            SetEmitterVolume(emitter, volume, modLog);
+            emitter.SetAsset(fmodAsset);
             modLog.LogDebug($"Configured emitter done!");
         }
 
@@ -28,11 +27,13 @@ namespace DaftAppleGames.ModUtils
         /// Registers a new AudioClip
         /// </summary>
         public static void RegisterSound(string clipName, string bus, ModAssetBundleUtils assetBundleUtils, ModLog modLog, float minDistance = 10f,
-            float maxDistance = 200f, float fadeDuration = 0)
+            float maxDistance = 200f, float fadeDuration = 0, bool loop = false)
         {
             modLog.LogDebug($"Registering new sound clip: {clipName}");
-            var sound = AudioUtils.CreateSound(assetBundleUtils.GetObjectFromAssetBundle<AudioClip>(clipName) as AudioClip,
-                maxDistance >= 0 ? AudioUtils.StandardSoundModes_3D : AudioUtils.StandardSoundModes_2D);
+            MODE fmodMode = maxDistance >= 0 ? AudioUtils.StandardSoundModes_3D : AudioUtils.StandardSoundModes_2D;
+            fmodMode = loop ? fmodMode | MODE.LOOP_NORMAL : fmodMode;
+            
+            Sound sound = AudioUtils.CreateSound(assetBundleUtils.GetObjectFromAssetBundle<AudioClip>(clipName) as AudioClip, fmodMode);
             if (maxDistance >= 0)
                 sound.set3DMinMaxDistance(minDistance, maxDistance);
 
@@ -40,6 +41,19 @@ namespace DaftAppleGames.ModUtils
             {
                 sound.AddFadeOut(fadeDuration);
             }
+
+            if (loop)
+            {
+                sound.getLength(out uint soundLength, TIMEUNIT.PCM);
+                modLog.LogDebug($"Sound length: {soundLength}");
+                sound.setLoopPoints(0, TIMEUNIT.PCM, soundLength, TIMEUNIT.PCMFRACTION);
+            }
+
+            sound.getMode(out MODE soundMode);
+            sound.getLoopPoints(out uint loopStart, TIMEUNIT.PCMFRACTION, out uint loopEnd,
+                TIMEUNIT.PCMFRACTION);
+            modLog.LogDebug($"Sound mode after loop: {soundMode}. Loop start: {loopStart}, Loop end: {loopEnd}");
+            
             CustomSoundHandler.RegisterCustomSound(clipName, sound, bus);
             modLog.LogDebug($"Register clip done!");
         }
@@ -50,20 +64,42 @@ namespace DaftAppleGames.ModUtils
         public static void SetEmitterVolume(FMOD_CustomEmitter emitter, float volume, ModLog modLog)
         {
             modLog.LogDebug($"Setting volume on emitter: {emitter.gameObject.name} to {volume}");
-            if (!emitter.evt.hasHandle())
-            {
-                emitter.CacheEventInstance();
-            }
-
-            if (!emitter.evt.hasHandle())
-            {
-                modLog.LogDebug($"FMOD Emitter has no handle!");
-                return;
-            }
-
-            RESULT result = emitter.evt.getVolume(out float currentVolume, out float finalVolume);
-            result = emitter.evt.setVolume(volume);
-            modLog.LogDebug($"Result of SetVolume is: {result.ToString()}");
+            emitter.evt.getDescription(out FMOD.Studio.EventDescription eventDescription);
+            eventDescription.createInstance(out FMOD.Studio.EventInstance instance);
+            instance.setVolume(volume);
+            instance.start();
         }
+        
+        public static void DumpEmitterFields(FMOD_CustomEmitter emitter, ModLog modLog)
+        {
+            var t = emitter.GetType();
+            modLog.LogDebug($"Emitter type: {t.FullName}");
+            foreach (var f in t.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+            {
+                try
+                {
+                    object val = f.GetValue(emitter);
+                    if (val == null) { modLog.LogDebug($"{f.Name} = null"); continue; }
+                    // Useful types to look for: string (path), Guid, FMODAsset classes etc.
+                    modLog.LogDebug($"{f.Name} ({f.FieldType.Name}) = {val}");
+                }
+                catch (Exception e)
+                {
+                    modLog.LogDebug($"Couldn't read field {f.Name}: {e.Message}");
+                }
+            }
+
+            foreach (var p in t.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic))
+            {
+                try
+                {
+                    object val = p.GetValue(emitter, null);
+                    if (val == null) { modLog.LogDebug($"{p.Name} = null"); continue; }
+                    modLog.LogDebug($"PROP {p.Name} ({p.PropertyType.Name}) = {val}");
+                }
+                catch { /* ignore property getters that throw */ }
+            }
+        }
+        
     }
 }

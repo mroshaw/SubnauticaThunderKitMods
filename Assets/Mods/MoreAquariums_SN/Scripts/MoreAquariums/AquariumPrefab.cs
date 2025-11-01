@@ -10,19 +10,6 @@ namespace DaftAppleGames.MoreAquariums
 {
     public abstract class AquariumPrefab
     {
-        // Aquarium prefab properties
-        internal struct PrefabData
-        {
-            public string ClassId;
-            public string DisplayName;
-            public string Description;
-            public string IconAssetName;
-            public string PrefabAssetName;
-            public RecipeData Recipe;
-            
-            public Action<GameObject> PostConfigAction;
-        }
-
         public static PrefabInfo Info;
         private const TechType CloneTechType = TechType.Aquarium;
         

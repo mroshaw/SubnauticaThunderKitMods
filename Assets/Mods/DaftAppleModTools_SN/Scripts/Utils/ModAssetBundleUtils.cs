@@ -3,7 +3,7 @@ using System.Reflection;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace DaftAppleGames.ModUtils
+namespace DaftAppleGames.ModTools
 {
     /// <summary>
     /// Wrappers around the AssetBundle Unity methods

@@ -2740,8 +2740,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 286e0dcabf7d9a44e8229da699ba0faf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  storageHeight: 4
+  storageWidth: 4
+  recipe: {fileID: 11400000, guid: 1e14e36651321e242a6c193aa65ec937, type: 2}
+  useCustomMovement: 0
+  allowConstructionOnConstructables: 0
+  waveScale: 1
+  replaceExistingModel: 0
+  addBubbleAudio: 1
   aquariumMesh: {fileID: 7269070882360284284}
   aquariumGlassMesh: {fileID: 1637797447210357396}
+  newAquariumModel: {fileID: 0}
   bubbles1Transform: {fileID: 1429994391581237902}
   bubbles2Transform: {fileID: 6904374226870065367}
   coral1Transform: {fileID: 6763830684495920501}
@@ -2762,9 +2771,6 @@ MonoBehaviour:
   rocksObject: {fileID: 106142409}
   colliderObject: {fileID: 6842814231332764545}
   constructableBoundsObject: {fileID: 124892669}
-  constructableBoundsPosition: {x: -0.01121283, y: 1.149481, z: -0.02659547}
-  constructableBoundsRotation: {x: 0, y: 0, z: 0, w: 0}
-  constructableBoundsExtents: {x: 2.899089, y: 1.147964, z: 0.610125}
   animator1: {fileID: 7706466400797541725}
   animator2: {fileID: 7706466400797541727}
   existingTrackObjects:

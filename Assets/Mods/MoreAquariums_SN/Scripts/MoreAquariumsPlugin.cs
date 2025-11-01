@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 using BepInEx;
-using DaftAppleGames.ModUtils;
+using DaftAppleGames.ModTools;
 using HarmonyLib;
 using Nautilus.Handlers;
 using Nautilus.Utility;
@@ -43,10 +43,10 @@ namespace DaftAppleGames.MoreAquariums
             RegisterCustomSounds();
 
             // Register our prefabs
-            DoubleAquarium.Register();
-            CornerAquarium.Register();
-            DeskAquarium.Register();
-            SphericalAquarium.Register();
+            DoubleAquariumPrefab.Register();
+            CornerAquariumPrefab.Register();
+            DeskAquariumPrefab.Register();
+            SphericalAquariumPrefab.Register();
             
             // Patch in our MOD
             Harmony.PatchAll();

@@ -22,8 +22,8 @@ namespace DaftAppleGames.MoreAquariums
         internal static ModAssetBundleUtils ModAssetUtils;
         
         // Config file / UI initialisation
-#if !UNITY_EDITOR
         private static readonly Harmony Harmony = new Harmony(MyGuid);
+#if !UNITY_EDITOR
         internal static readonly ModConfigFile ConfigFile = OptionsPanelHandler.RegisterModOptions<ModConfigFile>();
 #else
         internal static readonly ModConfigFile ConfigFile;
@@ -38,7 +38,7 @@ namespace DaftAppleGames.MoreAquariums
 #else
             ModDebugLog =  new ModLog(Logger, ConfigFile.DetailedLogging);            
             ModAssetUtils = new ModAssetBundleUtils(AssetBundleName, Assembly.GetExecutingAssembly(),true, ModDebugLog);
-
+#endif
             // Register custom sounds
             RegisterCustomSounds();
 
@@ -51,10 +51,8 @@ namespace DaftAppleGames.MoreAquariums
             // Patch in our MOD
             Harmony.PatchAll();
             ModDebugLog.LogInfo($"PluginName: {PluginName}, VersionString: {VersionString} is loaded.");
-#endif
         }
         
-#if !UNITY_EDITOR
         /// <summary>
         /// Register custom sounds for use in the mod
         /// </summary>
@@ -65,6 +63,5 @@ namespace DaftAppleGames.MoreAquariums
             BubblesFMODAsset = AudioUtils.GetFmodAsset(BubblesAudioClipName);
             ModDebugLog.LogDebug($"Registered FMOD Asset: {BubblesFMODAsset.name}");
         }
-#endif
     }
 }

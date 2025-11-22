@@ -1,5 +1,5 @@
 {
-    "name": "DaftAppleModTools_SN",
+    "name": "DaftAppleModTools_SN.Core",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -11,7 +11,8 @@
         "Nautilus.dll",
         "FMODUnity.dll",
         "Assembly-CSharp-firstpass_publicized.dll",
-        "Assembly-CSharp_publicized.dll"
+        "Assembly-CSharp_publicized.dll",
+        "Unity.ResourceManager.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],

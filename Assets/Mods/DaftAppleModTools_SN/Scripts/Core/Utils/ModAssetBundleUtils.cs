@@ -1,6 +1,9 @@
-﻿using System.IO;
+﻿using System.Collections;
+using System.IO;
 using System.Reflection;
+using DaftAppleGames.ModTools.Extensions;
 using UnityEngine;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using Object = UnityEngine.Object;
 
 namespace DaftAppleGames.ModTools
@@ -77,10 +80,18 @@ namespace DaftAppleGames.ModTools
             return Sprite.Create(texture, new Rect(0, 0, texture.width, texture.height), new Vector2(0.5f, 0.5f));
         }
 
+        public AssetBundleRequest GetObjectFromAssetBundleAsync<T>(string objectName) where T : Object
+        {
+            _modLog.LogDebug($"ModUtils: Looking for object of type {typeof(T)} named {objectName} in Asset Bundle (Async).");
+            LoadAssetBundle();
+            return _assetBundle.LoadAssetAsync<T>(objectName);
+        }
+        
+
         /// <summary>
         /// Loads a given Game Object from Asset Bundles shipped in the Mod folder
         /// </summary>
-        public Object GetObjectFromAssetBundle<T>(string objectName) where T : Object
+        public Object GetObjectFromAssetBundle<T>(string objectName, bool activeState = true) where T : Object
         {
             _modLog.LogDebug($"ModUtils: Looking for object of type {typeof(T)} named {objectName} in Asset Bundle.");
             
@@ -93,6 +104,12 @@ namespace DaftAppleGames.ModTools
                 return null;
             }
             _modLog.LogDebug($"ModUtils: Found GameObject named {objectName} in Asset Bundle.");
+
+            if (obj is GameObject objGameObject)
+            {
+                objGameObject.SetActive(activeState);
+            }
+            
             return obj;
         }
 

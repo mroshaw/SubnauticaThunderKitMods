@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using static DaftAppleGames.AquaEclipseNowPlugin.AquaEclipseNowPlugin;
 
@@ -10,6 +11,8 @@ namespace DaftAppleGames.AquaEclipseNowPlugin
     /// </summary>
     internal static class DayNightPlanetSimulation
     {
+        private const int IterationsPerFrame = 5000;
+        
         // Very basic DayNightCycle properties
         private static double _simulationTimePassed;
         private static float _timeLine;
@@ -58,7 +61,62 @@ namespace DaftAppleGames.AquaEclipseNowPlugin
         }
 
         /// <summary>
-        /// Run the simulation
+        /// Run the simulation asynchronously, yielding every IterationsPerFrame iteration
+        /// </summary>
+        internal static IEnumerator RunSimulationAsync(int numIterations, double numSecondIncrements, float alignmentThreshold, Action<double> simCompleteAction)
+        {
+            float maxAlignment = 0;
+            double maxAlignmentTime = 0;
+            bool thresholdMet = false;
+            
+            ResetSimulation();
+            
+            for (int iteration = 0; iteration < numIterations; iteration++)
+            {
+                AddTime(numSecondIncrements);
+                float alignment = GetSunPlanetAlignment();
+
+                if (alignment > maxAlignment)
+                {
+                    maxAlignment = alignment;
+                    maxAlignmentTime = _simulationTimePassed;
+                }
+                
+                // If we've just passed the peak, having met our threshold, then return the peak
+                if (alignment < maxAlignment && thresholdMet)
+                {
+                    ModDebugLog.LogDebug($"Max aligmnet reached. Using this for eclipse! " +
+                                         $"Iteration: {iteration}, Time Passed: {maxAlignmentTime}, Planet Pos: {_planetPosition}, Sun Euler: {_sunEuler}, Alignment: {alignment}, Threshold: {alignmentThreshold}");
+                    
+                    simCompleteAction.Invoke(maxAlignmentTime);
+                    yield break;
+                }
+                
+                // We've met our threshold, so now we look for the max 'peak' in coming iterations
+                if (alignmentThreshold > 0 && alignment > alignmentThreshold)
+                {
+                    ModDebugLog.LogDebug($"Exceeded alignment threshold. Looking for max value to return ");
+                    thresholdMet = true;
+                }
+                
+                ModDebugLog.LogDebug(
+                    $"Time Passed: {_simulationTimePassed}, Planet Pos: {_planetPosition}, Sun Euler: {_sunEuler}, Alignment: {alignment}");
+                
+                // Yield if iterations complete for the frame
+                if (iteration % IterationsPerFrame == 0)
+                {
+                    yield return null;
+                }
+            }
+
+            ModDebugLog.LogDebug(
+                $"Simulation ran for: {numIterations} iterations in {numSecondIncrements} increments. Max Alignment: {maxAlignment} at {maxAlignmentTime}.");
+
+            simCompleteAction.Invoke(maxAlignmentTime);
+        }
+        
+        /// <summary>
+        /// Run the simulation synchronously
         /// </summary>
         internal static Double RunSimulation(int numIterations, double numSecondIncrements, float alignmentThreshold)
         {

@@ -10,7 +10,7 @@ namespace DaftAppleGames.AquaEclipseNowPlugin
     {
         private const string MyGuid = "com.mroshaw.aquaeclipsenow";
         private const string PluginName = "Aquaeclipse Now SN";
-        private const string VersionString = "1.0.0";
+        private const string VersionString = "1.1.0";
 
         // Config file / UI initialisation
         internal static ModConfigFile ConfigFile = OptionsPanelHandler.RegisterModOptions<ModConfigFile>();

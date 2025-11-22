@@ -16,7 +16,7 @@ MonoBehaviour:
   Author: Daft Apple Games
   Name: AquaEclipseNow_SN
   Description: Adds a command to force an eclipse to occur
-  Version: 1.0.0
+  Version: 1.1.0
   Dependencies: []
 --- !u!114 &11400000
 MonoBehaviour:

@@ -40,12 +40,8 @@ namespace DaftAppleGames.AquaEclipseNowPlugin
             ModDebugLog.LogDebug("Processing eclipse now command...");
             ModDebugLog.LogDebug($"Current time: {DayNightCycle.main.timePassed}.");
             // Start a new simulation
-            double timeOfEclipse = DayNightPlanetSimulation.RunSimulation(ConfigFile.SimulationIterations, ConfigFile.SimulationTimeStep , ConfigFile.SimulationThreshold);
-            double timeToEclipse = timeOfEclipse - DayNightCycle.main.timePassedAsDouble;
-            double timeToSkip = timeToEclipse - ConfigFile.TimeBeforeEclipse;
-            ModDebugLog.LogDebug($"Current Time: {DayNightCycle.main.timePassed}, Time of Next Eclipse: {timeOfEclipse}, Time To Eclipse: {timeToEclipse}, Time To Skip: {timeToSkip}");
-            DayNightCycle.main.SkipTime((float)(timeToSkip), ConfigFile.TimeSkipDuration);
-            return $"Skipped {FormatFriendlyTime(timeToSkip)}. Enjoy the eclipse!";
+            UWE.CoroutineHost.StartCoroutine(DayNightPlanetSimulation.RunSimulationAsync(ConfigFile.SimulationIterations, ConfigFile.SimulationTimeStep , ConfigFile.SimulationThreshold, SetEclipseTime));
+            return $"Calculating time to next eclipse...";
         }
 
         /// <summary>
@@ -55,10 +51,8 @@ namespace DaftAppleGames.AquaEclipseNowPlugin
         {
             ModDebugLog.LogDebug("Processing eclipse next command...");
             ModDebugLog.LogDebug($"Current time: {DayNightCycle.main.timePassed}.");
-            double timeOfEclipse = DayNightPlanetSimulation.RunSimulation(ConfigFile.SimulationIterations, ConfigFile.SimulationTimeStep , ConfigFile.SimulationThreshold);
-            double timeToEclipse = timeOfEclipse - DayNightCycle.main.timePassedAsDouble;
-            ModDebugLog.LogDebug($"Current Time: {DayNightCycle.main.timePassed}, Time of Next Eclipse: {timeOfEclipse}, Time To Eclipse: {timeToEclipse}");
-            return ($"Next eclipse is in {FormatFriendlyTime(timeToEclipse)}!");
+            UWE.CoroutineHost.StartCoroutine(DayNightPlanetSimulation.RunSimulationAsync(ConfigFile.SimulationIterations, ConfigFile.SimulationTimeStep , ConfigFile.SimulationThreshold, ShowNextEclipseTime));
+            return $"Calculating time to next eclipse...";
         }
         
         /// <summary>
@@ -68,6 +62,42 @@ namespace DaftAppleGames.AquaEclipseNowPlugin
         {
             DayNightPlanetSimulation.RunSimulation(ConfigFile.SimulationIterations, ConfigFile.SimulationTimeStep, 0f);
             return "Simulation complete! Check the logs!";
+        }
+
+        /// <summary>
+        /// Action delegate to set the time based on the result of the simulation
+        /// </summary>
+        private static void SetEclipseTime(double timeOfEclipse)
+        {
+            double timeToEclipse = timeOfEclipse - DayNightCycle.main.timePassedAsDouble;
+            double timeToSkip = timeToEclipse - ConfigFile.TimeBeforeEclipse;
+            ModDebugLog.LogDebug($"Current Time: {DayNightCycle.main.timePassed}, Time of Next Eclipse: {timeOfEclipse}, Time To Eclipse: {timeToEclipse}, Time To Skip: {timeToSkip}");
+            if (timeToSkip > 0)
+            {
+                DayNightCycle.main.SkipTime((float)(timeToSkip), ConfigFile.TimeSkipDuration);
+                ErrorMessage.AddMessage($"Skipped {FormatFriendlyTime(timeToSkip)}. Enjoy the eclipse!");
+            }
+            else
+            {
+                ErrorMessage.AddMessage($"Eclipse still in progress. Please wait for current eclipse to end!");
+            }
+        }
+
+        /// <summary>
+        /// Action delegate to show the time based on the result of the simulation
+        /// </summary>
+        private static void ShowNextEclipseTime(double timeOfEclipse)
+        {
+            double timeToEclipse = timeOfEclipse - DayNightCycle.main.timePassedAsDouble;
+            ModDebugLog.LogDebug($"Current Time: {DayNightCycle.main.timePassed}, Time of Next Eclipse: {timeOfEclipse}, Time To Eclipse: {timeToEclipse}");
+            if (timeToEclipse > 0)
+            {
+                ErrorMessage.AddMessage($"Next eclipse is in {FormatFriendlyTime(timeToEclipse)}!");
+            }
+            else
+            {
+                ErrorMessage.AddMessage($"Eclipse still in progress. Please wait for current eclipse to end!");
+            }
         }
         
         /// <summary>

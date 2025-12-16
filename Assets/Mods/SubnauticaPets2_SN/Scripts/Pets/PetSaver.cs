@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using DaftAppleGames.SubnauticaPets.Utils;
 using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
 namespace DaftAppleGames.SubnauticaPets.Pets
 {
@@ -47,7 +47,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
 
         private void SceneLoadedHandler(Scene scene, LoadSceneMode loadSceneMode)
         {
-            LogUtils.LogDebug(LogArea.Main, $"Scene Loaded: {scene.name}");
+            ModDebugLog.LogDebug( $"Scene Loaded: {scene.name}");
             if (scene.name == "MenuEnvironment")
             {
                 ClearPetList();
@@ -75,7 +75,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             if (!PetList.Contains(pet) && !string.IsNullOrEmpty(pet.PetName))
             {
                 PetList.Add(pet);
-                LogUtils.LogDebug(LogArea.Main, $"PetSaver: Added Pet: {pet.PetName}");
+                ModDebugLog.LogDebug( $"PetSaver: Added Pet: {pet.PetName}");
                 PetRegisteredEvent?.Invoke(pet);
                 PetListUpdatedEvent.Invoke();
             }
@@ -89,7 +89,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             if (PetList.Contains(pet))
             {
                 PetList.Remove(pet);
-                LogUtils.LogDebug(LogArea.Main, $"PetSaver: Removed Pet: {pet.PetName}");
+                ModDebugLog.LogDebug( $"PetSaver: Removed Pet: {pet.PetName}");
                 PetUnregisteredEvent.Invoke(pet);
                 PetListUpdatedEvent.Invoke();
             }
@@ -191,7 +191,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// </summary>
         private void FixPetLoadData()
         {
-            LogUtils.LogDebug(LogArea.MonoUtils, $"Loading Pet Data...");
+            ModDebugLog.LogDebug( $"Loading Pet Data...");
             foreach (Pet pet in FindObjectsOfType<Pet>())
             {
                 pet.LoadPetData();

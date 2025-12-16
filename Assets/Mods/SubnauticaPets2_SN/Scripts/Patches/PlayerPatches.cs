@@ -3,6 +3,7 @@ using System.Collections;
 using DaftAppleGames.SubnauticaPets.BaseParts;
 using DaftAppleGames.SubnauticaPets.Utils;
 using UnityEngine;
+using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
 namespace DaftAppleGames.SubnauticaPets.Patches
 {
@@ -20,17 +21,17 @@ namespace DaftAppleGames.SubnauticaPets.Patches
             // FOR DEV ONLY! REMOVE BEFORE BUILD!!
             /*
             Debug.Log("In Player Start");
-            LogUtils.LogInfo("Added FragmentSpawner to player!");
+            ModDebugLog.LogDebug("Added FragmentSpawner to player!");
             __instance.gameObject.AddComponent<FragmentSpawner>();
             */
         }
 
         private static IEnumerator CheckUnlockStateSync(Player player)
         {
-            LogUtils.LogInfo("In CheckUnlockStateSync");
+            ModDebugLog.LogDebug("In CheckUnlockStateSync");
             yield return new WaitForSeconds(secondsToWaitBeforeCheck);
-            LogUtils.LogInfo($"Player.Awake (After delay): KnownText UnlockState for 'PetFabricatorPrefab' is: {KnownTech.GetTechUnlockState(PetFabricatorPrefab.Info.TechType)}");
-            LogUtils.LogInfo($"Player.Awake (After delay): KnownText UnlockState for 'PetConsolePrefab' is: {KnownTech.GetTechUnlockState(PetConsolePrefab.Info.TechType)}");
+            ModDebugLog.LogDebug($"Player.Awake (After delay): KnownText UnlockState for 'PetFabricatorPrefab' is: {KnownTech.GetTechUnlockState(PetFabricatorPrefab.Info.TechType)}");
+            ModDebugLog.LogDebug($"Player.Awake (After delay): KnownText UnlockState for 'PetConsolePrefab' is: {KnownTech.GetTechUnlockState(PetConsolePrefab.Info.TechType)}");
             UnlockUtils.UnlockAllIfCreativeMode();
         }
     }

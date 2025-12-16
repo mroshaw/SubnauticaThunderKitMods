@@ -1,6 +1,6 @@
 using System.Collections;
-using DaftAppleGames.SubnauticaPets.Utils;
 using UnityEngine;
+using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
 namespace DaftAppleGames.SubnauticaPets.Pets
 {
@@ -99,7 +99,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                 _pet.PlaySound();
             }
             
-            LogUtils.LogDebug(LogArea.MonoPets, $"{gameObject.name} is playing random body anim at index: {animIndex} ({BodyAnims[animIndex]})");
+            ModDebugLog.LogDebug( $"{gameObject.name} is playing random body anim at index: {animIndex} ({BodyAnims[animIndex]})");
             _animator.SetTrigger(_bodyAnimHashKeys[animIndex]);
         }
 
@@ -115,7 +115,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                 return;
             }
             int animIndex = Random.Range(0, _numFaceAnims);
-            // LogUtils.LogDebug(LogArea.MonoPets, $"Playing random face anim at index: {animIndex}");
+            // ModDebugLog.LogDebug( $"Playing random face anim at index: {animIndex}");
             _animator.Play(_faceAnimHashKeys[animIndex]);
         }
 

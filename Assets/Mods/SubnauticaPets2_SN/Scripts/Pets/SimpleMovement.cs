@@ -144,7 +144,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                 // Ground contact — ignore
                 return;
             }
-            // LogUtils.LogDebug(LogArea.MonoPets, $"{gameObject.name} hit: {hit.gameObject.name}");
+            // ModDebugLog.LogDebug( $"{gameObject.name} hit: {hit.gameObject.name}");
             OnHitObstacle?.Invoke(hit.normal);
         }
     }

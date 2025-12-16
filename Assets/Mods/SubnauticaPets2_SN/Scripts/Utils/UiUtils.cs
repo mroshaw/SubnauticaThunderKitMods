@@ -1,6 +1,7 @@
 ﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
 namespace DaftAppleGames.SubnauticaPets.Utils
 {
@@ -32,7 +33,7 @@ namespace DaftAppleGames.SubnauticaPets.Utils
 
             if (!origButtonGameObject)
             {
-                LogUtils.LogError(LogArea.Utilities, $"UiUtils: CreateButton can't find a Button in {sourceUi}");
+                ModDebugLog.LogDebug( $"UiUtils: CreateButton can't find a Button in {sourceUi}");
                 return null;
             }
 
@@ -57,7 +58,7 @@ namespace DaftAppleGames.SubnauticaPets.Utils
             }
             else
             {
-                LogUtils.LogError(LogArea.Utilities, $"UiUtils: Couldn't find TextMeshProUGUI on {newButtonGameObject.name}!");
+                ModDebugLog.LogDebug( $"UiUtils: Couldn't find TextMeshProUGUI on {newButtonGameObject.name}!");
             }
             newButtonGameObject.GetComponent<Button>().interactable = isInteractable;
             newButtonGameObject.SetActive(true);
@@ -89,7 +90,7 @@ namespace DaftAppleGames.SubnauticaPets.Utils
 
             if (!origTextGameObject)
             {
-                LogUtils.LogDebug(LogArea.Utilities, $"UiUtils: CreateButton can't find a TextEntry in {sourceUi}");
+                ModDebugLog.LogDebug( $"UiUtils: CreateButton can't find a TextEntry in {sourceUi}");
                 return null;
             }
 
@@ -134,7 +135,7 @@ namespace DaftAppleGames.SubnauticaPets.Utils
 
             if (!origLabelGameObject)
             {
-                LogUtils.LogDebug(LogArea.Utilities, $"UiUtils: CreateButton can't find a TextEntry in {sourceUi}");
+                ModDebugLog.LogDebug( $"UiUtils: CreateButton can't find a TextEntry in {sourceUi}");
                 return null;
             }
 
@@ -150,7 +151,7 @@ namespace DaftAppleGames.SubnauticaPets.Utils
             newLabelGameObject.transform.localScale = new Vector3(1, 1, 1);
 
             // Add translation component on label
-            LogUtils.LogDebug(LogArea.Utilities, $"UiUtils: Adding translation component on {newLabelGameObject.name} using key {newLabelKey}");
+            ModDebugLog.LogDebug( $"UiUtils: Adding translation component on {newLabelGameObject.name} using key {newLabelKey}");
             newLabelGameObject.SetActive(false);
             TextMeshProUGUI label = newLabelGameObject.GetComponentInChildren<TextMeshProUGUI>(true);
             TranslationLiveUpdate liveTranslation = label.gameObject.AddComponent<TranslationLiveUpdate>();
@@ -173,7 +174,7 @@ namespace DaftAppleGames.SubnauticaPets.Utils
         public static void CreateScrollView(GameObject sourceUi,
             GameObject targetUi, string scrollViewName, Vector3 localPosition, Vector2 size, out GameObject scrollViewContent)
         {
-            GameObject scrollView = CustomAssetBundleUtils.GetPrefabInstanceFromAssetBundle(ScrollViewObject, true);
+            GameObject scrollView = ModAssetUtils.GetPrefabInstanceFromAssetBundle(ScrollViewObject, true);
             scrollView.name = scrollViewName;
             scrollView.transform.SetParent(targetUi.transform);
             scrollView.transform.localPosition = localPosition;

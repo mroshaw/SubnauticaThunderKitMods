@@ -1,9 +1,9 @@
-﻿using DaftAppleGames.SubnauticaPets.Utils;
-using Nautilus.Assets;
+﻿using Nautilus.Assets;
 using Nautilus.Assets.Gadgets;
 using Nautilus.Assets.PrefabTemplates;
 using Nautilus.Utility;
 using UnityEngine;
+using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
 namespace DaftAppleGames.SubnauticaPets.Pets
 {
@@ -24,7 +24,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         internal static void RegisterAll()
         {
             // Get the DNA model prefab from the Asset Bundle
-            GameObject dnaModelPrefab = CustomAssetBundleUtils.GetObjectFromAssetBundle<GameObject>(PrefabAssetName) as GameObject;
+            GameObject dnaModelPrefab = ModAssetUtils.GetObjectFromAssetBundle<GameObject>(PrefabAssetName) as GameObject;
             MaterialUtils.ApplySNShaders(dnaModelPrefab);
 
             // Register DNA spawn prefabs
@@ -215,11 +215,11 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         private static PrefabInfo RegisterDnaPrefab(string classId, string displayName, string description, string textureName,
             Color color, LootDistributionData.BiomeData[] lootBiome, GameObject dnaModelPrefab)
         {
-            LogUtils.LogDebug(LogArea.Prefabs, $"PetDnaPrefab: Register Prefab for {classId}...");
+            ModDebugLog.LogDebug( $"PetDnaPrefab: Register Prefab for {classId}...");
 
             PrefabInfo prefabInfo = PrefabInfo
                 .WithTechType(classId, displayName, description, unlockAtStart: true)
-                .WithIcon(CustomAssetBundleUtils.GetObjectFromAssetBundle<Sprite>(textureName) as Sprite);
+                .WithIcon(ModAssetUtils.GetObjectFromAssetBundle<Sprite>(textureName) as Sprite);
 
             CustomPrefab clonePrefab = new CustomPrefab(prefabInfo);
 

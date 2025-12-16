@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using UnityEngine.Events;
+using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
 namespace DaftAppleGames.SubnauticaPets.Utils
 {
@@ -26,7 +27,7 @@ namespace DaftAppleGames.SubnauticaPets.Utils
         {
             if (constructed)
             {
-                LogUtils.LogDebug(LogArea.Utilities, $"ConstructedChanged to: {constructed} on {gameObject.name}. Invoking Events...");
+                ModDebugLog.LogDebug( $"ConstructedChanged to: {constructed} on {gameObject.name}. Invoking Events...");
                 onConstructed.Invoke();
             }
         }

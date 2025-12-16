@@ -1,6 +1,6 @@
 ﻿using System;
-using DaftAppleGames.SubnauticaPets.Utils;
 using UnityEngine;
+using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
 namespace DaftAppleGames.SubnauticaPets.BaseParts
 { 
@@ -32,7 +32,7 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
         /// </summary>
         public void OnConstructedChanged(bool constructed)
         {
-            LogUtils.LogDebug(LogArea.Utilities, $"ConstructedChanged to: {constructed} on {gameObject.name}... Enable screen");
+            ModDebugLog.LogDebug( $"ConstructedChanged to: {constructed} on {gameObject.name}... Enable screen");
             _petConsole.SetConstructedState(constructed);
         }
     }

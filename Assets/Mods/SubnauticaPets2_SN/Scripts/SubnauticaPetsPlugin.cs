@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using BepInEx;
 using BepInEx.Logging;
+using DaftAppleGames.ModTools;
 using DaftAppleGames.SubnauticaPets.BaseParts;
 using DaftAppleGames.SubnauticaPets.Pets;
-using DaftAppleGames.SubnauticaPets.Utils;
 using HarmonyLib;
 using Nautilus.Handlers;
 using Nautilus.Json;
@@ -17,30 +18,45 @@ namespace DaftAppleGames.SubnauticaPets
     {
         private const string MyGuid = "com.daftapplegames.subnauticapets2";
         private const string PluginName = "SubnauticaPets2";
-        internal const string VersionString = "2.9.0";
+        internal const string VersionString = "2.10.0";
 
+        private const string AssetBundleName = "subnauticapets2assetbundle";
+        
         private static Version LatestSaveDataVersion = new Version(1, 0, 0, 0);
 
         internal static ManualLogSource Log = new ManualLogSource(PluginName);
-
+        internal static ModAssetBundleUtils ModAssetUtils;
+        
         // Public PetSaver as a persistent list of active pets
         internal static PetSaver PetSaver;
 
         // SaveData instance for managing loading of Pet config data
         internal static HashSet<PetSaver.PetDetails> LoadedPetDetailsHashSet;
+        
+        // Mod Options Config
+        internal static ModConfigFile ConfigFile = OptionsPanelHandler.RegisterModOptions<ModConfigFile>();
 
+        // Mod Debug Log
+        internal static ModLog ModDebugLog;
+        
         // Keep tabs on currently selected options
         internal static TechType SelectedCreaturePetType;
-
-        // Mod Options Config
-        internal static ModConfigFile ModConfig = OptionsPanelHandler.RegisterModOptions<ModConfigFile>();
-
+        
         private static readonly Harmony Harmony = new Harmony(MyGuid);
         
         private void Awake()
         {
+            // Initialise Logger
+            ModDebugLog =  new ModLog(Logger, ConfigFile.DetailedLogging);
+            
+            // Initialise AssetBundle
+            ModAssetUtils = new ModAssetBundleUtils(AssetBundleName, Assembly.GetExecutingAssembly(),true, ModDebugLog);
+            
             // Init Localisation
             LanguageHandler.RegisterLocalizationFolder();
+            
+            // Init custom commands
+            PetCommands.RegisterAll();
             
             // Create PetSaver instance
             PetSaver = gameObject.AddComponent<PetSaver>();
@@ -48,15 +64,15 @@ namespace DaftAppleGames.SubnauticaPets
             // Save the HashSet
             saveData.OnStartedSaving += (object sender, JsonFileEventArgs e) =>
             {
-                LogUtils.LogDebug(LogArea.Main, "Started Saving Data...");
+                ModDebugLog.LogDebug("Started Saving Data...");
                 SaveData data = e.Instance as SaveData;
                 data.PetDetailsHashSet = PetSaver.GetPetListAsHashSet();
-                LogUtils.LogDebug(LogArea.Main, "Started Saving Data... Done.");
+                ModDebugLog.LogDebug("Started Saving Data... Done.");
             };
             // Load the HashSet
             saveData.OnFinishedLoading += (object sender, JsonFileEventArgs e) =>
             {
-                LogUtils.LogDebug(LogArea.Main, "Finished Loading Data...");
+                ModDebugLog.LogDebug("Finished Loading Data...");
                 SaveData data = e.Instance as SaveData;
                 if (data.PetDetailsHashSet != null)
                 {
@@ -69,7 +85,7 @@ namespace DaftAppleGames.SubnauticaPets
 
                 CraftData.PreparePrefabIDCache();
                 PetSaver.Init();
-                LogUtils.LogDebug(LogArea.Main, "Finished Loading Data... Done.");
+                ModDebugLog.LogDebug("Finished Loading Data... Done.");
             };
             // Apply all of our patches
             Logger.LogInfo($"PluginName: {PluginName}, VersionString: {VersionString} is loading...");

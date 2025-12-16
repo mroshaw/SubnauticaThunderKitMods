@@ -1,6 +1,6 @@
-﻿using DaftAppleGames.SubnauticaPets.Utils;
-using HarmonyLib;
+﻿using HarmonyLib;
 using UnityEngine;
+using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
 namespace DaftAppleGames.SubnauticaPets.Patches
 {
@@ -23,11 +23,18 @@ namespace DaftAppleGames.SubnauticaPets.Patches
                 return;
             }
             
+            // Check the config setting and only create the new collider if the preference is set
+            if (ConfigFile.DisableMoonpoolCollider)
+            {
+                ModDebugLog.LogDebug("DisableMoonpoolCollider is set to true. Skipping creation of blocking collider...");
+                return;
+            }
+            
             Transform poolColliderTransform  = __instance.transform.Find("entrance");
 
             if (!poolColliderTransform)
             {
-                LogUtils.LogError(LogArea.Patches,
+                ModDebugLog.LogDebug(
                     $"Could not patch MoonPool on {__instance.gameObject.name}! Couldn't find pool collider transform!");
             }
 

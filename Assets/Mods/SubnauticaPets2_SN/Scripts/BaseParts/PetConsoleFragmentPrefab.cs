@@ -1,10 +1,10 @@
 ﻿using DaftAppleGames.SubnauticaPets.Pets;
-using DaftAppleGames.SubnauticaPets.Utils;
 using Nautilus.Assets;
 using Nautilus.Assets.Gadgets;
 using Nautilus.Assets.PrefabTemplates;
 using Nautilus.Utility;
 using UnityEngine;
+using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
 namespace DaftAppleGames.SubnauticaPets.BaseParts
 {
@@ -36,20 +36,20 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
                 {
                     if (!obj)
                     {
-                        LogUtils.LogError(LogArea.Prefabs, $"PetConsoleFragmentPrefab cloned obj is null!");
+                        ModDebugLog.LogDebug( $"PetConsoleFragmentPrefab cloned obj is null!");
                     }
-                    LogUtils.LogDebug(LogArea.Prefabs, $"ConsoleFragmentPrefab cloned. Obj is: {obj.name}");
+                    ModDebugLog.LogDebug( $"ConsoleFragmentPrefab cloned. Obj is: {obj.name}");
 
                     obj.SetActive(false);
 
                     GameObject damagedConsoleGameObject =
-                        CustomAssetBundleUtils.GetPrefabInstanceFromAssetBundle(PrefabAssetName, false);
+                        ModAssetUtils.GetPrefabInstanceFromAssetBundle(PrefabAssetName, false);
                     
                     GameObject newModelGameObject = damagedConsoleGameObject.FindChild("newmodel");
 
                     if (!newModelGameObject)
                     {
-                        LogUtils.LogError(LogArea.Prefabs, $"PetConsoleFragmentPrefab: Unable to find 'newmodel' in prefab: {PrefabAssetName}!");
+                        ModDebugLog.LogDebug( $"PetConsoleFragmentPrefab: Unable to find 'newmodel' in prefab: {PrefabAssetName}!");
                         return;
                     }
 
@@ -58,11 +58,11 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
 
                     if (!oldModelGameObject)
                     {
-                        LogUtils.LogError(LogArea.Prefabs, $"PetConsoleFragmentPrefab: Couldn't find old model! All children:");
+                        ModDebugLog.LogDebug( $"PetConsoleFragmentPrefab: Couldn't find old model! All children:");
                         return;
                     }
 
-                    LogUtils.LogDebug(LogArea.Prefabs, "Found old model!");
+                    ModDebugLog.LogDebug( "Found old model!");
 
                     newModelGameObject.transform.SetParent(oldModelGameObject.transform.parent);
                     newModelGameObject.transform.localPosition = new Vector3(0, 0, 0);
@@ -81,10 +81,10 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
                 }
             };
 
-            LogUtils.LogDebug(LogArea.Prefabs, "PetConsoleFragmentPrefab: SetGameObject...");
+            ModDebugLog.LogDebug( "PetConsoleFragmentPrefab: SetGameObject...");
             consoleFragmentPrefab.SetGameObject(cloneTemplate);
 
-            LogUtils.LogDebug(LogArea.Prefabs, "PetConsoleFragmentPrefab: SetSpawns...");
+            ModDebugLog.LogDebug( "PetConsoleFragmentPrefab: SetSpawns...");
 
             SpawnLocation[] spawnLocations =
             {
@@ -101,9 +101,9 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
                 };
 
             consoleFragmentPrefab.SetSpawns(spawnLocations);
-            LogUtils.LogDebug(LogArea.Prefabs, "PetConsoleFragmentPrefab: CreateFragment...");
+            ModDebugLog.LogDebug( "PetConsoleFragmentPrefab: CreateFragment...");
             consoleFragmentPrefab.CreateFragment(PetConsolePrefab.Info.TechType, 5.0f, 3, EncKey, true, true);
-            LogUtils.LogDebug(LogArea.Prefabs, "PetConsoleFragmentPrefab: Register...");
+            ModDebugLog.LogDebug( "PetConsoleFragmentPrefab: Register...");
             consoleFragmentPrefab.Register();
         }
     }

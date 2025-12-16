@@ -1,10 +1,10 @@
 ﻿using DaftAppleGames.SubnauticaPets.Pets;
-using DaftAppleGames.SubnauticaPets.Utils;
 using Nautilus.Assets;
 using Nautilus.Assets.Gadgets;
 using Nautilus.Assets.PrefabTemplates;
 using Nautilus.Utility;
 using UnityEngine;
+using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
 namespace DaftAppleGames.SubnauticaPets.BaseParts
 {
@@ -32,9 +32,9 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
                 {
                     if (!obj)
                     {
-                        LogUtils.LogError(LogArea.Prefabs, $"FabricatorFragmentPrefab cloned obj is null!");
+                        ModDebugLog.LogDebug( $"FabricatorFragmentPrefab cloned obj is null!");
                     }
-                    LogUtils.LogDebug(LogArea.Prefabs, $"FabricatorFragmentPrefab cloned. Obj is: {obj.name}");
+                    ModDebugLog.LogDebug( $"FabricatorFragmentPrefab cloned. Obj is: {obj.name}");
                     obj.SetActive(false);
                     // Add components
                     PrefabUtils.AddBasicComponents(obj, ClassId, Info.TechType, LargeWorldEntity.CellLevel.Medium);
@@ -46,7 +46,7 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
                     obj.AddComponent<PetFabricatorFragment>();
                 }
             };
-            LogUtils.LogDebug(LogArea.Prefabs, "PetFabricatorFragment: SetGameObject...");
+            ModDebugLog.LogDebug( "PetFabricatorFragment: SetGameObject...");
             fabricatorFragmentPrefab.SetGameObject(cloneTemplate);
             SpawnLocation[] spawnLocations =
             {
@@ -61,11 +61,11 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
                     new SpawnLocation(new Vector3(376.36f, -26.60f, -209.09f), new Vector3(292.15f, 131.21f, 226.02f)) // warp 292.15 131.21 226.02
                 };
 
-            LogUtils.LogDebug(LogArea.Prefabs, "PetFabricatorFragment: SetSpawns...");
+            ModDebugLog.LogDebug( "PetFabricatorFragment: SetSpawns...");
             fabricatorFragmentPrefab.SetSpawns(spawnLocations);
-            LogUtils.LogDebug(LogArea.Prefabs, "PetFabricatorFragment: CreateFragment...");
+            ModDebugLog.LogDebug( "PetFabricatorFragment: CreateFragment...");
             fabricatorFragmentPrefab.CreateFragment(PetFabricatorPrefab.Info.TechType, 5.0f, 3, EncKey, true, true);
-            LogUtils.LogDebug(LogArea.Prefabs, "PetFabricatorFragment: Register...");
+            ModDebugLog.LogDebug( "PetFabricatorFragment: Register...");
             fabricatorFragmentPrefab.Register();
         }
     }

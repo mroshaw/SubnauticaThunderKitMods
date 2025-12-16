@@ -1,4 +1,4 @@
-﻿using DaftAppleGames.SubnauticaPets.Extensions;
+﻿using DaftAppleGames.ModTools.Extensions;
 using UnityEngine;
 
 namespace DaftAppleGames.SubnauticaPets.Utils

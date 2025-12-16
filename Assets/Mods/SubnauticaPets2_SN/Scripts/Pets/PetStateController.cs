@@ -51,7 +51,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                 return;
             }
             
-            // LogUtils.LogDebug(LogArea.MonoPets, $"{gameObject.name}: Changing state from: {_currState} to {newState}");
+            // ModDebugLog.LogDebug( $"{gameObject.name}: Changing state from: {_currState} to {newState}");
             currState = newState;
             switch (newState)
             {

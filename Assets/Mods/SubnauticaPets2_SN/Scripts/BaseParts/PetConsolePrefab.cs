@@ -1,11 +1,12 @@
-﻿using DaftAppleGames.SubnauticaPets.Extensions;
-using DaftAppleGames.SubnauticaPets.Utils;
+﻿using DaftAppleGames.ModTools;
+using DaftAppleGames.ModTools.Extensions;
 using Nautilus.Assets;
 using Nautilus.Assets.Gadgets;
 using Nautilus.Assets.PrefabTemplates;
 using Nautilus.Crafting;
 using Nautilus.Utility;
 using UnityEngine;
+using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
 namespace DaftAppleGames.SubnauticaPets.BaseParts
 {
@@ -33,7 +34,7 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
         {
             Info = PrefabInfo
                 .WithTechType(ClassId, null, null, unlockAtStart: false)
-                .WithIcon(CustomAssetBundleUtils.GetObjectFromAssetBundle<Sprite>(IconAssetName) as Sprite);
+                .WithIcon(ModAssetUtils.GetObjectFromAssetBundle<Sprite>(IconAssetName) as Sprite);
             CustomPrefab consolePrefab = new CustomPrefab(Info);
 
             // We'll use the PictureFrame as a template
@@ -48,7 +49,7 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
             
             // Define the recipe for the new Console, depends on whether in "Adventure" or "Creative" mode.
             RecipeData recipe;
-            if (SubnauticaPetsPlugin.ModConfig.ModMode == ModMode.Adventure)
+            if (ConfigFile.ModMode == ModMode.Adventure)
             {
                 recipe = new RecipeData(
                     new Ingredient(TechType.Titanium, 3),
@@ -66,16 +67,16 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
             consolePrefab.SetRecipe(recipe);
 
             consolePrefab.SetUnlock(Info.TechType)
-                .WithAnalysisTech(CustomAssetBundleUtils.GetObjectFromAssetBundle<Sprite>(DatabankPopupImageAssetName) as Sprite, null,
+                .WithAnalysisTech(ModAssetUtils.GetObjectFromAssetBundle<Sprite>(DatabankPopupImageAssetName) as Sprite, null,
                     null)
                 .WithPdaGroupCategory(TechGroup.InteriorModules, TechCategory.InteriorModule)
                 .WithEncyclopediaEntry(EncPath,
-                    CustomAssetBundleUtils.GetObjectFromAssetBundle<Sprite>(DatabankPopupImageAssetName) as Sprite,
-                    CustomAssetBundleUtils.GetObjectFromAssetBundle<Texture2D>(DatabankMainImageAssetName) as Texture2D);
+                    ModAssetUtils.GetObjectFromAssetBundle<Sprite>(DatabankPopupImageAssetName) as Sprite,
+                    ModAssetUtils.GetObjectFromAssetBundle<Texture2D>(DatabankMainImageAssetName) as Texture2D);
 
             consolePrefab.SetGameObject(consoleTemplate);
             consolePrefab.Register();
-            LogUtils.LogDebug(LogArea.Prefabs, "Pet Console Registered Successfully!");
+            ModDebugLog.LogDebug( "Pet Console Registered Successfully!");
         }
 
         private static void ConfigurePrefab(GameObject prefabGameObject)
@@ -88,7 +89,7 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
 
             // Get Console UI Prefab from Asset Bundle and add to the picture frame
             GameObject petConsoleInstance =
-                CustomAssetBundleUtils.GetPrefabInstanceFromAssetBundle(ConsolePrefabAssetName, true);
+                ModAssetUtils.GetPrefabInstanceFromAssetBundle(ConsolePrefabAssetName, true);
             petConsoleInstance.transform.SetParent(prefabGameObject.transform);
             petConsoleInstance.transform.localPosition = new Vector3(0, 0, 0.018f);
             petConsoleInstance.transform.localRotation = new Quaternion(0, 180, 0, 1);
@@ -96,7 +97,7 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
             
             // Add a Constructable Listener and enable the console screen when constructed
             prefabGameObject.EnsureComponent<ConsoleConstructedNotifier>();
-            LogUtils.LogDebug(LogArea.Prefabs, "ConsoleConstructedNotifier added...");
+            ModDebugLog.LogDebug( "ConsoleConstructedNotifier added...");
             
             // Add Audio FMOD components
             GameObject alertEmitterGo = new GameObject("AlertEmitter")
@@ -118,10 +119,14 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
             };
 
             FMOD_CustomEmitter alertEmitter = alertEmitterGo.AddComponent<FMOD_CustomEmitter>();
-            CustomAudioUtils.ConfigureEmitter(alertEmitter, ConsoleAlertAudioAssetName, AudioUtils.BusPaths.SurfaceAmbient, 5.0f);
+            ModAudioUtils.RegisterSound(ConsoleAlertAudioAssetName, AudioUtils.BusPaths.SurfaceAmbient, ModAssetUtils, ModDebugLog, 0.1f, 8.0f, 0, true);
+            FMODAsset consoleAlertFmodAsset = AudioUtils.GetFmodAsset(ConsoleAlertAudioAssetName);
+            ModAudioUtils.ConfigureEmitter(alertEmitter, consoleAlertFmodAsset, ModDebugLog);
             
             FMOD_CustomEmitter renameEmitter = renameEmitterGo.AddComponent<FMOD_CustomEmitter>();
-            CustomAudioUtils.ConfigureEmitter(renameEmitter, ConsoleRenameAudioAssetName, AudioUtils.BusPaths.SurfaceAmbient, 5.0f);
+            ModAudioUtils.RegisterSound(ConsoleRenameAudioAssetName, AudioUtils.BusPaths.SurfaceAmbient, ModAssetUtils, ModDebugLog, 0.1f, 8.0f, 0, true);
+            FMODAsset consoleRenameFmodAsset = AudioUtils.GetFmodAsset(ConsoleRenameAudioAssetName);
+            ModAudioUtils.ConfigureEmitter(renameEmitter, consoleRenameFmodAsset, ModDebugLog);
         }
     }
 }

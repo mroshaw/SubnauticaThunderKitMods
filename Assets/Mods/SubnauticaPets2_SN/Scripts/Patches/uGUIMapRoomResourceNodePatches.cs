@@ -1,6 +1,6 @@
 ﻿using DaftAppleGames.SubnauticaPets.Pets;
-using DaftAppleGames.SubnauticaPets.Utils;
 using HarmonyLib;
+using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
 namespace DaftAppleGames.SubnauticaPets.Patches
 {
@@ -15,8 +15,6 @@ namespace DaftAppleGames.SubnauticaPets.Patches
         /// <summary>
         /// Patch in names and force enable icons when setting up map room TechTypes
         /// </summary>
-        /// <param name="__instance"></param>
-        /// <param name="techType"></param>
         [HarmonyPatch(nameof(uGUI_MapRoomResourceNode.SetTechType))]
         [HarmonyPostfix]
         public static void SetTechType_Postfix(uGUI_MapRoomResourceNode __instance, TechType techType)
@@ -31,7 +29,7 @@ namespace DaftAppleGames.SubnauticaPets.Patches
 
             // Lookup our scanner text
             string textString = Language.main.Get($"Scanner_{techType}");
-            LogUtils.LogDebug(LogArea.Patches, $"uGUI_MapRoomResourceNode: Setting item text to: {textString}.");
+            ModDebugLog.LogDebug($"uGUI_MapRoomResourceNode: Setting item text to: {textString}.");
             __instance.text.text = textString;
             __instance.icon.enabled = true;
         }

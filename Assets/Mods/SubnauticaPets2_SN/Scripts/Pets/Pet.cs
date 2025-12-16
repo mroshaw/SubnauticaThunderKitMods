@@ -1,7 +1,7 @@
-﻿using DaftAppleGames.SubnauticaPets.Extensions;
-using System.Collections;
-using DaftAppleGames.SubnauticaPets.Utils;
+﻿using System.Collections;
 using UnityEngine;
+using DaftAppleGames.ModTools.Extensions;
+using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
 namespace DaftAppleGames.SubnauticaPets.Pets
 {
@@ -44,7 +44,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             {
                 if (_techTag == null)
                 {
-                    LogUtils.LogError(LogArea.MonoPets, "Pet _techTag is null!!!");
+                    ModDebugLog.LogDebug( "Pet _techTag is null!!!");
                     return "Unknown";
                 }
                 else
@@ -117,11 +117,11 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             // Need to avoid doing anything for the prefab
             if (!gameObject.name.Contains("Clone"))
             {
-                LogUtils.LogDebug(LogArea.Prefabs, $"Start called on Pet Prefab: {gameObject.name}");
+                ModDebugLog.LogDebug( $"Start called on Pet Prefab: {gameObject.name}");
                 return;
             }
 
-            LogUtils.LogDebug(LogArea.Prefabs, $"In Pet Start for: {gameObject.name}");
+            ModDebugLog.LogDebug( $"In Pet Start for: {gameObject.name}");
 
             UpdateActions();
             SetMoveMethod();
@@ -160,53 +160,53 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                 return;
             }
 
-            LogUtils.LogDebug(LogArea.MonoPets, $"Fixing parent for {PetName}");
+            ModDebugLog.LogDebug( $"Fixing parent for {PetName}");
             transform.SetParent(base.transform);
             _skyApplier.SetSky(Skies.BaseInterior);
         }
 
         private void DeriveBase()
         {
-            LogUtils.LogDebug(LogArea.MonoPets, $"In DeriveBase for {PetName}");
+            ModDebugLog.LogDebug( $"In DeriveBase for {PetName}");
             if (Base)
             {
-                LogUtils.LogDebug(LogArea.MonoPets, $"Base already set!");
+                ModDebugLog.LogDebug( $"Base already set!");
                 return;
             }
 
-            LogUtils.LogDebug(LogArea.MonoPets, $"Base not set");
+            ModDebugLog.LogDebug( $"Base not set");
 
             if (transform.parent)
             {
-                LogUtils.LogDebug(LogArea.MonoPets, $"Looking for BaseRoot in parent");
+                ModDebugLog.LogDebug( $"Looking for BaseRoot in parent");
                 Base = transform.parent.GetComponent<Base>();
                 if (Base)
                 {
-                    LogUtils.LogDebug(LogArea.MonoPets, $"Setting Base to: {Base.gameObject.name}...");
+                    ModDebugLog.LogDebug( $"Setting Base to: {Base.gameObject.name}...");
                     return;
                 }
             }
 
-            LogUtils.LogDebug(LogArea.MonoPets, "Looking for Base via RayCast...");
+            ModDebugLog.LogDebug("Looking for Base via RayCast...");
 
             _rayOrigin = new Ray(transform.position, transform.up);
             int numHits = Physics.RaycastNonAlloc(_rayOrigin, _baseCheckCache, maxDistance: 10.0f);
 
-            LogUtils.LogDebug(LogArea.MonoPets, $"RayCast hit {numHits} colliders");
+            ModDebugLog.LogDebug( $"RayCast hit {numHits} colliders");
 
             for (int curHit = 0; curHit < numHits; curHit++)
             {
-                LogUtils.LogDebug(LogArea.MonoPets, $"Looking in {_baseCheckCache[curHit].collider.gameObject.name}.");
+                ModDebugLog.LogDebug( $"Looking in {_baseCheckCache[curHit].collider.gameObject.name}.");
 
                 Base = _baseCheckCache[curHit].collider.transform.parent.GetComponentInChildren<Base>(true);
 
                 if (Base)
                 {
-                    LogUtils.LogDebug(LogArea.MonoPets, $"Found BaseRoot in {Base.gameObject.name}");
+                    ModDebugLog.LogDebug( $"Found BaseRoot in {Base.gameObject.name}");
                     return;
                 }
             }
-            LogUtils.LogError(LogArea.MonoPets, $"Can't find Base for Pet {PetName}!");
+            ModDebugLog.LogDebug( $"Can't find Base for Pet {PetName}!");
         }
 
 
@@ -220,7 +220,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             {
                 if (petDetails.PrefabId == PrefabId)
                 {
-                    LogUtils.LogDebug(LogArea.MonoPets, $"Pet: Found {petDetails.PrefabId}, assigning Pet name");
+                    ModDebugLog.LogDebug( $"Pet: Found {petDetails.PrefabId}, assigning Pet name");
                     PetName = petDetails.PetName;
                     break;
                 }
@@ -233,7 +233,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// <param name="identifier"></param>
         private void LogPetData(string identifier)
         {
-            LogUtils.LogDebug(LogArea.MonoPets, $"{identifier}: GameObject is: {gameObject.name}, ObjectId is: {gameObject.GetInstanceID()}, " +
+            ModDebugLog.LogDebug( $"{identifier}: GameObject is: {gameObject.name}, ObjectId is: {gameObject.GetInstanceID()}, " +
                                                 $"Transform is: ({gameObject.transform.position.x},{gameObject.transform.position.y}, {gameObject.transform.position.z}), Type is: {PetTypeString}, PrefabId is: {PrefabId}");
         }
 
@@ -260,26 +260,26 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             _moveOnSurface = GetComponent<MoveOnSurface>();
             if (!_moveOnSurface)
             {
-                // LogUtils.LogDebug(LogArea.MonoPets, "Pet: No MoveOnSurface component found.");
+                // ModDebugLog.LogDebug("Pet: No MoveOnSurface component found.");
             }
 
             _moveOnGround = GetComponent<MoveOnGround>();
             if (!_moveOnGround)
             {
-                // LogUtils.LogDebug(LogArea.MonoPets, "Pet: No MoveOnGround component found.");
+                // ModDebugLog.LogDebug("Pet: No MoveOnGround component found.");
             }
 
             _petStateController = GetComponent<PetStateController>();
             if (!_petStateController)
             {
-                // LogUtils.LogDebug(LogArea.MonoPets, "Pet: No PetStateController component found.");
+                // ModDebugLog.LogDebug("Pet: No PetStateController component found.");
             }
 
             _canMove = _moveOnGround || _moveOnSurface || _petStateController;
 
             if (!_canMove)
             {
-                LogUtils.LogDebug(LogArea.MonoPets, "Pet: No ground movement behaviour found. Cannot move to player!");
+                ModDebugLog.LogDebug("Pet: No ground movement behaviour found. Cannot move to player!");
             }
         }
 
@@ -308,7 +308,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             }
             else
             {
-                LogUtils.LogError(LogArea.MonoPets, "Pet: No animator found, so can't play animation.");
+                ModDebugLog.LogDebug( "Pet: No animator found, so can't play animation.");
             }
         }
 
@@ -319,7 +319,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         {
             if (!_canMove)
             {
-                LogUtils.LogError(LogArea.MonoPets, "Pet: No movement component found, so can't walk to player");
+                ModDebugLog.LogDebug( "Pet: No movement component found, so can't walk to player");
                 return;
             }
 
@@ -377,7 +377,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             Happiness = PetHappiness.Dead;
 
             SubnauticaPetsPlugin.PetSaver.UnregisterPet(this);
-            LogUtils.LogDebug(LogArea.MonoPets, $"Picked up the OnKill message in {gameObject.name}");
+            ModDebugLog.LogDebug( $"Picked up the OnKill message in {gameObject.name}");
 
             if (!string.IsNullOrEmpty(PetNameString))
             {

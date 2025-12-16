@@ -1,11 +1,11 @@
-﻿using DaftAppleGames.SubnauticaPets.Extensions;
-using DaftAppleGames.SubnauticaPets.Utils;
+﻿using DaftAppleGames.ModTools.Extensions;
 using Nautilus.Assets;
 using Nautilus.Assets.Gadgets;
 using Nautilus.Assets.PrefabTemplates;
 using Nautilus.Crafting;
 using Nautilus.Utility;
 using UnityEngine;
+using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
 // https://github.com/LeeTwentyThree/Nautilus/blob/master/Nautilus/Documentation/resources/BZ-PrefabPaths.json
 // https://github.com/LeeTwentyThree/Nautilus/blob/master/Nautilus/Documentation/resources/SN1-PrefabPaths.json
@@ -43,7 +43,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             {
                 Info = PrefabInfo
                     .WithTechType(ClassId, null, null, unlockAtStart: true)
-                    .WithIcon(CustomAssetBundleUtils.GetObjectFromAssetBundle<Sprite>(IconTextureAssetName) as Sprite);
+                    .WithIcon(ModAssetUtils.GetObjectFromAssetBundle<Sprite>(IconTextureAssetName) as Sprite);
 
                 CustomPrefab prefab = new CustomPrefab(Info);
                 CloneTemplate cloneTemplate = new CloneTemplate(Info, CloneClassId);
@@ -65,14 +65,14 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                     PetPrefabConfigUtils.AddPetComponent(obj);
                     obj.name = ClassId;
                     obj.SetActive(false);
-                    LogUtils.LogDebug(LogArea.Prefabs, $"Done modifying {Info.TechType}");
+                    ModDebugLog.LogDebug( $"Done modifying {Info.TechType}");
                 };
 
                 prefab.SetGameObject(cloneTemplate);
 
                 // Set the recipe, depends on whether in "Adventure" or "Creative" mode.
                 RecipeData recipe = null;
-                if (SubnauticaPetsPlugin.ModConfig.ModMode == ModMode.Adventure)
+                if (ConfigFile.ModMode == ModMode.Adventure)
                 {
                     recipe = new RecipeData(
                     new Ingredient(TechType.Gold, 1),
@@ -109,7 +109,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             {
                 Info = PrefabInfo
                     .WithTechType(ClassId, null, null, unlockAtStart: true)
-                    .WithIcon(CustomAssetBundleUtils.GetObjectFromAssetBundle<Sprite>(IconTextureAssetName) as Sprite);
+                    .WithIcon(ModAssetUtils.GetObjectFromAssetBundle<Sprite>(IconTextureAssetName) as Sprite);
 
                 CustomPrefab prefab = new CustomPrefab(Info);
                 CloneTemplate cloneTemplate = new CloneTemplate(Info, CloneClassId);
@@ -132,14 +132,14 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                     PetPrefabConfigUtils.AddPetComponent(obj);
                     obj.name = ClassId;
                     obj.SetActive(false);
-                    LogUtils.LogDebug(LogArea.Prefabs, $"Done modifying {Info.TechType}");
+                    ModDebugLog.LogDebug( $"Done modifying {Info.TechType}");
                 };
 
                 prefab.SetGameObject(cloneTemplate);
 
                 // Set the recipe, depends on whether in "Adventure" or "Creative" mode.
                 RecipeData recipe = null;
-                if (SubnauticaPetsPlugin.ModConfig.ModMode == ModMode.Adventure)
+                if (ConfigFile.ModMode == ModMode.Adventure)
                 {
                     recipe = new RecipeData(
                     new Ingredient(TechType.Gold, 1),
@@ -174,7 +174,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             {
                 Info = PrefabInfo
                     .WithTechType(ClassId, null, null, unlockAtStart: true)
-                    .WithIcon(CustomAssetBundleUtils.GetObjectFromAssetBundle<Sprite>(IconTextureAssetName) as Sprite);
+                    .WithIcon(ModAssetUtils.GetObjectFromAssetBundle<Sprite>(IconTextureAssetName) as Sprite);
 
                 CustomPrefab prefab = new CustomPrefab(Info);
                 CloneTemplate cloneTemplate = new CloneTemplate(Info, CloneClassId);
@@ -196,14 +196,14 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                     PetPrefabConfigUtils.AddPetComponent(obj);
                     obj.name = ClassId;
                     obj.SetActive(false);
-                    LogUtils.LogDebug(LogArea.Prefabs, $"Done modifying {Info.TechType}");
+                    ModDebugLog.LogDebug( $"Done modifying {Info.TechType}");
                 };
 
                 prefab.SetGameObject(cloneTemplate);
 
                 // Set the recipe, depends on whether in "Adventure" or "Creative" mode.
                 RecipeData recipe = null;
-                if (SubnauticaPetsPlugin.ModConfig.ModMode == ModMode.Adventure)
+                if (ConfigFile.ModMode == ModMode.Adventure)
                 {
                     recipe = new RecipeData(
                     new Ingredient(TechType.Gold, 1),
@@ -238,7 +238,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             {
                 Info = PrefabInfo
                     .WithTechType(ClassId, null, null, unlockAtStart: true)
-                    .WithIcon(CustomAssetBundleUtils.GetObjectFromAssetBundle<Sprite>(IconTextureAssetName) as Sprite);
+                    .WithIcon(ModAssetUtils.GetObjectFromAssetBundle<Sprite>(IconTextureAssetName) as Sprite);
 
                 CustomPrefab prefab = new CustomPrefab(Info);
                 CloneTemplate cloneTemplate = new CloneTemplate(Info, CloneClassId);
@@ -265,14 +265,14 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                     PetPrefabConfigUtils.AddPetComponent(obj);
                     obj.name = ClassId;
                     obj.SetActive(false);
-                    LogUtils.LogDebug(LogArea.Prefabs, $"Done modifying {Info.TechType}");
+                    ModDebugLog.LogDebug( $"Done modifying {Info.TechType}");
                 };
 
                 prefab.SetGameObject(cloneTemplate);
 
                 // Set the recipe, depends on whether in "Adventure" or "Creative" mode.
                 RecipeData recipe = null;
-                if (SubnauticaPetsPlugin.ModConfig.ModMode == ModMode.Adventure)
+                if (ConfigFile.ModMode == ModMode.Adventure)
                 {
                     recipe = new RecipeData(
                     new Ingredient(TechType.Gold, 1),

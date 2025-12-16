@@ -1,12 +1,14 @@
-﻿using DaftAppleGames.SubnauticaPets.Extensions;
-using Nautilus.Handlers;
+﻿using Nautilus.Handlers;
 using Nautilus.Utility;
 using System.Collections.Generic;
+using DaftAppleGames.ModTools;
+using DaftAppleGames.ModTools.Extensions;
 using DaftAppleGames.SubnauticaPets.Utils;
 using Nautilus.Assets;
 using Nautilus.Assets.Gadgets;
 using Nautilus.Crafting;
 using UnityEngine;
+using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
 namespace DaftAppleGames.SubnauticaPets.Pets
 {
@@ -39,9 +41,11 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             creatureDeath.respawn = false;
             creatureDeath.useRigidbody = targetGameObject.GetComponent<Rigidbody>();
 
-            LogUtils.LogDebug(LogArea.Prefabs, "Setting up FMOD Emitter");
+            ModDebugLog.LogDebug( "Setting up FMOD Emitter");
             FMOD_CustomEmitter customEmitter = targetGameObject.EnsureComponent<FMOD_CustomEmitter>();
-            CustomAudioUtils.ConfigureEmitter(customEmitter, audioClipName, busPath, audioVolume);
+            ModAudioUtils.RegisterSound(audioClipName, busPath, ModAssetUtils, ModDebugLog, 0.1f, 8.0f, 0, true);
+            FMODAsset petFmodAsset = AudioUtils.GetFmodAsset(audioClipName);
+            ModAudioUtils.ConfigureEmitter(customEmitter,  petFmodAsset, ModDebugLog);
 
             // Configure the CharacterController collider to interact with the MoonPool blocker
             CharacterController characterController = targetGameObject.GetComponent<CharacterController>();
@@ -81,7 +85,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// </summary>
         public static void AddDnaCapsuleCollider(GameObject targetGameObject)
         {
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "AddDnaCapsuleCollider started...");
+            ModDebugLog.LogDebug("AddDnaCapsuleCollider started...");
 
             Collider collider = targetGameObject.GetComponentInChildren<Collider>(true);
             if (collider)
@@ -94,7 +98,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                 newCollider.direction = 1;
             }
 
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "AddDnaCapsuleCollider done.");
+            ModDebugLog.LogDebug( "AddDnaCapsuleCollider done.");
         }
 
         /// <summary>
@@ -102,11 +106,11 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// </summary>
         internal static void ConfigureAnimator(GameObject targetGameObject, bool isEnabled)
         {
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "ConfigureAnimator started...");
+            ModDebugLog.LogDebug( "ConfigureAnimator started...");
             Creature creature = targetGameObject.GetComponent<Creature>();
             Animator animator = creature.GetAnimator();
             animator.enabled = isEnabled;
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "ConfigureAnimator done.");
+            ModDebugLog.LogDebug( "ConfigureAnimator done.");
         }
 
         /// <summary>
@@ -114,10 +118,10 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// </summary>
         internal static void AddScaleOnStart(GameObject targetGameObject, float scaleFactor)
         {
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "AddScaleOnStart started...");
+            ModDebugLog.LogDebug( "AddScaleOnStart started...");
             ScaleOnStart scaleOnStart = targetGameObject.AddComponent<ScaleOnStart>();
             scaleOnStart.Scale = new Vector3(scaleFactor, scaleFactor, scaleFactor);
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "AddScaleOnStart done.");
+            ModDebugLog.LogDebug( "AddScaleOnStart done.");
         }
 
         /// <summary>
@@ -126,7 +130,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         internal static void AddVFXFabricating(GameObject targetGameObject, string pathToModel, float minY, float maxY,
             Vector3 posOffset, float scaleFactor, Vector3 eulerOffset)
         {
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "AddVFXFabricating started...");
+            ModDebugLog.LogDebug( "AddVFXFabricating started...");
             GameObject modelGameObject = targetGameObject.GetComponentInChildren<Animator>().gameObject;
             if (modelGameObject != null)
             {
@@ -134,7 +138,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                     eulerOffset);
             }
 
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "AddVFXFabricating done.");
+            ModDebugLog.LogDebug( "AddVFXFabricating done.");
         }
 
         /// <summary>
@@ -142,14 +146,14 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// </summary>
         internal static void AddPrefabIdentifier(GameObject targetGameObject)
         {
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "AddPrefabIdentifier started...");
+            ModDebugLog.LogDebug("AddPrefabIdentifier started...");
             PrefabIdentifier prefabIdentifier = targetGameObject.GetComponent<PrefabIdentifier>();
             if (!prefabIdentifier)
             {
                 targetGameObject.AddComponent<PrefabIdentifier>();
             }
 
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "AddPrefabIdentifier done.");
+            ModDebugLog.LogDebug("AddPrefabIdentifier done.");
         }
 
         /// <summary>
@@ -157,9 +161,9 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// </summary>
         internal static void SetMeshRenderersColor(GameObject targetGameObject, string modelGameObjectName, Color color)
         {
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "SetMeshRenderersColor started...");
+            ModDebugLog.LogDebug("SetMeshRenderersColor started...");
             targetGameObject.FindChild(modelGameObjectName).GetComponent<MeshRenderer>().material.color = color;
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "SetMeshRenderersColor done.");
+            ModDebugLog.LogDebug("SetMeshRenderersColor done.");
         }
 
         /// <summary>
@@ -169,11 +173,11 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// <param name="modelGameObjectName"></param>
         internal static void AddRotateModel(GameObject targetGameObject, string modelGameObjectName)
         {
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "AddRotateModel started...");
+            ModDebugLog.LogDebug("AddRotateModel started...");
             GameObject dnaGameObject = targetGameObject.transform.Find(modelGameObjectName).gameObject;
             RotateModel rotateModel = dnaGameObject.AddComponent<RotateModel>();
             rotateModel.RotationSpeed = 0.1f;
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "AddRotateModel done.");
+            ModDebugLog.LogDebug("AddRotateModel done.");
         }
 
         /// <summary>
@@ -181,7 +185,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// </summary>
         internal static void AddTechTag(GameObject targetGameObject, TechType techType)
         {
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "AddTechTag started...");
+            ModDebugLog.LogDebug( "AddTechTag started...");
             TechTag techTag = targetGameObject.GetComponent<TechTag>();
             if (techTag == null)
             {
@@ -189,7 +193,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             }
 
             techTag.type = techType;
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "AddTechTag done");
+            ModDebugLog.LogDebug( "AddTechTag done");
         }
 
         /// <summary>
@@ -197,7 +201,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// </summary>
         internal static void UpdatePickupable(GameObject targetGameObject, bool isPickupable)
         {
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "UpdatePickupable started...");
+            ModDebugLog.LogDebug( "UpdatePickupable started...");
             // Prevent fragments from being phsyically picked up
             Pickupable pickupable = targetGameObject.GetComponent<Pickupable>();
             if (pickupable)
@@ -205,7 +209,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                 pickupable.isPickupable = isPickupable;
             }
 
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "UpdatePickupable done.");
+            ModDebugLog.LogDebug("UpdatePickupable done.");
         }
 
         /// <summary>
@@ -213,7 +217,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// </summary>
         internal static void AddSimpleMovement(GameObject targetGameObject)
         {
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "AddSimpleMovement started...");
+            ModDebugLog.LogDebug( "AddSimpleMovement started...");
             // Add simple movement component
             SimpleMovement movement = targetGameObject.GetComponent<SimpleMovement>();
             if (movement == null)
@@ -222,7 +226,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                 movement.moveSpeed = 1.0f;
             }
 
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "AddSimpleMovement done.");
+            ModDebugLog.LogDebug( "AddSimpleMovement done.");
         }
 
         /// <summary>
@@ -230,14 +234,14 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// </summary>
         internal static void AddWorldForces(GameObject targetGameObject)
         {
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "AddWorldForces started...");
+            ModDebugLog.LogDebug( "AddWorldForces started...");
             WorldForces worldForces = targetGameObject.GetComponent<WorldForces>();
             if (worldForces == null)
             {
                 worldForces = targetGameObject.AddComponent<WorldForces>();
             }
 
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "AddWorldForces done.");
+            ModDebugLog.LogDebug( "AddWorldForces done.");
         }
 
         /// <summary>
@@ -245,9 +249,9 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// </summary>
         internal static void AddPetHandTarget(GameObject targetGameObject)
         {
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "AddPetHandTarget started...");
+            ModDebugLog.LogDebug( "AddPetHandTarget started...");
             targetGameObject.AddComponent<PetHandTarget>();
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "AddPetHandTarget done.");
+            ModDebugLog.LogDebug( "AddPetHandTarget done.");
         }
 
         /// <summary>
@@ -255,9 +259,9 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// </summary>
         internal static void SetScale(GameObject targetGameObject, Vector3 scaleFactor)
         {
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "SetScale started...");
+            ModDebugLog.LogDebug( "SetScale started...");
             targetGameObject.transform.localScale = scaleFactor;
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "SetScale done.");
+            ModDebugLog.LogDebug( "SetScale done.");
         }
 
         /// <summary>
@@ -265,7 +269,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// </summary>
         internal static void ConfigurePetTraits(GameObject targetGameObject)
         {
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "ConfigurePetTraits started...");
+            ModDebugLog.LogDebug( "ConfigurePetTraits started...");
             Creature creature = targetGameObject.GetComponent<Creature>();
             if (creature)
             {
@@ -278,7 +282,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                 creature.Tired.Value = 0.0f;
             }
 
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "ConfigurePetTraits done.");
+            ModDebugLog.LogDebug( "ConfigurePetTraits done.");
         }
 
         /// <summary>
@@ -286,7 +290,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// </summary>
         internal static void AddRigidBody(GameObject targetGameObject)
         {
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "AddRigidBody started...");
+            ModDebugLog.LogDebug( "AddRigidBody started...");
             Rigidbody rigidbody = targetGameObject.GetComponent<Rigidbody>();
             if (rigidbody == null)
             {
@@ -297,7 +301,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                 rigidbody.isKinematic = false;
             }
 
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "AddRigidBody done.");
+            ModDebugLog.LogDebug( "AddRigidBody done.");
         }
 
 
@@ -306,7 +310,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// </summary>
         internal static void SetRigidBodyKinematic(GameObject targetGameObject, bool isKinematic)
         {
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "SetRigidBodyKinematic started...");
+            ModDebugLog.LogDebug( "SetRigidBodyKinematic started...");
             Rigidbody rigidbody = targetGameObject.GetComponent<Rigidbody>();
             if (rigidbody != null)
             {
@@ -314,7 +318,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                 rigidbody.isKinematic = isKinematic;
             }
 
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "SetRigidBodyKinematic done.");
+            ModDebugLog.LogDebug( "SetRigidBodyKinematic done.");
         }
 
         /// <summary>
@@ -322,7 +326,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// </summary>
         internal static void AddFreezeOnSettle(GameObject targetGameObject)
         {
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "AddFreezeOnSettle started...");
+            ModDebugLog.LogDebug( "AddFreezeOnSettle started...");
             FreezeOnSettle freeze = targetGameObject.GetComponent<FreezeOnSettle>();
             if (freeze == null)
             {
@@ -333,7 +337,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                 freeze.StartDelay = 2.0f;
             }
 
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "AddFreezeOnSettle done.");
+            ModDebugLog.LogDebug( "AddFreezeOnSettle done.");
         }
 
         /// <summary>
@@ -341,14 +345,14 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// </summary>
         internal static void AddAlignToFloor(GameObject targetGameObject)
         {
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "AddAlignToFloor started...");
+            ModDebugLog.LogDebug( "AddAlignToFloor started...");
             AlignToFloorOnStart alignToFloor = targetGameObject.GetComponent<AlignToFloorOnStart>();
             if (alignToFloor == null)
             {
                 alignToFloor = targetGameObject.AddComponent<AlignToFloorOnStart>();
             }
 
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "AddAlignToFloor done.");
+            ModDebugLog.LogDebug( "AddAlignToFloor done.");
         }
 
         /// <summary>
@@ -356,7 +360,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// </summary>
         internal static void ResizeCollider(GameObject targetGameObject, Vector3 colliderCenter, Vector3 colliderSize)
         {
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "ResizeCollider started...");
+            ModDebugLog.LogDebug( "ResizeCollider started...");
             BoxCollider collider = targetGameObject.GetComponentInChildren<BoxCollider>(true);
             if (collider)
             {
@@ -364,7 +368,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                 collider.size = colliderSize;
             }
 
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "ResizeCollider done.");
+            ModDebugLog.LogDebug( "ResizeCollider done.");
         }
 
         /// <summary>
@@ -372,14 +376,14 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// </summary>
         internal static void RemoveOldModel(GameObject targetGameObject, string modelNameHint)
         {
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "RemoveOldModel started...");
+            ModDebugLog.LogDebug( "RemoveOldModel started...");
             GameObject oldModelGameObject = targetGameObject.FindChild(modelNameHint);
             if (oldModelGameObject != null)
             {
                 Object.Destroy(oldModelGameObject);
             }
 
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "RemoveOldModel done.");
+            ModDebugLog.LogDebug( "RemoveOldModel done.");
         }
 
         /// <summary>
@@ -388,18 +392,18 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// </summary>
         internal static void ConfigureSkyApplier(GameObject targetGameObject)
         {
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "ConfigureSkyApplier started...");
+            ModDebugLog.LogDebug( "ConfigureSkyApplier started...");
             Pet pet = targetGameObject.GetComponent<Pet>();
 
             SkyApplier skyApplier = targetGameObject.EnsureComponent<SkyApplier>();
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "Pet: ConfigureSkyApplier added SkyApplier component.");
+            ModDebugLog.LogDebug( "Pet: ConfigureSkyApplier added SkyApplier component.");
 
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "Pet: ConfigureSkyApplier setting SkyApplier Sky.");
+            ModDebugLog.LogDebug( "Pet: ConfigureSkyApplier setting SkyApplier Sky.");
             // skyApplier.SetSky(Skies.BaseInterior);
 
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "Pet: ConfigureSkyApplier updating renderers...");
+            ModDebugLog.LogDebug( "Pet: ConfigureSkyApplier updating renderers...");
             Renderer[] creatureRenderers = targetGameObject.GetComponentsInChildren<Renderer>(true);
-            LogUtils.LogDebug(LogArea.PetConfigUtils,
+            ModDebugLog.LogDebug(
                 $"Pet: ConfigureSkyApplier found {creatureRenderers.Length} renderers...");
             // skyApplier.anchorSky = Skies.Auto;
             // skyApplier.emissiveFromPower = false;
@@ -409,7 +413,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                 skyApplier.renderers = creatureRenderers;
             }
 
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "ConfigureSkyApplier done.");
+            ModDebugLog.LogDebug( "ConfigureSkyApplier done.");
         }
 
         /// <summary>
@@ -417,10 +421,10 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// </summary>
         internal static void PreventFloatingOnDeath(GameObject targetGameObject)
         {
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "PreventFloatingOnDeath started...");
+            ModDebugLog.LogDebug( "PreventFloatingOnDeath started...");
             // Remove the CreatureDeath component, to prevent floating on death
             targetGameObject.DestroyComponentsInChildren<CreatureDeath>();
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "PreventFloatingOnDeath done.");
+            ModDebugLog.LogDebug( "PreventFloatingOnDeath done.");
         }
 
         /// <summary>
@@ -428,11 +432,11 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// </summary>
         private static Behaviour[] RemoveBehaviourItem(Behaviour[] array, System.Type typeToRemove)
         {
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "RemoveBehaviourItem started...");
+            ModDebugLog.LogDebug( "RemoveBehaviourItem started...");
             List<Behaviour> behaviourList = new List<Behaviour>(array);
             Behaviour behaviorToRemove = behaviourList.Find(x => x.GetType() == typeToRemove);
             behaviourList.Remove(behaviorToRemove);
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "RemoveBehaviourItem done.");
+            ModDebugLog.LogDebug( "RemoveBehaviourItem done.");
             return behaviourList.ToArray();
         }
 
@@ -443,14 +447,14 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             string popupImageTextureName)
         {
             Texture2D mainImage =
-                CustomAssetBundleUtils.GetObjectFromAssetBundle<Texture2D>(mainImageTextureName) as Texture2D;
+                ModAssetUtils.GetObjectFromAssetBundle<Texture2D>(mainImageTextureName) as Texture2D;
             Sprite popupImageSprite =
-                CustomAssetBundleUtils.GetObjectFromAssetBundle<Sprite>(popupImageTextureName) as Sprite;
+                ModAssetUtils.GetObjectFromAssetBundle<Sprite>(popupImageTextureName) as Sprite;
             if (!popupImageSprite)
             {
                 Texture2D popupImageTexture =
-                    CustomAssetBundleUtils.GetObjectFromAssetBundle<Texture2D>(popupImageTextureName) as Texture2D;
-                popupImageSprite = CustomAssetBundleUtils.GetSpriteFromTexture(popupImageTexture);
+                    ModAssetUtils.GetObjectFromAssetBundle<Texture2D>(popupImageTextureName) as Texture2D;
+                popupImageSprite = ModAssetUtils.GetSpriteFromTexture(popupImageTexture);
             }
 
             PDAHandler.AddEncyclopediaEntry(encyKey, encyPath, null, null,
@@ -464,7 +468,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             CustomPrefab prefab = new CustomPrefab(prefabInfo);
 
             GameObject prefabGameObject =
-                CustomAssetBundleUtils.GetObjectFromAssetBundle<GameObject>(bundlePrefabName) as GameObject;
+                ModAssetUtils.GetObjectFromAssetBundle<GameObject>(bundlePrefabName) as GameObject;
 
             GameObject model = prefabGameObject.transform.Find("model").gameObject;
             Transform petEyes = prefabGameObject.transform.Find("Eyes");
@@ -488,7 +492,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
 
             // Set the recipe, depends on whether in "Adventure" or "Creative" mode.
             RecipeData recipe = null;
-            if (SubnauticaPetsPlugin.ModConfig.ModMode == ModMode.Adventure)
+            if (SubnauticaPetsPlugin.ConfigFile.ModMode == ModMode.Adventure)
             {
                 if (dnaTechType != TechType.None)
                 {
@@ -520,9 +524,9 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// </summary>
         internal static void DestroyEmpAttack(GameObject targetGameObject)
         {
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "DestroyEmpAttack started...");
+            ModDebugLog.LogDebug( "DestroyEmpAttack started...");
             targetGameObject.DestroyComponentsInChildren<EMPAttack>();
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "DestroyEmpAttack done.");
+            ModDebugLog.LogDebug( "DestroyEmpAttack done.");
         }
 
         /// <summary>
@@ -530,9 +534,9 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// </summary>
         internal static void DestroyAttackLastTarget(GameObject targetGameObject)
         {
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "DestroyAttackLastTarget started...");
+            ModDebugLog.LogDebug( "DestroyAttackLastTarget started...");
             targetGameObject.DestroyComponentsInChildren<AttackLastTarget>();
-            LogUtils.LogDebug(LogArea.PetConfigUtils, "DestroyAttackLastTarget done.");
+            ModDebugLog.LogDebug( "DestroyAttackLastTarget done.");
         }
     }
 }

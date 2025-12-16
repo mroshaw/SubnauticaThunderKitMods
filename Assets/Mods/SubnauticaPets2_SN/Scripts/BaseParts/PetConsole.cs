@@ -2,11 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using DaftAppleGames.SubnauticaPets.Extensions;
 using DaftAppleGames.SubnauticaPets.Utils;
 using TMPro;
 using UnityEngine;
 using Button = UnityEngine.UI.Button;
+using DaftAppleGames.ModTools.Extensions;
+using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
 namespace DaftAppleGames.SubnauticaPets.BaseParts
 {
@@ -190,24 +191,24 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
             // Get the BasePart transform
             if (!transform.parent)
             {
-                LogUtils.LogDebug(LogArea.MonoBaseParts, $"PetConsole has no parent, so isn't in base!");
+                ModDebugLog.LogDebug( $"PetConsole has no parent, so isn't in base!");
                 return;
             }
 
             if (!transform.parent.parent)
             {
-                LogUtils.LogDebug(LogArea.MonoBaseParts, $"PetConsole parent has no parent, so isn't in base!");
+                ModDebugLog.LogDebug( $"PetConsole parent has no parent, so isn't in base!");
                 return;
             }
             
             Base = transform.parent.parent.GetComponent<Base>();
             if (Base)
             {
-                LogUtils.LogDebug(LogArea.MonoBaseParts, $"PetConsole Start in Base: {Base.gameObject.name}");
+                ModDebugLog.LogDebug( $"PetConsole Start in Base: {Base.gameObject.name}");
             }
             else
             {
-                LogUtils.LogDebug(LogArea.MonoBaseParts, $"PetConsole Start: Base not found in parent!");
+                ModDebugLog.LogDebug( $"PetConsole Start: Base not found in parent!");
             }
         }
         
@@ -225,7 +226,7 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
         {
             if (!_alertEmitter)
             {
-                LogUtils.LogDebug(LogArea.MonoBaseParts, $"PetConsole alert emitter is null!");
+                ModDebugLog.LogDebug( $"PetConsole alert emitter is null!");
                 return;
             }
             _alertEmitter.Play();
@@ -235,7 +236,7 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
         {
             if (!_renameEmitter)
             {
-                LogUtils.LogDebug(LogArea.MonoBaseParts, $"PetConsole rename emitter is null!");
+                ModDebugLog.LogDebug( $"PetConsole rename emitter is null!");
                 return;
             }
             _renameEmitter.Play();
@@ -290,7 +291,7 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
             killButton.gameObject.SetActive(true);
             killConfirmButton.GetComponentInChildren<TextMeshProUGUI>().text = _confirmButtonText;
 
-            // LogUtils.LogDebug(LogArea.MonoBaseParts, "Kill Button Clicked!");
+            // ModDebugLog.LogDebug( "Kill Button Clicked!");
             if (_selectedPet != null)
             {
                 _selectedPet.Kill();
@@ -346,7 +347,7 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
         /// </summary>
         private void PetSelectedProxy(Pet pet)
         {
-            LogUtils.LogDebug(LogArea.MonoBaseParts, $"Selected Pet Changed: {pet.PetName}");
+            ModDebugLog.LogDebug( $"Selected Pet Changed: {pet.PetName}");
             _selectedPet = pet;
 
             // Set the Kill and Rename buttons to interactable
@@ -377,10 +378,10 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
         internal void UpdatePetList()
         {
             // Get button background
-            Sprite backgroundSprite = CustomAssetBundleUtils.GetObjectFromAssetBundle<Sprite>(UiUtils.CustomButtonTexture) as Sprite;
+            Sprite backgroundSprite = ModAssetUtils.GetObjectFromAssetBundle<Sprite>(UiUtils.CustomButtonTexture) as Sprite;
 
             // Clear the current UI objects
-            LogUtils.LogDebug(LogArea.MonoBaseParts, "CreatePetList: Clearing existing buttons...");
+            ModDebugLog.LogDebug( "CreatePetList: Clearing existing buttons...");
             if (_allScrollViewEntries != null)
             {
                 foreach (ConsoleScrollViewEntry scrollListEntry in _allScrollViewEntries)
@@ -396,14 +397,14 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
             // Check the PetList
             if (SubnauticaPetsPlugin.PetSaver.PetList == null)
             {
-                LogUtils.LogDebug(LogArea.MonoBaseParts, $"PetConsoleUi: The PetList is null, and cannot be sorted.");
+                ModDebugLog.LogDebug( $"PetConsoleUi: The PetList is null, and cannot be sorted.");
                 return;
             }
 
             // Sort by name
             List<Pet> sortedPetList = SubnauticaPetsPlugin.PetSaver.PetList.OrderBy(pet => pet.PetName).ToList();
 
-            LogUtils.LogDebug(LogArea.MonoBaseParts, $"PetConsoleUi: Sorted list into {sortedPetList.Count} pets.");
+            ModDebugLog.LogDebug( $"PetConsoleUi: Sorted list into {sortedPetList.Count} pets.");
 
             // Iterate over all pets and add a button
             foreach (Pet currPet in sortedPetList)
@@ -482,7 +483,7 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
                 case "WalrusPet":
                     return walrusTemplate;
                 default:
-                    LogUtils.LogError(LogArea.MonoBaseParts, $"GetScrollListTemplate: Unknown pet type: {petType}");
+                    ModDebugLog.LogDebug( $"GetScrollListTemplate: Unknown pet type: {petType}");
                     return null;
             }
         }

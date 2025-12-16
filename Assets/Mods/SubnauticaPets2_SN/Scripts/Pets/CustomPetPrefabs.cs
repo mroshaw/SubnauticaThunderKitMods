@@ -1,6 +1,6 @@
-﻿using DaftAppleGames.SubnauticaPets.Utils;
-using Nautilus.Assets;
+﻿using Nautilus.Assets;
 using UnityEngine;
+using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
 namespace DaftAppleGames.SubnauticaPets.Pets
 {
@@ -33,7 +33,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             {
                 Info = PrefabInfo
                     .WithTechType(ClassId, null, null, unlockAtStart: true)
-                    .WithIcon(CustomAssetBundleUtils.GetObjectFromAssetBundle<Sprite>(IconTextureAssetName) as Sprite);
+                    .WithIcon(ModAssetUtils.GetObjectFromAssetBundle<Sprite>(IconTextureAssetName) as Sprite);
                 PetPrefabConfigUtils.RegisterCustomPet(Info, ClassId, PrefabAssetName,
                     AudioAssetName,
                     Info.TechType, PetDnaPrefabs.CatDnaPrefab.Info.TechType);
@@ -53,7 +53,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             {
                 Info = PrefabInfo
                     .WithTechType(ClassId, null, null, unlockAtStart: true)
-                    .WithIcon(CustomAssetBundleUtils.GetObjectFromAssetBundle<Sprite>(IconTextureAssetName) as Sprite);
+                    .WithIcon(ModAssetUtils.GetObjectFromAssetBundle<Sprite>(IconTextureAssetName) as Sprite);
                 PetPrefabConfigUtils.RegisterCustomPet(Info, ClassId, PrefabAssetName,
                     AudioAssetName,
                     Info.TechType, TechType.None);
@@ -76,7 +76,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             {
                 Info = PrefabInfo
                     .WithTechType(ClassId, null, null, unlockAtStart: true)
-                    .WithIcon(CustomAssetBundleUtils.GetObjectFromAssetBundle<Sprite>(IconTextureAssetName) as Sprite);
+                    .WithIcon(ModAssetUtils.GetObjectFromAssetBundle<Sprite>(IconTextureAssetName) as Sprite);
                 PetPrefabConfigUtils.RegisterCustomPet(Info, ClassId, PrefabAssetName,
                     AudioAssetName,
                     Info.TechType, TechType.None);
@@ -99,7 +99,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             {
                 Info = PrefabInfo
                     .WithTechType(ClassId, null, null, unlockAtStart: true)
-                    .WithIcon(CustomAssetBundleUtils.GetObjectFromAssetBundle<Sprite>(IconTextureAssetName) as Sprite);
+                    .WithIcon(ModAssetUtils.GetObjectFromAssetBundle<Sprite>(IconTextureAssetName) as Sprite);
                 PetPrefabConfigUtils.RegisterCustomPet(Info, ClassId, PrefabAssetName,
                     AudioAssetName,
                     Info.TechType, TechType.None);
@@ -122,7 +122,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             {
                 Info = PrefabInfo
                     .WithTechType(ClassId, null, null, unlockAtStart: true)
-                    .WithIcon(CustomAssetBundleUtils.GetObjectFromAssetBundle<Sprite>(IconTextureAssetName) as Sprite);
+                    .WithIcon(ModAssetUtils.GetObjectFromAssetBundle<Sprite>(IconTextureAssetName) as Sprite);
                 PetPrefabConfigUtils.RegisterCustomPet(Info, ClassId, PrefabAssetName,
                     AudioAssetName,
                     Info.TechType, TechType.None);
@@ -146,7 +146,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             {
                 Info = PrefabInfo
                     .WithTechType(ClassId, null, null, unlockAtStart: true)
-                    .WithIcon(CustomAssetBundleUtils.GetObjectFromAssetBundle<Sprite>(IconTextureAssetName) as Sprite);
+                    .WithIcon(ModAssetUtils.GetObjectFromAssetBundle<Sprite>(IconTextureAssetName) as Sprite);
                 PetPrefabConfigUtils.RegisterCustomPet(Info, ClassId, PrefabAssetName,
                     AudioAssetName,
                     Info.TechType, TechType.None);

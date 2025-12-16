@@ -1,5 +1,4 @@
-﻿
-using DaftAppleGames.SubnauticaPets.Utils;
+﻿using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
 namespace DaftAppleGames.SubnauticaPets.Pets
 {
@@ -20,7 +19,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             _pet = GetComponent<Pet>();
             if (!_pet)
             {
-                LogUtils.LogError(LogArea.MonoUtils, "PetHandTarget: GameObject MUST have a Pet component!");
+                ModDebugLog.LogDebug("PetHandTarget: GameObject MUST have a Pet component!");
             }
         }
 
@@ -37,13 +36,13 @@ namespace DaftAppleGames.SubnauticaPets.Pets
 
             HandReticle main = HandReticle.main;
 
-            // LogUtils.LogDebug(LogArea.MonoPets, $"OnHandOver... hand.IsFreeToInteract is: {hand.IsFreeToInteract()}");
+            // ModDebugLog.LogDebug( $"OnHandOver... hand.IsFreeToInteract is: {hand.IsFreeToInteract()}");
 
             // Check for right mouse click
             if (GameInput.GetButtonDown(GameInput.Button.RightHand) )
             {
                 // Walk towards the player
-                LogUtils.LogDebug(LogArea.MonoPets, "PetHandTarget: Walking to player...");
+                ModDebugLog.LogDebug("PetHandTarget: Walking to player...");
                 _pet.MoveToPlayer();
                 return;
             }
@@ -78,7 +77,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                 return;
             }
 
-            LogUtils.LogDebug(LogArea.MonoPets, "PetHandTarget: In OnHandClick");
+            ModDebugLog.LogDebug("PetHandTarget: In OnHandClick");
 
             if (!hand.IsFreeToInteract() || _pet.IsDead)
             {
@@ -86,7 +85,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             }
 
             // Play random animation
-            LogUtils.LogDebug(LogArea.MonoPets, "PetHandTarget: Playing animation...");
+            ModDebugLog.LogDebug("PetHandTarget: Playing animation...");
             _pet.PlayAnimation();
         }
     }

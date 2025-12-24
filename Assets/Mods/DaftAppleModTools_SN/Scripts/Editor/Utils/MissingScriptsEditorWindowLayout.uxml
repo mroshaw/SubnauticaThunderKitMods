@@ -1,6 +1,6 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
     <ui:VisualElement name="MainContainer">
-        <Style src="EditorWindowStyles.uss" />
+        <Style src="/Assets/Mods/DaftAppleModTools_SN/Scripts/Editor/EditorWindowStyles.uss" />
         <ui:Button text="Find Missing Scripts in Scene" name="FindMissingScriptsInSceneButton" class="WideButton" />
         <ui:Label text="Scene Objects:" name="SceneObjectsLabel" class="ContainedLabel" />
         <ui:ListView focusable="true" name="SceneObjectsListView" binding-path="sceneObjects" item-height="18" class="ObjectListView" />

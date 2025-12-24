@@ -6,7 +6,7 @@
         <ui:VisualElement name="CustomEditorContainer" class="CustomEditorContainer" />
         <ui:VisualElement name="LoggingContainer" style="margin-left: 5px; margin-right: 5px;">
             <ui:Label text="Log:" name="LogLabel" class="ContainedLabel" />
-            <ui:ScrollView name="LogScrollView" class="LogScrollView">
+            <ui:ScrollView name="LogScrollView" show-vertical-scroller="true" class="LogScrollView">
                 <ui:TextField picking-mode="Ignore" name="LogText" binding-path="logText" multiline="true" class="LogText" />
             </ui:ScrollView>
             <ui:VisualElement name="LogOptions" class="OptionsContainer">

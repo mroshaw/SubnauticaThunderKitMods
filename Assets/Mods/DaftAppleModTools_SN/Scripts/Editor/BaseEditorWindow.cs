@@ -15,15 +15,13 @@ namespace DaftAppleGames.Editor
         // Bound text to display in the Editor
         [SerializeField] private string logText;
         [SerializeField] private string titleText;
-        [SerializeField] private string introText;
+        [SerializeField] private string instructionText;
 
         private bool _isPopupOpen = false;
 
         // Logging instance
         protected EditorLog Log;
         protected VisualElement CustomEditorRootVisualElement;
-
-        // protected internal StyleSheet EditorWindowMainStyleSheet => baseVisualTree.stylesheets.FirstOrDefault();
 
         private Button _clearLogButton;
         private VisualElement _customEditorContainer;
@@ -32,14 +30,19 @@ namespace DaftAppleGames.Editor
 
         private bool _hasInternalLogging;
 
-        // protected virtual string WindowTitle => "";
-        protected virtual string ToolTitle => "";
-        protected virtual string IntroText => "";
-        protected virtual string WelcomeLogText => "";
+        protected virtual string ToolTitle => "Title";
+        protected virtual string IntroText => "Instructions.";
+        protected virtual string WelcomeLogText => "Welcome log text.";
 
         public virtual void CreateGUI()
         {
             Log = new EditorLog(logToConsole, detailedLogging);
+
+            if (rootVisualElement == null)
+            {
+                Debug.LogError("No rootVisualElement found!");
+                return;
+            }
 
             baseVisualTree.CloneTree(rootVisualElement);
 
@@ -51,48 +54,26 @@ namespace DaftAppleGames.Editor
                 _customEditorContainer.Add(CustomEditorRootVisualElement);
             }
 
-            Toggle detailedLoggingToggle = rootVisualElement.Q<Toggle>("DetailedLoggingToggle");
-            detailedLoggingToggle?.RegisterValueChangedCallback(evt => DetailedLoggingToggled(evt.newValue));
-            if (detailedLoggingToggle != null)
-            {
-                detailedLogging = detailedLoggingToggle.value;
-            }
-
-            TextField logTextField = rootVisualElement.Q<TextField>("LogText");
-            _hasInternalLogging = logTextField != null;
-
-            if (_hasInternalLogging)
-            {
-                Log.LogChangedEvent.RemoveListener(LogChangedHandler);
-                Log.LogChangedEvent.AddListener(LogChangedHandler);
-
-
-                logTextField.RegisterValueChangedCallback(_ => ScrollLogToBottom());
-                _logTextScrollView = logTextField.Q<ScrollView>();
-
-                Toggle logToConsoleToggle = rootVisualElement.Q<Toggle>("LogToConsoleToggle");
-                logToConsoleToggle?.RegisterValueChangedCallback(evt => LogToConsoleToggled(evt.newValue));
-                logToConsole = logToConsoleToggle == null || logToConsoleToggle.value;
-
-                Button clearLogButton = rootVisualElement.Q<Button>("ClearLogButton");
-                clearLogButton.clicked -= ClearLog;
-                clearLogButton.clicked += ClearLog;
-
-                ClearLog();
-            }
-            else
-            {
-                Log.LogToConsole = true;
-            }
-
             // Set window titles
             titleText = ToolTitle;
-            introText = IntroText;
-
-            Log.AddToLogNoConsole(LogLevel.Info, WelcomeLogText);
+            instructionText = IntroText;
+            logText = WelcomeLogText;
 
             CreateCustomGUI();
 
+            // Configure logging
+            Log.LogChangedEvent.RemoveListener(LogChangedHandler);
+            Log.LogChangedEvent.AddListener(LogChangedHandler);
+
+            Toggle logToConsoleToggle = rootVisualElement.Q<Toggle>("LogToConsoleToggle");
+            logToConsoleToggle?.RegisterValueChangedCallback(evt => LogToConsoleToggled(evt.newValue));
+            logToConsole = logToConsoleToggle == null || logToConsoleToggle.value;
+
+            Button clearLogButton = rootVisualElement.Q<Button>("ClearLogButton");
+            clearLogButton.clicked -= ClearLog;
+            clearLogButton.clicked += ClearLog;
+
+            // Bind the UI to serialized properties
             BindUI();
         }
 
@@ -104,6 +85,7 @@ namespace DaftAppleGames.Editor
             _serializedObject = new SerializedObject(this);
             rootVisualElement.Bind(_serializedObject);
         }
+
 
         private void LogToConsoleToggled(bool value)
         {
@@ -121,6 +103,11 @@ namespace DaftAppleGames.Editor
             ScrollLogToBottom();
         }
 
+        protected void LogDebug(string logMessage)
+        {
+            Log.AddToLog(logMessage);
+        }
+        
         private void ClearLog()
         {
             Log.Clear();
@@ -130,7 +117,8 @@ namespace DaftAppleGames.Editor
         {
             if (_logTextScrollView != null)
             {
-                _logTextScrollView.scrollOffset = _logTextScrollView.contentContainer.layout.max - _logTextScrollView.contentViewport.layout.size;
+                _logTextScrollView.scrollOffset = _logTextScrollView.contentContainer.layout.max -
+                                                  _logTextScrollView.contentViewport.layout.size;
                 // _logTextScrollView.scrollOffset = new Vector2(0, float.MaxValue); // Force scroll to bottom
             }
         }

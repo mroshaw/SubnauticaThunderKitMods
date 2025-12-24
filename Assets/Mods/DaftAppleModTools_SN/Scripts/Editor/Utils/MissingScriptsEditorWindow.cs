@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,120 +10,70 @@ namespace DaftAppleGames.Editor
 {
     public class MissingScriptsEditorWindow : BaseEditorWindow
     {
-        [SerializeField] private List<string> missingAssetNames = new List<string>();
-        [SerializeField] private List<GameObject> objectsWithMissingScriptsInAssets = new List<GameObject>();
-        [SerializeField] private List<GameObject> objectsWithMissingScriptsInScenes = new List<GameObject>();
 
-        private Button _deleteMissingScriptsInAssetsButton;
-        private Button _deleteMissingScriptsInSceneButton;
-        private Button _findMissingScriptsInAssetsButton;
+        [SerializeField] List<GameObject> sceneObjects = new List<GameObject>();
+        [SerializeField] List<GameObject> assets = new List<GameObject>();
+        private List<string> _assetPaths = new List<string>();
+        
         private Button _findMissingScriptsInSceneButton;
-
-        private ListView _objectsInSceneListView;
-        private ListView _assetObjectsListView;
-
-        /// <summary>
-        ///     Custom editor overrides
-        /// </summary>
-        protected override string ToolTitle => "Missing Scripts Tool";
-
-        protected override string WelcomeLogText =>
-            "Welcome to the Missing Script Tool! Click one of the buttons above to manage missing scripts in your scene and prefab assets.\n" +
-            "WARNING: Finding missing scripts in assets can take several minutes!";
-
-        [MenuItem("Tools/Daft Apple Games/Editor Tools/Missing Script Tool")]
+        private Button _findMissingScriptsInAssetsButton;
+        
+        private ListView _objectsListView;
+        private ListView _assetsListView;
+        
+        protected override string ToolTitle => "Missing Scripts";
+        protected override string IntroText => "This tool will help you find and remove missing scripts from the current scene or all asset files.";
+        protected override string WelcomeLogText => "Welcome to the Missing Scripts tool!";
+        
+        [MenuItem("Tools/Missing Scripts Tool")]
         public static void ShowWindow()
         {
             MissingScriptsEditorWindow editorWindow = GetWindow<MissingScriptsEditorWindow>();
-            editorWindow.titleContent = new GUIContent("Missing Scripts Tool");
+            editorWindow.titleContent = new GUIContent("Missing Scripts");
         }
 
         protected override void CreateCustomGUI()
         {
             // Register buttons
-            _findMissingScriptsInSceneButton = rootVisualElement.Q<Button>("FindMissingScriptsInSceneButton");
-            if (_findMissingScriptsInSceneButton != null)
-            {
-                _findMissingScriptsInSceneButton.clicked -= FindInScene;
-                _findMissingScriptsInSceneButton.clicked += FindInScene;
-            }
-
-            _deleteMissingScriptsInSceneButton = rootVisualElement.Q<Button>("DeleteMissingScriptsInSceneButton");
-            if (_deleteMissingScriptsInSceneButton != null)
-            {
-                _deleteMissingScriptsInSceneButton.clicked -= FindAndDeleteInScene;
-                _deleteMissingScriptsInSceneButton.clicked += FindAndDeleteInScene;
-            }
-
-            _findMissingScriptsInAssetsButton = rootVisualElement.Q<Button>("FindMissingScriptsInAssetsButton");
-            if (_findMissingScriptsInAssetsButton != null)
-            {
-                _findMissingScriptsInAssetsButton.clicked -= FindInAssets;
-                _findMissingScriptsInAssetsButton.clicked += FindInAssets;
-            }
-
-            _deleteMissingScriptsInAssetsButton = rootVisualElement.Q<Button>("DeleteMissingScriptsInAssetsButton");
-            if (_deleteMissingScriptsInAssetsButton != null)
-            {
-                _deleteMissingScriptsInAssetsButton.clicked -= FindAndDeleteInAssets;
-                _deleteMissingScriptsInAssetsButton.clicked += FindAndDeleteInAssets;
-            }
-
-            // Configure the object list views
-            _objectsInSceneListView = rootVisualElement.Q<ListView>("SceneGameObjectsListView");
-            ConfigureListView(_objectsInSceneListView);
-            _assetObjectsListView = rootVisualElement.Q<ListView>("AssetsObjectsListView");
-            ConfigureListView(_assetObjectsListView);
-        }
-
-        private static void ConfigureListView(ListView listView)
-        {
-            // listView.showBoundCollectionSize = false;
-            listView.SetEnabled(false);
+            InitButton("FindMissingScriptsInSceneButton", FindInScene,  out _findMissingScriptsInSceneButton);
+            InitButton("FindMissingScriptsInAssetsButton", FindInAssets,  out _findMissingScriptsInAssetsButton);
+            InitButton("DeleteInSceneButton", DeleteInScenes,  out _findMissingScriptsInSceneButton);
+            InitButton("DeleteInAssetsButton", DeleteInAssets,  out _findMissingScriptsInSceneButton);
+            
+            // Get lists
+            _objectsListView = rootVisualElement.Q<ListView>("SceneObjectsListView");
+            // _objectsListView.SetEnabled(false);
+            _objectsListView.Refresh();
+            
+            _assetsListView = rootVisualElement.Q<ListView>("AssetsListView");
+            // _assetsListView.SetEnabled(false);
+            _assetsListView.Refresh();
         }
 
         /// <summary>
-        ///     Button handler for Find Scripts in scene
+        /// Find and configure an Editor window button
+        /// </summary>
+        private void InitButton(string uiElementName, Action clickAction, out Button button)
+        {
+            button = rootVisualElement.Q<Button>(uiElementName);
+            if (button != null)
+            {
+                button.clicked -= clickAction;
+                button.clicked += clickAction;
+            }
+            else
+            {
+                Debug.LogError($"Could not find {uiElementName}!");
+            }
+        }
+        
+        /// <summary>
+        /// Find all objects in open scenes that contain missing scripts
         /// </summary>
         private void FindInScene()
         {
-            Log.AddToLog(LogLevel.Info, "Searching for missing scripts in open scenes...");
-            FindMissingScriptsInOpenScenes(false);
-        }
-
-        /// <summary>
-        ///     Button handler for Find and Delete Scripts in scene
-        /// </summary>
-        private void FindAndDeleteInScene()
-        {
-            Log.AddToLog(LogLevel.Info, "Searching for and deleting missing scripts in open scenes...");
-            FindMissingScriptsInOpenScenes(true);
-        }
-
-        /// <summary>
-        ///     Button handler for Find Scripts in assets
-        /// </summary>
-        private void FindInAssets()
-        {
-            Log.AddToLog(LogLevel.Info, "Searching for missing scripts in assets...");
-            FindMissingScriptsInAssets(false);
-        }
-
-        /// <summary>
-        ///     Button handler for Find and Delete Scripts in assets
-        /// </summary>
-        private void FindAndDeleteInAssets()
-        {
-            Log.AddToLog(LogLevel.Info, "Searching for and deleting missing scripts in assets...");
-            FindMissingScriptsInAssets(true);
-        }
-
-        /// <summary>
-        ///     Find game objects in open scenes for missing scripts
-        /// </summary>
-        private void FindMissingScriptsInOpenScenes(bool deleteScripts)
-        {
-            objectsWithMissingScriptsInScenes.Clear();
+            LogDebug("Looking for missing scripts in open scenes...");
+            sceneObjects.Clear();
             GameObject[] allObjects = FindObjectsOfType<GameObject>();
             foreach (GameObject go in allObjects)
             {
@@ -132,18 +83,12 @@ namespace DaftAppleGames.Editor
                 }
             }
 
-            Log.AddToLog(LogLevel.Info, $"Found {objectsWithMissingScriptsInScenes.Count} missing script(s) in open scenes.");
-
-            if (deleteScripts)
-            {
-                DeleteMissingScripts(objectsWithMissingScriptsInScenes);
-            }
-
-            // _objectsInSceneListView?.RefreshItems();
+            LogDebug($"Found {sceneObjects.Count} missing script(s) in open scenes.");
+            _objectsListView.Refresh();
         }
 
         /// <summary>
-        ///     Search through entire game object structure for missing scripts
+        /// Search through entire game object structure for missing scripts
         /// </summary>
         private void FindMissingScriptsInGameObjectAndChildren(GameObject parentGameObject)
         {
@@ -151,8 +96,8 @@ namespace DaftAppleGames.Editor
             bool hasMissingScript = components.Any(c => c == null);
             if (hasMissingScript)
             {
-                Log.AddToLog(LogLevel.Info, $"Found missing script on: {parentGameObject.name}");
-                objectsWithMissingScriptsInScenes.Add(parentGameObject);
+                LogDebug($"Found missing script on: {parentGameObject.name}");
+                sceneObjects.Add(parentGameObject);
             }
 
             foreach (Transform child in parentGameObject.transform) // Recursively check children
@@ -160,15 +105,38 @@ namespace DaftAppleGames.Editor
                 FindMissingScriptsInGameObjectAndChildren(child.gameObject);
             }
         }
-
+        
         /// <summary>
-        ///     Search assets for objects with missing scripts
+        /// Delete missing scripts from those GameObjects that were identified
         /// </summary>
-        private void FindMissingScriptsInAssets(bool deleteScripts)
+        private void DeleteInScenes()
         {
-            missingAssetNames.Clear();
-            objectsWithMissingScriptsInAssets.Clear();
+            Log.AddToLog(LogLevel.Info, "Deleting missing scripts...");
+            foreach (GameObject go in sceneObjects)
+            {
+                Undo.RecordObject(go, $"Delete Missing Script from {go.name}");
+                GameObjectUtility.RemoveMonoBehavioursWithMissingScript(go);
+                Log.AddToLog($"Deleted missing script from: {go.name}");
+                if (!go.hideFlags.HasFlag(HideFlags.HideInHierarchy))
+                {
+                    continue;
+                }
 
+                Log.AddToLog($"Revealing hidden GameObject: {go.name}");
+                go.hideFlags &= ~HideFlags.HideInHierarchy;
+            }
+
+            Log.AddToLog(LogLevel.Info, "Done deleting missing scripts!.");
+        }
+        
+        /// <summary>
+        /// Find Assets in the project that contain missing scripts
+        /// </summary>
+        private void FindInAssets()
+        {
+            assets.Clear();
+            _assetPaths.Clear();
+            
             string[] allAssets = AssetDatabase.GetAllAssetPaths();
             foreach (string assetPath in allAssets)
             {
@@ -196,37 +164,37 @@ namespace DaftAppleGames.Editor
                 }
 
                 Log.AddToLog(LogLevel.Info, $"Found missing script on: {assetRoot.name}");
-                missingAssetNames.Add(assetPath);
-                objectsWithMissingScriptsInAssets.Add(assetRoot);
+
+                assets.Add(assetRoot);
+                _assetPaths.Add(assetPath);
             }
 
-            Log.AddToLog(LogLevel.Info, $"Found {objectsWithMissingScriptsInAssets.Count} missing script(s) in assets.");
-
-            if (deleteScripts)
-            {
-                DeleteMissingScripts(objectsWithMissingScriptsInAssets);
-            }
-
-            // _assetObjectsListView?.RefreshItems();
+            Log.AddToLog(LogLevel.Info, $"Found {assets.Count} missing script(s) in assets.");
+            
+            _assetsListView.Refresh();
         }
 
-        private void DeleteMissingScripts(List<GameObject> gameObjectsWithMissingScripts)
+        /// <summary>
+        /// Deletes empty scripts from all assets in the list
+        /// </summary>
+        private void DeleteInAssets()
         {
-            Log.AddToLog(LogLevel.Info, "Deleting missing scripts...");
-            foreach (GameObject go in gameObjectsWithMissingScripts)
+            foreach (string assetPath in _assetPaths)
             {
-                GameObjectUtility.RemoveMonoBehavioursWithMissingScript(go);
-                Log.AddToLog($"Deleted missing script from: {go.name}");
-                if (!go.hideFlags.HasFlag(HideFlags.HideInHierarchy))
+                GameObject assetRoot = AssetDatabase.LoadAssetAtPath<GameObject>(assetPath);
+                
+                Component[] components = assetRoot.GetComponents<Component>();
+                foreach (Component component in components.ToArray())
                 {
-                    continue;
+                    if (component == null)
+                    {
+                        Undo.RecordObject(assetRoot, $"Delete Missing Script from {assetRoot}");
+                        GameObjectUtility.RemoveMonoBehavioursWithMissingScript(assetRoot);
+                    }
                 }
-
-                Log.AddToLog($"Revealing hidden GameObject: {go.name}");
-                go.hideFlags &= ~HideFlags.HideInHierarchy;
+                EditorUtility.SetDirty(assetRoot);
+                AssetDatabase.SaveAssets();
             }
-
-            Log.AddToLog(LogLevel.Info, "Deleting missing scripts... Done.");
         }
     }
 }

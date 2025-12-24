@@ -16,7 +16,7 @@ namespace DaftAppleGames.StartupCommand
 
         // Contains the command config UI prefab
         private const string AssetBundleName = "startupcommandassetbundle";
-       
+        
         // Config file / UI initialisation
         // This is the Mod Options config
         internal static ModConfigFile ConfigFile = OptionsPanelHandler.RegisterModOptions<ModConfigFile>();

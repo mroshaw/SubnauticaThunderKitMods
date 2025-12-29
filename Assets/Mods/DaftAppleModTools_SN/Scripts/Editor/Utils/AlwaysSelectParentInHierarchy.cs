@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEditor;
 
-namespace DaftAppleGames.Editor.Utils
+namespace DaftAppleGames.Editor
 {
     /// <summary>
     /// This forces the Editor to select the parent game object, rather than the
@@ -79,7 +79,7 @@ namespace DaftAppleGames.Editor.Utils
             return false;
         }
 
-        [MenuItem("Tools/Daft Apple Games/Editor Tools/Toggle LOD Parent Selection")]
+        [MenuItem("Tools/Toggle LOD Parent Selection")]
         public static void ToggleFunctionality()
         {
             _isEnabled = !_isEnabled;

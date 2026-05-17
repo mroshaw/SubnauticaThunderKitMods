@@ -10,7 +10,8 @@
         "0Harmony.dll",
         "Assembly-CSharp.dll",
         "Nautilus.dll",
-        "Assembly-CSharp-firstpass.dll"
+        "Assembly-CSharp-firstpass.dll",
+        "Unity.InputSystem.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],

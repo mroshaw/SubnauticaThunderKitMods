@@ -1,6 +1,5 @@
 ﻿using Nautilus.Json;
 using Nautilus.Options.Attributes;
-using UnityEngine;
 
 namespace DaftAppleGames.CuddlefishRecall_SN
 {    /// <summary>
@@ -9,15 +8,6 @@ namespace DaftAppleGames.CuddlefishRecall_SN
     [Menu("Cuddle Fish Recall")]
     public class ModConfigFile : ConfigFile
     {
-        /// <summary>
-        /// Recall Keybind
-        /// </summary>
-        [Keybind("Recall Keyboard Modifier")]
-        public KeyCode RecallKeyboardModifier = KeyCode.LeftControl;
-
-        [Keybind("Recall Keyboard Shortcut")]
-        public KeyCode RecallKeyboardShortcut = KeyCode.R;
-
         [Choice("Recall Method", "Teleport", "Swim")]
         public RecallMoveMethod RecallMoveMethod = RecallMoveMethod.SwimTo;
 

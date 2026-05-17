@@ -17,13 +17,19 @@ namespace DaftAppleGames.CuddlefishRecall_SN
     {
         private const string MyGuid = "com.mroshaw.cuddlefishrecallmodsn";
         private const string PluginName = "Cuddlefish Recall Mod SN";
-        private const string VersionString = "1.3.0";
+        private const string VersionString = "1.4.0";
 
         // Config file / UI initialisation
         internal static ModConfigFile ConfigFile = OptionsPanelHandler.RegisterModOptions<ModConfigFile>();
         private static readonly Harmony Harmony = new Harmony(MyGuid);
         public static ManualLogSource Log = new ManualLogSource(PluginName);
 
+        // New input system
+        public static GameInput.Button _recallButton = EnumHandler.AddEntry<GameInput.Button>("Recall All Cuddlefish")
+            .CreateInput("Recall All Cuddlefish")
+            .WithKeyboardBinding(GameInputHandler.Paths.Keyboard.LeftCtrl, GameInputHandler.Paths.Keyboard.R)
+            .WithCategory("Cuddlefish Recall");
+        
         private void Awake()
         {
             // Patch in our MOD

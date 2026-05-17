@@ -9,7 +9,7 @@ namespace DaftAppleGames.CuddlefishRecall_SN
     internal class CreatureRecallerInputManager : MonoBehaviour
     {
         private CreatureRecaller _creatureRecaller;
-
+        
         private void Start()
         {
             Log.LogDebug("Getting CreatureRecaller...");
@@ -23,7 +23,7 @@ namespace DaftAppleGames.CuddlefishRecall_SN
         private void Update()
         {
             // Check for "Spawn Pet" keypress
-            if (Input.GetKey(ConfigFile.RecallKeyboardModifier) && Input.GetKeyDown(ConfigFile.RecallKeyboardShortcut))
+            if (GameInput.GetButtonDown(_recallButton))
             {
                 Log.LogDebug("Recall keypress detected...");
                 _creatureRecaller.RecallAllCreatures();

@@ -43,7 +43,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         internal static class CatDnaPrefab
         {
             internal static PrefabInfo Info;
-            private const string TextureAssetName = "CatTexture.png";
+            private const string TextureAssetName = "CatDnaStrandTexture.png";
             private const string ClassId = "CatPetDna";
             private const int FindCount = 1;
             private const float FindProbability = 0.3f;

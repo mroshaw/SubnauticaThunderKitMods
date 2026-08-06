@@ -85,6 +85,7 @@ namespace DaftAppleGames.SubnauticaPets
 
                 CraftData.PreparePrefabIDCache();
                 PetSaver.Init();
+                PetSaver.LoadData();
                 ModDebugLog.LogDebug("Finished Loading Data... Done.");
             };
             // Apply all of our patches

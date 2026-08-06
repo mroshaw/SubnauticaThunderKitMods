@@ -1,4 +1,5 @@
-﻿using HarmonyLib;
+using DaftAppleGames.SubnauticaPets.Pets;
+using HarmonyLib;
 using UnityEngine;
 using static DaftAppleGames.SubnauticaPets.SubnauticaPetsPlugin;
 
@@ -7,72 +8,53 @@ namespace DaftAppleGames.SubnauticaPets.Patches
     [HarmonyPatch(typeof(BaseFoundationPiece))]
     internal class BaseFoundationPiecePatches
     {
+        private const float CollisionFilterMargin = 2.0f;
 
-        private const int PetObstacleLayer = 25;
-        private static bool _layerConfigured;
-        
         /// <summary>
-        /// Patches the Start method, adding a special collider to the Moon Pool to stop pets falling in
+        /// Adds a physical Pet blocker and a surrounding filter that lets non-Pet colliders pass through it.
         /// </summary>
         [HarmonyPatch(nameof(BaseFoundationPiece.Start))]
         [HarmonyPostfix]
         public static void Start_Postfix(BaseFoundationPiece __instance)
         {
-            if (__instance.gameObject.name != "BaseMoonpool(Clone)")
+            if (__instance.gameObject.name != "BaseMoonpool(Clone)" || ConfigFile.DisableMoonpoolCollider)
             {
                 return;
             }
-            
-            // Check the config setting and only create the new collider if the preference is set
-            if (ConfigFile.DisableMoonpoolCollider)
+
+            Transform entranceTransform = __instance.transform.Find("entrance");
+            if (!entranceTransform)
             {
-                ModDebugLog.LogDebug("DisableMoonpoolCollider is set to true. Skipping creation of blocking collider...");
+                ModDebugLog.LogError("Could not find the Moonpool entrance collider transform.");
                 return;
             }
-            
-            Transform poolColliderTransform  = __instance.transform.Find("entrance");
 
-            if (!poolColliderTransform)
+            BoxCollider entranceCollider = entranceTransform.GetComponent<BoxCollider>();
+            if (!entranceCollider)
             {
-                ModDebugLog.LogDebug(
-                    $"Could not patch MoonPool on {__instance.gameObject.name}! Couldn't find pool collider transform!");
+                ModDebugLog.LogError("Could not find the Moonpool entrance BoxCollider.");
+                return;
             }
 
-            BoxCollider entranceCollider = poolColliderTransform.GetComponent<BoxCollider>();
+            GameObject blockerObject = new GameObject("PetMoonpoolBlocker");
+            blockerObject.transform.SetParent(__instance.transform, true);
+            blockerObject.transform.position = entranceCollider.transform.position + new Vector3(0.0f, -1.0f, 0.0f);
+            blockerObject.transform.rotation = entranceCollider.transform.rotation;
+            blockerObject.transform.localScale = entranceCollider.transform.lossyScale;
 
-            GameObject petColliderGameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            petColliderGameObject.name = "petcollider";
-            petColliderGameObject.layer = PetObstacleLayer;
-            petColliderGameObject.tag = poolColliderTransform.gameObject.tag;
+            BoxCollider blocker = blockerObject.AddComponent<BoxCollider>();
+            blocker.size = entranceCollider.size + new Vector3(0.0f, 2.0f, 0.0f);
 
-            petColliderGameObject.transform.SetParent(__instance.transform);
-            petColliderGameObject.transform.position = entranceCollider.transform.position + new Vector3(0, -1f, 0);
-            petColliderGameObject.transform.rotation = entranceCollider.transform.rotation;
-            petColliderGameObject.transform.localScale = entranceCollider.size + (new Vector3(0, 2f, 0));
+            GameObject filterObject = new GameObject("PetMoonpoolCollisionFilter");
+            filterObject.transform.SetParent(blockerObject.transform, false);
+            BoxCollider filterTrigger = filterObject.AddComponent<BoxCollider>();
+            filterTrigger.size = blocker.size + Vector3.one * CollisionFilterMargin;
+            filterTrigger.isTrigger = true;
 
-            if (!_layerConfigured)
-            {
-                ConfigureLayerMatrix();
-            }
-            
-            Object.Destroy(petColliderGameObject.GetComponent<MeshRenderer>());
-            Object.Destroy(petColliderGameObject.GetComponent<MeshFilter>());
-        }
-        
-        /// <summary>
-        /// Configures the new 'PetAvoidance' layer, allowing Players and Vehicles
-        /// to pass through unaffected by collisions or physics
-        /// </summary>
-        private static void ConfigureLayerMatrix()
-        {
-            Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Vehicle"), PetObstacleLayer);
-            Physics.IgnoreLayerCollision(LayerMask.NameToLayer("Player"), PetObstacleLayer);
-            
-            Physics.IgnoreLayerCollision(PetObstacleLayer, LayerMask.NameToLayer("Vehicle"));
-            Physics.IgnoreLayerCollision(PetObstacleLayer, LayerMask.NameToLayer("Player"));
-            Physics.IgnoreLayerCollision(PetObstacleLayer, LayerMask.NameToLayer("SubRigidbodyExclude"));
-            
-            _layerConfigured = true;
+            MoonpoolPetCollisionFilter filter = filterObject.AddComponent<MoonpoolPetCollisionFilter>();
+            filter.Init(blocker, filterTrigger);
+            filter.PrimeExistingOverlaps();
+            Physics.SyncTransforms();
         }
     }
 }

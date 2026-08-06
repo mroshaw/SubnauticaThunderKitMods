@@ -74,7 +74,7 @@ namespace DaftAppleGames.CuddlefishRecall_SN
 
                 if (Player.main.GetBiomeString().StartsWith("precursor", StringComparison.OrdinalIgnoreCase))
                 {
-                    ErrorMessage.AddMessage($"Cuddlefish {_creatureIndex} cannot be recalled to this location!");
+                    ErrorMessage.AddMessage($"Cuddlefish {_creatureIndex} cannot be recalled to this Precursor location!");
                     return;
                 }
 

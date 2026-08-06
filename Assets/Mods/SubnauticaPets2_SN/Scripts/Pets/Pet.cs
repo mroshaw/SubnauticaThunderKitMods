@@ -216,6 +216,11 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// <returns></returns>
         internal void LoadPetData()
         {
+            if (LoadedPetDetailsHashSet == null)
+            {
+                return;
+            }
+
             foreach (PetSaver.PetDetails petDetails in SubnauticaPetsPlugin.LoadedPetDetailsHashSet)
             {
                 if (petDetails.PrefabId == PrefabId)
@@ -376,7 +381,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
 
             Happiness = PetHappiness.Dead;
 
-            SubnauticaPetsPlugin.PetSaver.UnregisterPet(this);
+            SubnauticaPetsPlugin.PetSaver.UnregisterPet(this, true);
             ModDebugLog.LogDebug( $"Picked up the OnKill message in {gameObject.name}");
 
             if (!string.IsNullOrEmpty(PetNameString))

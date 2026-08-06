@@ -223,7 +223,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             if (movement == null)
             {
                 movement = targetGameObject.AddComponent<SimpleMovement>();
-                movement.moveSpeed = 1.0f;
+                movement.SetMoveSpeed(1.0f);
             }
 
             ModDebugLog.LogDebug( "AddSimpleMovement done.");

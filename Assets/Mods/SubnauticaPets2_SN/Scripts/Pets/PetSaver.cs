@@ -84,7 +84,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// <summary>
         /// Remove a Pet from the HashList
         /// </summary>
-        internal void UnregisterPet(Pet pet)
+        internal void UnregisterPet(Pet pet, bool removeSavedDetails = false)
         {
             if (PetList.Contains(pet))
             {
@@ -92,6 +92,20 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                 ModDebugLog.LogDebug( $"PetSaver: Removed Pet: {pet.PetName}");
                 PetUnregisteredEvent.Invoke(pet);
                 PetListUpdatedEvent.Invoke();
+            }
+
+            if (LoadedPetDetailsHashSet == null)
+            {
+                LoadedPetDetailsHashSet = new HashSet<PetDetails>();
+            }
+
+            if (removeSavedDetails || pet && !string.IsNullOrEmpty(pet.PetName))
+            {
+                LoadedPetDetailsHashSet.RemoveWhere(details => details.PrefabId == pet.PrefabId);
+                if (!removeSavedDetails)
+                {
+                    LoadedPetDetailsHashSet.Add(new PetDetails(pet.PrefabId, pet.PetName, pet.PetTypeString));
+                }
             }
         }
 
@@ -119,6 +133,14 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         {
             HashSet<PetDetails> hashSet = new HashSet<PetDetails>();
 
+            if (LoadedPetDetailsHashSet != null)
+            {
+                foreach (PetDetails petDetails in LoadedPetDetailsHashSet)
+                {
+                    hashSet.Add(petDetails);
+                }
+            }
+
             if (PetList == null)
             {
                 PetList = new List<Pet>();
@@ -128,6 +150,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             {
                 if (pet)
                 {
+                    hashSet.RemoveWhere(details => details.PrefabId == pet.PrefabId);
                     PetDetails newPetDetails = new PetDetails(pet.PrefabId, pet.PetName, pet.PetTypeString);
                     hashSet.Add(newPetDetails);
                 }
@@ -191,11 +214,15 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// </summary>
         private void FixPetLoadData()
         {
-            ModDebugLog.LogDebug( $"Loading Pet Data...");
-            foreach (Pet pet in FindObjectsOfType<Pet>())
+            ModDebugLog.LogDebug("Loading Pet Data...");
+            Pet[] loadedPets = FindObjectsOfType<Pet>();
+            foreach (Pet pet in loadedPets)
             {
                 pet.LoadPetData();
+                RegisterPet(pet);
             }
+
+            ModDebugLog.LogDebug($"Loading Pet Data... Reconciled {loadedPets.Length} loaded pets.");
         }
 
         /// <summary>

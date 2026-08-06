@@ -98,3 +98,6 @@ crashlytics-build.properties
 /[Aa]ssets/CGSoul/
 /[Aa]ssets/Plugins.meta
 /[Aa]ssets/Plugins/
+
+# Game File Rip
+/GameFiles~/

@@ -46,7 +46,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             private const string TextureAssetName = "CatDnaStrandTexture.png";
             private const string ClassId = "CatPetDna";
             private const int FindCount = 1;
-            private const float FindProbability = 0.3f;
+            private const float FindProbability = 0.08f;
 
             /// <summary>
             /// Register Cat DNA
@@ -76,7 +76,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             private const string TextureAssetName = "AlienRobotDnaStrandTexture.png";
             private const string ClassId = "AlienRobotPetDna";
             private const int FindCount = 1;
-            private const float FindProbability = 0.3f;
+            private const float FindProbability = 0.05f;
 
             /// <summary>
             /// Register Alien Robot DNA
@@ -114,7 +114,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             private const string TextureAssetName = "BloodCrawlerDnaStrandTexture.png";
             private const string ClassId = "BloodCrawlerPetDna";
             private const int FindCount = 1;
-            private const float FindProbability = 0.3f;
+            private const float FindProbability = 0.08f;
 
             /// <summary>
             /// Register Blood Crawler DNA
@@ -148,7 +148,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             private const string TextureAssetName = "CaveCrawlerDnaStrandTexture.png";
             private const string ClassId = "CaveCrawlerPetDna";
             private const int FindCount = 1;
-            private const float FindProbability = 0.3f;
+            private const float FindProbability = 0.10f;
             internal static void Register(GameObject dnaModelGameObject)
             {
                 Info = RegisterDnaPrefab(ClassId, null, null, TextureAssetName, Color.cyan,
@@ -181,7 +181,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             private const string TextureAssetName = "CrabSquidDnaStrandTexture.png";
             private const string ClassId = "CrabSquidPetDna";
             private const int FindCount = 1;
-            private const float FindProbability = 0.3f;
+            private const float FindProbability = 0.06f;
 
             /// <summary>
             /// Register Crab Squid DNA
@@ -237,7 +237,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                     // Add new model
                     newModel.transform.SetParent(obj.transform);
                     newModel.transform.localPosition = new Vector3(0, 0, 0);
-                    newModel.transform.localRotation = new Quaternion(0, 0, 0, 0);
+                    newModel.transform.localRotation = Quaternion.identity;
 
                     // obj.FindChild("Quartz_small").SetActive(false);
 

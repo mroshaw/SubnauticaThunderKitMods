@@ -91,6 +91,7 @@ namespace DaftAppleGames.Editor
         /// </summary>
         protected override void CancelProcess()
         {
+            LogInfo("Process cancelled!");
             SetReadyState();
         }
 

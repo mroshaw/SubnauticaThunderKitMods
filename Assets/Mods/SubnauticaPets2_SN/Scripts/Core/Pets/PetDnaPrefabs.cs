@@ -17,7 +17,38 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         private const string EncPath = "Lifeforms/Fauna";
         private const string DatabankPopupImageAssetName = "PetDnaDataBankPopupImageTexture.png";
         private const string DatabankMainImageAssetName = "PetDnaDataBankMainImageTexture.png";
-        
+
+        private static readonly SpawnLocation[] NoFixedSpawns = new SpawnLocation[0];
+
+        // Fixed DNA clusters are placed beside the existing SN fragment locations. The center
+        // is offset from the fragment pivot so the samples do not obstruct scanning the fragment.
+        private static readonly SpawnLocation[] CatFixedSpawns = CreateFixedSpawnClusters(
+            Cluster(-49.88f, -28.49f, -403.04f, 2),
+            Cluster(-168.27f, -41.07f, -234.29f, 3),
+            Cluster(-1628.70f, -356.51f, 77.22f, 4));
+
+        private static readonly SpawnLocation[] AlienRobotFixedSpawns = CreateFixedSpawnClusters(
+            Cluster(292.63f, -103.24f, 414.90f, 2),
+            Cluster(-381.88f, -122.79f, 623.95f, 3),
+            Cluster(-503.13f, -96.74f, -56.38f, 4),
+            Cluster(16.01f, -26.85f, -243.06f, 5));
+
+        private static readonly SpawnLocation[] BloodCrawlerFixedSpawns = CreateFixedSpawnClusters(
+            Cluster(78.52f, -46.40f, 389.12f, 3),
+            Cluster(-1599.49f, -353.97f, 79.63f, 4),
+            Cluster(-628.11f, -109.64f, -37.28f, 2, 2));
+
+        private static readonly SpawnLocation[] CaveCrawlerFixedSpawns = CreateFixedSpawnClusters(
+            Cluster(-394.39f, -138.44f, 666.46f, 2),
+            Cluster(-769.64f, -222.83f, -729.66f, 3),
+            Cluster(-1448.19f, -346.24f, 768.21f, 4));
+
+        private static readonly SpawnLocation[] CrabSquidFixedSpawns = CreateFixedSpawnClusters(
+            Cluster(85.92f, -33.90f, 128.91f, 2),
+            Cluster(-27.72f, -30.77f, -418.56f, 3),
+            Cluster(396.70f, -26.90f, -175.90f, 4),
+            Cluster(380.36f, -24.60f, -209.09f, 4));
+
         /// <summary>
         /// Register all prefabs
         /// </summary>
@@ -257,8 +288,98 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             };
             clonePrefab.SetGameObject(cloneTemplate);
             clonePrefab.SetSpawns(lootBiome);
+            SpawnLocation[] fixedSpawns = GetFixedSpawns(classId);
+            if (fixedSpawns.Length > 0)
+            {
+                clonePrefab.SetSpawns(fixedSpawns);
+            }
             clonePrefab.Register();
             return prefabInfo;
+        }
+
+        private static SpawnLocation[] GetFixedSpawns(string classId)
+        {
+            if (classId == "CatPetDna")
+            {
+                return CatFixedSpawns;
+            }
+
+            if (classId == "AlienRobotPetDna")
+            {
+                return AlienRobotFixedSpawns;
+            }
+
+            if (classId == "BloodCrawlerPetDna")
+            {
+                return BloodCrawlerFixedSpawns;
+            }
+
+            if (classId == "CaveCrawlerPetDna")
+            {
+                return CaveCrawlerFixedSpawns;
+            }
+
+            if (classId == "CrabSquidPetDna")
+            {
+                return CrabSquidFixedSpawns;
+            }
+
+            return NoFixedSpawns;
+        }
+
+        private static FixedSpawnCluster Cluster(float x, float y, float z, int count)
+        {
+            return Cluster(x, y, z, count, 0);
+        }
+
+        private static FixedSpawnCluster Cluster(float x, float y, float z, int count, int firstOffsetIndex)
+        {
+            return new FixedSpawnCluster(new Vector3(x, y, z), count, firstOffsetIndex);
+        }
+
+        private static SpawnLocation[] CreateFixedSpawnClusters(params FixedSpawnCluster[] clusters)
+        {
+            Vector3[] offsets =
+            {
+                Vector3.zero,
+                new Vector3(3.0f, 0.0f, 0.0f),
+                new Vector3(-1.5f, 0.0f, 2.6f),
+                new Vector3(-1.5f, 0.0f, -2.6f),
+                new Vector3(0.0f, 0.0f, 4.5f)
+            };
+
+            int spawnCount = 0;
+            foreach (FixedSpawnCluster cluster in clusters)
+            {
+                spawnCount += cluster.Count;
+            }
+
+            SpawnLocation[] spawns = new SpawnLocation[spawnCount];
+            int spawnIndex = 0;
+            foreach (FixedSpawnCluster cluster in clusters)
+            {
+                for (int offsetIndex = 0; offsetIndex < cluster.Count; offsetIndex++)
+                {
+                    spawns[spawnIndex++] =
+                        new SpawnLocation(cluster.Center + offsets[cluster.FirstOffsetIndex + offsetIndex]);
+                }
+            }
+
+            return spawns;
+        }
+
+        private struct FixedSpawnCluster
+        {
+            internal readonly Vector3 Center;
+            internal readonly int Count;
+            internal readonly int FirstOffsetIndex;
+
+            internal FixedSpawnCluster(Vector3 center, int count, int firstOffsetIndex)
+            {
+                Center = center;
+                Count = count;
+                FirstOffsetIndex = firstOffsetIndex;
+            }
         }
 
         /// <summary>

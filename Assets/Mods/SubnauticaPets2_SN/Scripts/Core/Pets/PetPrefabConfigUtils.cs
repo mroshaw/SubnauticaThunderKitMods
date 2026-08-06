@@ -520,6 +520,31 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         }
 
         /// <summary>
+        /// Applies the configured pet scale after the fabricated prefab has been instantiated.
+        /// </summary>
+        internal static void ConfigureCreature(GameObject targetGameObject)
+        {
+            Creature creature = targetGameObject.GetComponent<Creature>();
+            Pet pet = targetGameObject.GetComponent<Pet>();
+
+            if (!pet)
+            {
+                return;
+            }
+
+            if (creature)
+            {
+                ModDebugLog.LogDebug($"ConfigureCreature: Creature.SetScale set to {pet.ScaleFactor}.");
+                creature.SetScale(pet.ScaleFactor);
+            }
+            else
+            {
+                ModDebugLog.LogDebug($"ConfigureCreature: Transform scale set to {pet.ScaleFactor}.");
+                targetGameObject.transform.localScale = Vector3.one * pet.ScaleFactor;
+            }
+        }
+
+        /// <summary>
         /// Destroy the EmpAttack component
         /// </summary>
         internal static void DestroyEmpAttack(GameObject targetGameObject)

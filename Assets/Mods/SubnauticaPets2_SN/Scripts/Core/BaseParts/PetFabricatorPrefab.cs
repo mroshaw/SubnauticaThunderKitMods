@@ -35,10 +35,10 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
             CustomPrefab fabricatorPrefab = new CustomPrefab(Info);
 
             FabricatorGadget fabGadget = fabricatorPrefab.CreateFabricator(out CraftTree.Type treeType)
-                .AddCraftNode(PetPrefabs.AlienRobotPrefab.Info.TechType)
-                .AddCraftNode(PetPrefabs.BloodCrawlerPrefab.Info.TechType)
-                .AddCraftNode(PetPrefabs.CaveCrawlerPrefab.Info.TechType)
-                .AddCraftNode(PetPrefabs.CrabSquidPrefab.Info.TechType);
+                .AddCraftNode(AlienRobotPrefab.Info.TechType)
+                .AddCraftNode(BloodCrawlerPrefab.Info.TechType)
+                .AddCraftNode(CaveCrawlerPrefab.Info.TechType)
+                .AddCraftNode(CrabSquidPrefab.Info.TechType);
 
             // If enabled, add the "bonus pets" to the fabricator
             if (ConfigFile.EnableBonusPets)

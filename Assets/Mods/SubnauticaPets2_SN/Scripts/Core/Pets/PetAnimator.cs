@@ -8,7 +8,6 @@ namespace DaftAppleGames.SubnauticaPets.Pets
     {
         private Animator _animator;
         private Pet _pet;
-        private bool _inRandomAnim;
 
         private static readonly int IsMovingAnimParameter = Animator.StringToHash("IsMoving");
         private static readonly int IsSleepingAnimParameter = Animator.StringToHash("IsSleeping");
@@ -122,10 +121,8 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         private IEnumerator PlayRandomFaceAnimAsync(float duration)
         {
 
-            _inRandomAnim = true;
             PlayRandomFaceAnim();
             yield return new WaitForSeconds(duration);
-            _inRandomAnim = false;
         }
         
         internal void SetSleeping(bool isSleeping)

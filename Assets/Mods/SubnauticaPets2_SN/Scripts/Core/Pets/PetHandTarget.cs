@@ -14,12 +14,12 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// <summary>
         /// Initialise the component
         /// </summary>
-        internal void Start()
+        private void Start()
         {
             _pet = GetComponent<Pet>();
             if (!_pet)
             {
-                ModDebugLog.LogDebug("PetHandTarget: GameObject MUST have a Pet component!");
+                ModDebugLog.LogError("PetHandTarget: GameObject MUST have a Pet component!");
             }
         }
 

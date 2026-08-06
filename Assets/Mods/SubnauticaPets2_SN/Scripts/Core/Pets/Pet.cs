@@ -12,10 +12,13 @@ namespace DaftAppleGames.SubnauticaPets.Pets
     /// </summary>
     internal class Pet : MonoBehaviour
     {
+        [SerializeField] private float scaleFactor = 1.0f;
+
         // Public properties
         internal Base Base { get; set; }
         internal PetHappiness Happiness { get; private set; }
         internal string BaseId => Base != null ? Base.GetComponent<PrefabIdentifier>().Id : "NO BASE!";
+        internal float ScaleFactor => scaleFactor;
 
         internal float timeBeforePetNeutral = 1800.0f;
         internal float timeBeforePetSad = 3600.0f;
@@ -161,7 +164,7 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             }
 
             ModDebugLog.LogDebug( $"Fixing parent for {PetName}");
-            transform.SetParent(base.transform);
+            transform.SetParent(Base.transform);
             _skyApplier.SetSky(Skies.BaseInterior);
         }
 
@@ -427,8 +430,8 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         /// </summary>
         internal static bool IsPetTechType(TechType techType)
         {
-            return (techType == PetPrefabs.AlienRobotPrefab.Info.TechType || techType == PetPrefabs.CaveCrawlerPrefab.Info.TechType ||
-                    techType == PetPrefabs.BloodCrawlerPrefab.Info.TechType || techType == PetPrefabs.CrabSquidPrefab.Info.TechType ||
+            return (techType == AlienRobotPrefab.Info.TechType || techType == CaveCrawlerPrefab.Info.TechType ||
+                    techType == BloodCrawlerPrefab.Info.TechType || techType == CrabSquidPrefab.Info.TechType ||
                     techType == CustomPetPrefabs.CatPetPrefab.Info.TechType || techType == CustomPetPrefabs.DogPetPrefab.Info.TechType ||
                     techType == CustomPetPrefabs.RabbitPetPrefab.Info.TechType || techType == CustomPetPrefabs.SealPetPrefab.Info.TechType ||
                     techType == CustomPetPrefabs.WalrusPetPrefab.Info.TechType || techType == CustomPetPrefabs.FoxPetPrefab.Info.TechType);

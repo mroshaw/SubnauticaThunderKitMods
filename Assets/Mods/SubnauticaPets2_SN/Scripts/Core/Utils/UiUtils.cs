@@ -33,7 +33,7 @@ namespace DaftAppleGames.SubnauticaPets.Utils
 
             if (!origButtonGameObject)
             {
-                ModDebugLog.LogDebug( $"UiUtils: CreateButton can't find a Button in {sourceUi}");
+                ModDebugLog.LogError($"UiUtils: CreateButton can't find a Button in {sourceUi}");
                 return null;
             }
 
@@ -58,7 +58,7 @@ namespace DaftAppleGames.SubnauticaPets.Utils
             }
             else
             {
-                ModDebugLog.LogDebug( $"UiUtils: Couldn't find TextMeshProUGUI on {newButtonGameObject.name}!");
+                ModDebugLog.LogError($"UiUtils: Couldn't find TextMeshProUGUI on {newButtonGameObject.name}!");
             }
             newButtonGameObject.GetComponent<Button>().interactable = isInteractable;
             newButtonGameObject.SetActive(true);

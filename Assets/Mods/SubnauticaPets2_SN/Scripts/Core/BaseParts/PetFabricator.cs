@@ -162,6 +162,7 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
             Pet newPet = newPetGameObject.GetComponent<Pet>();
             if (newPet)
             {
+                PetPrefabConfigUtils.ConfigureCreature(newPetGameObject);
                 ModDebugLog.LogDebug( "PetFabricator: Setting Pet Name...");
                 newPet.PetName = $"Test Subject {SubnauticaPetsPlugin.PetSaver.PetList.Count + 1}";
                 ModDebugLog.LogDebug( "PetFabricator: Setting Pet Name... Done.");

@@ -20,12 +20,13 @@ namespace DaftAppleGames.MoreAquariums.Patches
             {
                 ModDebugLog.LogDebug("In Aquarium.Start...");
 
+#if !UNITY_EDITOR
                 // Skip if configured to not add bubble audio
                 if (!ConfigFile.BubbleAudioEnabled)
                 {
                     return;
                 }
-                
+#endif                
                 // Custom aquariums already have emitters
                 if (__instance.GetComponent<CustomAquarium>())
                 {

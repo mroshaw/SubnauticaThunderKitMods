@@ -2132,7 +2132,26 @@ MonoBehaviour:
   storageWidth: 2
   recipe: {fileID: 11400000, guid: e3574bb41dd6a1a43af7320932bb1ae2, type: 2}
   useCustomMovement: 1
+  configureConstructable: 1
+  configureConstructableBase: 0
+  faceLinkedModulePosition: {x: 0, y: 0, z: 0}
+  placeMaxDistance: 5
+  placeMinDistance: 1.2
+  placeDefaultDistance: 2
+  faceLinkedModuleType: 0
   allowConstructionOnConstructables: 1
+  allowContructionOutside: 0
+  allowConstructionInBase: 1
+  allowConstructionInSub: 1
+  allowConstructionOnWalls: 0
+  allowConstructionOnCeiling: 0
+  allowConstructionOnGround: 1
+  allowConstructionUnderWater: 1
+  constructionAttachedToBase: 0
+  constructionAlignWithSurface: 0
+  constructionForceUpright: 0
+  constructionRotationEnabled: 0
+  deconstructionAllowed: 1
   waveScale: 0.9
   replaceExistingModel: 0
   addBubbleAudio: 0

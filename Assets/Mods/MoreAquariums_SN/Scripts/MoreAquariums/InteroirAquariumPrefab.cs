@@ -8,18 +8,22 @@ using static DaftAppleGames.MoreAquariums.MoreAquariumsPlugin;
 
 namespace DaftAppleGames.MoreAquariums
 {
-    public abstract class AquariumPrefab
+    /// <summary>
+    /// This class can be inherited by Aquarium prefab classes that makes a model change, then reconfigures
+    /// an existing Aquarium component.
+    /// For use in scenarios where the original Aquarium is the cloned prefab.
+    /// </summary>
+    public abstract class InteroirAquariumPrefab
     {
-        public static PrefabInfo Info;
         private const TechType CloneTechType = TechType.Aquarium;
         
-        internal static void RegisterInternal(string classId, string displayName, string description,
+        internal static PrefabInfo RegisterInternal(string classId, string displayName, string description,
             string iconAssetName, string prefabAssetName, RecipeData recipeData, Action<GameObject> postConfigAction = null)
         {
-            Info = PrefabInfo
+            PrefabInfo info = PrefabInfo
                 .WithTechType(classId, displayName, description, unlockAtStart: true)
                 .WithIcon(ModAssetUtils.GetObjectFromAssetBundle<Sprite>(iconAssetName) as Sprite);
-            CustomPrefab aquariumPrefab = new CustomPrefab(Info);
+            CustomPrefab aquariumPrefab = new CustomPrefab(info);
             
             // Clone the existing Aquarium
             PrefabTemplate aquariumTemplate = new CloneTemplate(aquariumPrefab.Info, CloneTechType)
@@ -35,6 +39,8 @@ namespace DaftAppleGames.MoreAquariums
                 .WithPdaGroupCategory(TechGroup.InteriorModules, TechCategory.InteriorModule);
             aquariumPrefab.Register();
             ModDebugLog.LogDebug($"{displayName} registered successfully!");
+
+            return info;
         }
 
         /// <summary>

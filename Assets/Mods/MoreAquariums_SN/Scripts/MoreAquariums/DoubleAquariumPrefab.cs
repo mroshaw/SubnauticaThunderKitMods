@@ -1,12 +1,15 @@
-﻿using Nautilus.Crafting;
+﻿using Nautilus.Assets;
+using Nautilus.Crafting;
 
 namespace DaftAppleGames.MoreAquariums
 {
     /// <summary>
     /// Describes a Double Aquarium prefab
     /// </summary>
-    public class DoubleAquariumPrefab : AquariumPrefab
+    public class DoubleAquariumPrefab : InteroirAquariumPrefab
     {
+        public static PrefabInfo PrefabInfo;
+        
         /// Properties of the aquarium
         private const string ClassId = "DoubleAquarium";
         private const string DisplayName = "Double Aquarium";
@@ -20,6 +23,6 @@ namespace DaftAppleGames.MoreAquariums
             new Ingredient(TechType.Glass, 4));
         
         // Register the new prefab
-        public static void Register() => RegisterInternal(ClassId, DisplayName, Description, IconAssetName, PrefabAssetName, Recipe);
+        public static void Register() => PrefabInfo = RegisterInternal(ClassId, DisplayName, Description, IconAssetName, PrefabAssetName, Recipe);
     }
 }

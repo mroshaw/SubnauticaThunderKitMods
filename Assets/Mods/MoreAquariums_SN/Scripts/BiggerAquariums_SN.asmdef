@@ -14,7 +14,9 @@
         "Nautilus.dll",
         "Assembly-CSharp-firstpass_publicized.dll",
         "Unity.Addressables.dll",
-        "Sirenix.OdinInspector.Attributes.dll"
+        "Sirenix.OdinInspector.Attributes.dll",
+        "Unity.ResourceManager.dll",
+        "Newtonsoft.Json.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],

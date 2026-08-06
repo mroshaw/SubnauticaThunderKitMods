@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Nautilus.Assets;
 using Nautilus.Crafting;
 using UnityEngine;
 using static DaftAppleGames.MoreAquariums.MoreAquariumsPlugin;
@@ -8,8 +9,10 @@ namespace DaftAppleGames.MoreAquariums
     /// <summary>
     /// Describes a Desk Aquarium prefab
     /// </summary>
-    public class DeskAquariumPrefab : AquariumPrefab
+    public class DeskAquariumPrefab : InteroirAquariumPrefab
     {
+        public static PrefabInfo PrefabInfo;
+        
         /// Properties of the aquarium
         private const string ClassId = "DeskAquarium";
         private const string DisplayName = "Desk Aquarium";
@@ -23,7 +26,7 @@ namespace DaftAppleGames.MoreAquariums
             new Ingredient(TechType.Glass, 1));
             
         // Register the prefab
-        public static void Register() => RegisterInternal(ClassId, DisplayName, Description, IconAssetName, PrefabAssetName, Recipe, ResizeBubbleParticles);
+        public static void Register() => PrefabInfo = RegisterInternal(ClassId, DisplayName, Description, IconAssetName, PrefabAssetName, Recipe, ResizeBubbleParticles);
         
         /// <summary>
         /// Perform aquarium type specific post configuration of the new prefab

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using static DaftAppleGames.MoreAquariums.MoreAquariumsPlugin;
+// using static DaftAppleGames.MoreAquariums.MoreAquariumsPlugin;
 
 namespace DaftAppleGames.MoreAquariums
 {
@@ -22,11 +22,11 @@ namespace DaftAppleGames.MoreAquariums
         /// </summary>
         private void Awake()
         {
-            ModDebugLog.LogDebug("FishManager is refreshing attached fish...");
+            // ModDebugLog.LogDebug("FishManager is refreshing attached fish...");
             // Refresh attached fish
             foreach (AquariumFishExt fish in GetComponentsInChildren<AquariumFishExt>(true))
             {
-                ModDebugLog.LogDebug($"Updating {fish.name}...");
+                // ModDebugLog.LogDebug($"Updating {fish.name}...");
                 fish.SetFishManager(this);
             }
         }
@@ -50,7 +50,6 @@ namespace DaftAppleGames.MoreAquariums
         /// <summary>
         /// Add a new fish to the manager
         /// </summary>
-        /// <param name="newFishExt"></param>
         internal void AddActiveFish(AquariumFishExt newFishExt)
         {
             if (!_fishList.Contains(newFishExt))
@@ -86,17 +85,21 @@ namespace DaftAppleGames.MoreAquariums
                 return;
             }
 
+#if UNITY_EDITOR
+            return;
+#endif
+            
             float distanceFromPlayer = Vector3.Distance(transform.position, Player.main.transform.position);
             if (distanceFromPlayer < fishSettings.cullingDistanceFromPlayer && _isCulled)
             {
-                ModDebugLog.LogDebug("FishManager: Enabling fish...");
+                // ModDebugLog.LogDebug("FishManager: Enabling fish...");
                 _isCulled = false;
                 SetFishActiveState(true);
             }
 
             if (distanceFromPlayer >= fishSettings.cullingDistanceFromPlayer && !_isCulled)
             {
-                ModDebugLog.LogDebug("FishManager: Disabling fish...");
+                // ModDebugLog.LogDebug("FishManager: Disabling fish...");
                 _isCulled = true;
                 SetFishActiveState(false);
             }

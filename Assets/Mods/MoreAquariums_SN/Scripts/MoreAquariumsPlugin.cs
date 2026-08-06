@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Collections.Generic;
+using System.Reflection;
 using BepInEx;
 using DaftAppleGames.ModTools;
 using HarmonyLib;
@@ -13,8 +14,13 @@ namespace DaftAppleGames.MoreAquariums
         private const string MyGuid = "com.mroshaw.biggeraquariumssn";
         private const string PluginName = "More Aquariums SN";
         private const string VersionString = "1.3.0";
-
         private const string AssetBundleName = "biggeraquariumsassetbundle";
+
+        // Public PetSaver as a persistent list of active pets
+        internal static AquariumSaver AquariumSaver;
+
+        // SaveData instance for managing loading of Pet config data
+        internal static HashSet<AquariumSaver.AquariumDetails> LoadedAquariumDetailsHashSet;
         
         // Bubble audio asset for use by custom emitters
         private const string BubblesAudioClipName = "AquariumBubblesLoop2_Quiet";
@@ -35,8 +41,9 @@ namespace DaftAppleGames.MoreAquariums
             // Set up logging and asset bundle
 #if UNITY_EDITOR
             ModDebugLog =  new ModLog(Logger, true);
+            return;
 #else
-            ModDebugLog =  new ModLog(Logger, ConfigFile.DetailedLogging);            
+            ModDebugLog =  new ModLog(Logger, ConfigFile.DetailedLogging);
             ModAssetUtils = new ModAssetBundleUtils(AssetBundleName, Assembly.GetExecutingAssembly(),true, ModDebugLog);
 #endif
             // Register custom sounds
@@ -47,6 +54,7 @@ namespace DaftAppleGames.MoreAquariums
             CornerAquariumPrefab.Register();
             DeskAquariumPrefab.Register();
             SphericalAquariumPrefab.Register();
+            ObservatoryAquariumPrefab.Register();
             
             // Patch in our MOD
             Harmony.PatchAll();

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
-using static DaftAppleGames.MoreAquariums.MoreAquariumsPlugin;
+// using static DaftAppleGames.MoreAquariums.MoreAquariumsPlugin;
 
 namespace DaftAppleGames.MoreAquariums
 {
@@ -65,13 +65,13 @@ namespace DaftAppleGames.MoreAquariums
             
             if (!fishSettings)
             {
-                ModDebugLog.LogError("Fish has no fish settings!");
+                // ModDebugLog.LogError("Fish has no fish settings!");
                 return;
             }
             
             if (movementColliders == null || movementColliders.Count == 0)
             {
-                ModDebugLog.LogError("Fish has no movement colliders!");
+                // ModDebugLog.LogError("Fish has no movement colliders!");
                 return;
             }
            
@@ -168,15 +168,15 @@ namespace DaftAppleGames.MoreAquariums
         {
             if (!newFishManager)
             {
-                ModDebugLog.LogError("SetFishManager: newFishManager is null!");
+                // ModDebugLog.LogError("SetFishManager: newFishManager is null!");
             }
             
-            ModDebugLog.LogDebug($"Setting fish manager on {gameObject.name}...");
+            // ModDebugLog.LogDebug($"Setting fish manager on {gameObject.name}...");
             fishManager = newFishManager;
             fishSettings = newFishManager.FishSettings;
             movementColliders = newFishManager.MovementColliders;
             _fishManagerSet = true;
-            ModDebugLog.LogDebug($"Fish manager set to {newFishManager}");
+            // ModDebugLog.LogDebug($"Fish manager set to {newFishManager}");
         }
         
         private void PickNewTarget()

@@ -1,0 +1,3 @@
+[submodule "Packages/RippedAssetImporter"]
+	path = Packages/RippedAssetImporter
+	url = https://github.com/mroshaw/RippedAssetImporter.git

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using DaftAppleGames.ModTools;
-using DaftAppleGames.ModTools.Extensions;
 using DaftAppleGames.ModUtils;
 using Nautilus.Utility;
 using Sirenix.OdinInspector;
@@ -28,46 +26,19 @@ namespace DaftAppleGames.MoreAquariums
     /// </summary>
     public class AquariumConfigurator : MonoBehaviour
     {
-        [BoxGroup("Aquarium")] [SerializeField] private AquariumType aquariumType;
         [BoxGroup("Aquarium")] [SerializeField] private int storageHeight;
         [BoxGroup("Aquarium")] [SerializeField] private int storageWidth;
         [BoxGroup("Aquarium")] [SerializeField] [InlineEditor] private RecipePreset recipe;
         [BoxGroup("Aquarium")] [SerializeField] private bool useCustomMovement;
-        [BoxGroup("Constructable Base")] [SerializeField] private bool configureConstructableBase;
-        [BoxGroup("Constructable Base")] [SerializeField] private TechType faceLinkedModuleType;
-        [BoxGroup("Constructable Base")] [SerializeField] private Vector3 faceLinkedModulePosition;
-        [BoxGroup("Constructable Base")] [SerializeField] private float maxHeightFromTerrain;
-        [BoxGroup("Constructable Base")] [SerializeField] private float minHeightFromTerrain;
-        [BoxGroup("Constructable Base")] [SerializeField] private bool allowedAboveWater;
-        [BoxGroup("Constructable Base")] [SerializeField] private List<Base.CellType> cellTypes;
-        [BoxGroup("Constructable")] [SerializeField] private bool configureConstructable;
-        [BoxGroup("Constructable")] [SerializeField] private bool allowConstructionOnConstructables;
-        [BoxGroup("Constructable")] [SerializeField] private bool allowContructionOutside;
-        [BoxGroup("Constructable")] [SerializeField] private bool allowConstructionInBase;
-        [BoxGroup("Constructable")] [SerializeField] private bool allowConstructionInSub;
-        [BoxGroup("Constructable")] [SerializeField] private bool allowConstructionOnWalls;
-        [BoxGroup("Constructable")] [SerializeField] private bool allowConstructionOnCeiling;
-        [BoxGroup("Constructable")] [SerializeField] private bool allowConstructionOnGround;
-        [BoxGroup("Constructable")] [SerializeField] private bool allowConstructionUnderWater;
-        [BoxGroup("Constructable")] [SerializeField] private bool constructionAttachedToBase;
-        [BoxGroup("Constructable")] [SerializeField] private bool constructionAlignWithSurface;
-        [BoxGroup("Constructable")] [SerializeField] private bool constructionForceUpright;
-        [BoxGroup("Constructable")] [SerializeField] private bool constructionRotationEnabled;
-        [BoxGroup("Constructable")] [SerializeField] private float placeMaxDistance;
-        [BoxGroup("Constructable")] [SerializeField] private float placeMinDistance;
-        [BoxGroup("Constructable")] [SerializeField] private float placeDefaultDistance;
-        
-        [BoxGroup("Constructable")] [SerializeField] private bool deconstructionAllowed;
+        [BoxGroup("Aquarium")] [SerializeField] private bool allowConstructionOnConstructables;
         [BoxGroup("Aquarium")] [SerializeField] private float waveScale;
+        [BoxGroup("Aquarium")] [SerializeField] private bool replaceExistingModel;
         [BoxGroup("Aquarium")] [SerializeField] private bool addBubbleAudio;
-
+        [BoxGroup("Aquarium")] [SerializeField] private string oldGhostModelPath;
+        
         [BoxGroup("Mesh Model")] [SerializeField] private MeshFilter aquariumMesh;
         [BoxGroup("Mesh Model")] [SerializeField] private MeshFilter aquariumGlassMesh;
-        [BoxGroup("Mesh Model")] [SerializeField] private bool replaceExistingModel;
         [BoxGroup("Mesh Model")] [SerializeField] private GameObject newAquariumModel;
-        [BoxGroup("Mesh Model")] [SerializeField] private string oldGhostModelPath;
-        [BoxGroup("Mesh Model")] [SerializeField] private string oldBaseModelPath;
-        [BoxGroup("Mesh Model")] [SerializeField] private Aquarium newAquarium;
         
         [BoxGroup("Object References")] [SerializeField] private Transform bubbles1Transform;
         [BoxGroup("Object References")] [SerializeField] private Transform bubbles2Transform;
@@ -77,6 +48,9 @@ namespace DaftAppleGames.MoreAquariums
         [BoxGroup("Object References")] [SerializeField] private Transform[] newCoralTransforms;
         [BoxGroup("Object References")] [SerializeField] private GameObject rocksObject;
         [BoxGroup("Object References")] [SerializeField] private GameObject colliderObject;
+
+        [BoxGroup("Sky Applier")] [SerializeField] private Renderer[] objectRenderers;
+        [BoxGroup("Sky Applier")] [SerializeField] private Renderer[] glassRenderers;
         
         [BoxGroup("Constructable")] [SerializeField] private GameObject constructableBoundsObject;
         
@@ -90,17 +64,15 @@ namespace DaftAppleGames.MoreAquariums
         [BoxGroup("Custom Fish")] [SerializeField] private FishSettings fishSettings;
         [BoxGroup("Custom Fish")] [SerializeField] private GameObject[] movementColliderObjects;
         
-        internal GameObject NewAquariumModel => newAquariumModel;
-        internal Aquarium NewAquarium => newAquarium;
-        internal AquariumType AquariumType => aquariumType;
-        internal string OldGhostModelPath => oldGhostModelPath;
-        
         // Used to control the waving animation of the coral and plants
         private static readonly int WaveUpMinParam = Shader.PropertyToID("_WaveUpMin");
         private static readonly int ScaleParam = Shader.PropertyToID("_Scale");
         private static readonly int FrequencyParam = Shader.PropertyToID("_Frequency");
         private static readonly int SpeedParam = Shader.PropertyToID("_Speed");
 
+        internal GameObject NewAquariumModel => newAquariumModel;
+        internal string OldGhostModelPath => oldGhostModelPath;
+        
         /// <summary>
         /// Takes the "vanilla" aquarium prefab, and reconfigures it as the new aquarium 
         /// </summary>
@@ -132,16 +104,9 @@ namespace DaftAppleGames.MoreAquariums
             // Replace the collider
             ConfigureCollider(vanillaAquariumGo);
            
-            // Configure Constructable/Base Constructable
-            if (configureConstructable)
-            {
-                ConfigureConstructable(vanillaAquariumGo);
-            }
-
-            if (configureConstructableBase)
-            {
-                ConfigureConstructableBase(vanillaAquariumGo);
-            }
+            // If configured, allow construction on other constructables
+            vanillaConstructable.allowedOnConstructables = allowConstructionOnConstructables;
+            ConfigureConstructable(vanillaAquariumGo);
             
             // Reposition tracks and add new
             ConfigureTracks(vanillaAquariumGo);
@@ -164,18 +129,6 @@ namespace DaftAppleGames.MoreAquariums
             Constructable vanillaConstructable = vanillaAquariumGo.GetComponent<Constructable>();
             // If configured, allow construction on other constructables
             vanillaConstructable.allowedOnConstructables = allowConstructionOnConstructables;
-            vanillaConstructable.allowedOutside = allowContructionOutside;
-            vanillaConstructable.allowedInBase = allowConstructionInBase;
-            vanillaConstructable.allowedInSub = allowConstructionInSub;
-            vanillaConstructable.allowedOnCeiling = allowConstructionOnCeiling;
-            vanillaConstructable.allowedOnGround = allowConstructionOnGround;
-            vanillaConstructable.allowedUnderwater = allowConstructionUnderWater;
-            vanillaConstructable.attachedToBase = constructionAttachedToBase;
-            vanillaConstructable.deconstructionAllowed =  deconstructionAllowed;
-            vanillaConstructable.allowedOnWall = allowConstructionOnWalls;
-            vanillaConstructable.alignWithSurface = constructionAlignWithSurface;
-            vanillaConstructable.forceUpright = constructionForceUpright;
-            vanillaConstructable.rotationEnabled = constructionRotationEnabled;
             
             ConstructableBounds constructableBounds = vanillaAquariumGo.GetComponentInChildren<ConstructableBounds>();
             if (!constructableBounds)
@@ -198,48 +151,6 @@ namespace DaftAppleGames.MoreAquariums
             ModDebugLog.LogDebug($"Done configuring constructable bounds.");
         }
 
-        /// <summary>
-        /// Adds/configure a Base Constructable
-        /// </summary>
-        private void ConfigureConstructableBase(GameObject vanillaAquariumGo)
-        {
-            ModDebugLog.LogDebug($"Configuring base-constructable...");
-            // Destroy any Constructable
-            Constructable constructable = vanillaAquariumGo.GetComponent<Constructable>();
-
-            if (!constructable)
-            {
-                ModDebugLog.LogError($"Constructable not found!");
-                return;
-            }
-           
-            // Add a ConstructableBase (which inherits from Constructable)
-            ModDebugLog.LogError($"Adding ConstructableBase component...");
-            ConstructableBase constructableBase =  vanillaAquariumGo.EnsureComponent<ConstructableBase>();
-            constructableBase.techType = constructable.techType;
-            constructableBase.model = constructable.model;
-            constructableBase.builtBoxFX = constructable.builtBoxFX;
-            constructableBase.ghostMaterial = constructable.ghostMaterial;
-            constructableBase.surfaceType = constructable.surfaceType;
-            constructableBase._EmissiveTex = constructable._EmissiveTex;
-            constructableBase._NoiseTex = constructable._NoiseTex;
-            constructableBase.rotatableBasePiece = true;
-            constructableBase.ghostRenderers = GetComponentsInChildren<Renderer>().ToList();
-            
-            GameObject model = constructable.model;
-            Base modelBase = model.EnsureComponent<Base>();
-            BaseAddCellGhost modelBaseCellGhost = model.EnsureComponent<BaseAddCellGhost>();
-            modelBaseCellGhost.maxHeightFromTerrain = maxHeightFromTerrain;
-            modelBaseCellGhost.minHeightFromTerrain = minHeightFromTerrain;
-            modelBaseCellGhost.allowedAboveWater = allowedAboveWater;
-            modelBaseCellGhost.cellTypes = cellTypes;
-            ConfigureConstructable(vanillaAquariumGo);
-            
-            ModDebugLog.LogDebug($"Destroying Constructable, leaving ConstructableBase...");
-            Destroy(constructable);
-        }
-        
-        
         /// <summary>
         /// Configure the storage container size
         /// </summary>
@@ -435,14 +346,21 @@ namespace DaftAppleGames.MoreAquariums
             newRocks.transform.localPosition = rocksObject.transform.localPosition;
             newRocks.transform.localScale = Vector3.one;
             
-            ModDebugLog.LogDebug("Updating SkyApplier...");
-            SkyApplier skyApplier = vanillaAquariumGo.GetComponent<SkyApplier>();
-            if (!skyApplier)
+            ModDebugLog.LogDebug("Updating SkyAppliers...");
+            SkyApplier[] skyAppliers = vanillaAquariumGo.GetComponentsInChildren<SkyApplier>();
+            foreach (SkyApplier skyApplier in skyAppliers)
             {
-                ModDebugLog.LogDebug("Looking for SkyApplier in children...");
-                skyApplier = vanillaAquariumGo.GetComponentInChildren<SkyApplier>();
+                if (skyApplier.anchorSky == Skies.BaseGlass)
+                {
+                    ModDebugLog.LogDebug("Setting glass SkyApplier...");
+                    skyApplier.renderers = glassRenderers;
+                }
+                else
+                {
+                    ModDebugLog.LogDebug("Setting object SkyApplier...");
+                    skyApplier.renderers = objectRenderers;
+                }
             }
-            skyApplier.renderers = vanillaAquariumGo.GetComponentsInChildren<Renderer>(true);
         }
 
         /// <summary>
@@ -493,7 +411,6 @@ namespace DaftAppleGames.MoreAquariums
         /// </summary>
         internal static void AddCustomEmitter(GameObject parentGameObject)
         {
-#if !UNITY_EDITOR
             if (ConfigFile.BubbleAudioEnabled)
             {
                 ModDebugLog.LogDebug($"Adding bubbles CustomEmitter to {parentGameObject.name}");
@@ -501,7 +418,6 @@ namespace DaftAppleGames.MoreAquariums
                 ModAudioUtils.ConfigureEmitter(customEmitter, BubblesFMODAsset, ModDebugLog);
                 customEmitter.playOnAwake = true;
             }
-#endif
         }
         
         /// <summary>
@@ -683,7 +599,9 @@ namespace DaftAppleGames.MoreAquariums
         {
             GameObject movementColliderContainer = new GameObject("MovementColliders");
             movementColliderContainer.transform.SetParent(vanillaAquariumGo.transform);
-            movementColliderContainer.transform.LocalZero();
+            movementColliderContainer.transform.localPosition = Vector3.zero;
+            movementColliderContainer.transform.localRotation = Quaternion.identity;
+            movementColliderContainer.transform.localScale = Vector3.one;
             
             List<Collider> newMovementColliders = new List<Collider>();
             foreach (GameObject movementColliderObject in movementColliderObjects)

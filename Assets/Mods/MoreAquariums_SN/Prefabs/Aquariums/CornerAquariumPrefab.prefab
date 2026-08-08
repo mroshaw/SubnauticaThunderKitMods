@@ -2947,6 +2947,7 @@ Transform:
   - {fileID: 297547071240225189}
   - {fileID: 1108407481012449085}
   - {fileID: 596692633}
+  - {fileID: 8123959261901275600}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2966,29 +2967,11 @@ MonoBehaviour:
   storageWidth: 4
   recipe: {fileID: 11400000, guid: 42424d20984c9cc4a8a24023635384df, type: 2}
   useCustomMovement: 0
-  configureConstructable: 1
-  configureConstructableBase: 0
-  faceLinkedModulePosition: {x: 0, y: 0, z: 0}
-  placeMaxDistance: 5
-  placeMinDistance: 1.2
-  placeDefaultDistance: 2
-  faceLinkedModuleType: 0
   allowConstructionOnConstructables: 0
-  allowContructionOutside: 0
-  allowConstructionInBase: 1
-  allowConstructionInSub: 1
-  allowConstructionOnWalls: 0
-  allowConstructionOnCeiling: 0
-  allowConstructionOnGround: 1
-  allowConstructionUnderWater: 1
-  constructionAttachedToBase: 0
-  constructionAlignWithSurface: 0
-  constructionForceUpright: 0
-  constructionRotationEnabled: 0
-  deconstructionAllowed: 1
   waveScale: 1
   replaceExistingModel: 0
   addBubbleAudio: 1
+  oldGhostModelPath: 
   aquariumMesh: {fileID: 5845888427636876927}
   aquariumGlassMesh: {fileID: 2556507337223790743}
   newAquariumModel: {fileID: 0}
@@ -3011,6 +2994,8 @@ MonoBehaviour:
   - {fileID: 1337334052692010800}
   rocksObject: {fileID: 3873141829460764874}
   colliderObject: {fileID: 7725545489830447490}
+  objectRenderers: []
+  glassRenderers: []
   constructableBoundsObject: {fileID: 596692632}
   animator1: {fileID: 6859817472609089374}
   animator2: {fileID: 6859817472609089372}
@@ -6177,4 +6162,67 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4534751120464736, guid: b9d8a29fa8de746489c645abd6548e79,
     type: 3}
   m_PrefabInstance: {fileID: 7935891409925264501}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &8119449637707889737
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 8792288716250449528}
+    m_Modifications:
+    - target: {fileID: 1709254077376921, guid: a04cc3cc4ad401445a29a9bbec5ac8aa, type: 3}
+      propertyPath: m_Name
+      value: Aquarium
+      objectReference: {fileID: 0}
+    - target: {fileID: 4518489005915545, guid: a04cc3cc4ad401445a29a9bbec5ac8aa, type: 3}
+      propertyPath: m_RootOrder
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 4518489005915545, guid: a04cc3cc4ad401445a29a9bbec5ac8aa, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 6.6552467
+      objectReference: {fileID: 0}
+    - target: {fileID: 4518489005915545, guid: a04cc3cc4ad401445a29a9bbec5ac8aa, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.7885077
+      objectReference: {fileID: 0}
+    - target: {fileID: 4518489005915545, guid: a04cc3cc4ad401445a29a9bbec5ac8aa, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.2699442
+      objectReference: {fileID: 0}
+    - target: {fileID: 4518489005915545, guid: a04cc3cc4ad401445a29a9bbec5ac8aa, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4518489005915545, guid: a04cc3cc4ad401445a29a9bbec5ac8aa, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4518489005915545, guid: a04cc3cc4ad401445a29a9bbec5ac8aa, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.0000011346135
+      objectReference: {fileID: 0}
+    - target: {fileID: 4518489005915545, guid: a04cc3cc4ad401445a29a9bbec5ac8aa, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4518489005915545, guid: a04cc3cc4ad401445a29a9bbec5ac8aa, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4518489005915545, guid: a04cc3cc4ad401445a29a9bbec5ac8aa, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -0.00013001713
+      objectReference: {fileID: 0}
+    - target: {fileID: 4518489005915545, guid: a04cc3cc4ad401445a29a9bbec5ac8aa, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a04cc3cc4ad401445a29a9bbec5ac8aa, type: 3}
+--- !u!4 &8123959261901275600 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4518489005915545, guid: a04cc3cc4ad401445a29a9bbec5ac8aa,
+    type: 3}
+  m_PrefabInstance: {fileID: 8119449637707889737}
   m_PrefabAsset: {fileID: 0}

@@ -23,6 +23,21 @@ namespace DaftAppleGames.CuddlefishRecall_SN.Patches
                 __instance.gameObject.AddComponent<HealthRegen>();
                 CuddlefishRecallPlugin.Log.LogDebug("Added EnhancedCuddlefish component.");
             }
+
+            /// <summary>
+            /// Keeps Cuddlefish loaded after their following state changes
+            /// </summary>
+            [HarmonyPatch(nameof(CuteFish.followingPlayer), MethodType.Setter)]
+            [HarmonyPostfix]
+            public static void FollowingPlayerSetter_Postfix(CuteFish __instance)
+            {
+                __instance.largeWorldEntity.cellLevel = LargeWorldEntity.CellLevel.Global;
+
+                if (LargeWorldStreamer.main && LargeWorldStreamer.main.cellManager != null)
+                {
+                    LargeWorldStreamer.main.cellManager.RegisterEntity(__instance.largeWorldEntity);
+                }
+            }
         }
     }
 }

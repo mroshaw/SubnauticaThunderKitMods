@@ -63,7 +63,6 @@ namespace DaftAppleGames.CuddlefishRecall_SN
                 return;
             }
 
-            _isBeingRecalled = true;
             _creatureIndex = creatureIndex;
             
             // Teleport method
@@ -96,6 +95,7 @@ namespace DaftAppleGames.CuddlefishRecall_SN
             // Swim to method
             if (ConfigFile.RecallMoveMethod == RecallMoveMethod.SwimTo)
             {
+                _isBeingRecalled = true;
                 Log.LogDebug($"Swimming to Player position");
                 Log.LogDebug("Swimming to player in progress...");
                 _swimRandom.enabled = false;

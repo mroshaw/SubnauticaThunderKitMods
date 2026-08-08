@@ -29,7 +29,7 @@ namespace DaftAppleGames.SubnauticaPets
         /// <summary>
         /// Enable detailed logging
         /// </summary>
-        [Toggle("Detailed logging", Tooltip="Use this to produce a detailed log when reporting bugs. Logs are written to %LOCALAPPDATA%low\\Unknown Worlds\\Subnautica\\Player.log")]
+        [Toggle("Detailed logging", Tooltip="Use this to produce a detailed log when reporting bugs. Logs are written to %LOCALAPPDATA%low\\Unknown Worlds\\Subnautica\\Player.log"), OnChange(nameof(OnLoggingChanged))]
         public bool DetailedLogging = false;
 
         /// <summary>
@@ -64,6 +64,14 @@ namespace DaftAppleGames.SubnauticaPets
             {
                 _aboutGameObject = ModAssetUtils.GetPrefabInstanceFromAssetBundle(AboutGameObjectName, true);
             }
+        }
+
+        /// <summary>
+        /// Handle toggling of detailed logging
+        /// </summary>
+        private void OnLoggingChanged(ToggleChangedEventArgs eventArgs)
+        {
+            ModDebugLog.SetDetailedLoggingState(eventArgs.Value);
         }
     }
 }

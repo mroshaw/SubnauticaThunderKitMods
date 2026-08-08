@@ -13,9 +13,9 @@ namespace DaftAppleGames.CuddlefishRecall_SN
         
         private void Start()
         {
-            Log.LogDebug("Getting CreatureRecaller...");
+            ModDebugLog.LogDebug("Getting CreatureRecaller...");
             _creatureRecaller = GetComponent<CreatureRecaller>();
-            Log.LogDebug(_creatureRecaller ? "CreatureRecaller found." : "CreatureRecaller not found!");
+            ModDebugLog.LogDebug(_creatureRecaller ? "CreatureRecaller found." : "CreatureRecaller not found!");
         }
 
         /// <summary>
@@ -42,9 +42,9 @@ namespace DaftAppleGames.CuddlefishRecall_SN
                     return;
                 }
 
-                Log.LogDebug("Recall keypress detected...");
+                ModDebugLog.LogDebug("Recall keypress detected...");
                 _creatureRecaller.RecallAllCreatures();
-                Log.LogDebug("All creatures recalled!");
+                ModDebugLog.LogDebug("All creatures recalled!");
             }
         }
     }

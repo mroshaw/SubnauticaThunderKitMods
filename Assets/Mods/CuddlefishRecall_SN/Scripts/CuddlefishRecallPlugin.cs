@@ -19,7 +19,7 @@ namespace DaftAppleGames.CuddlefishRecall_SN
     {
         private const string MyGuid = "com.mroshaw.cuddlefishrecallmodsn";
         private const string PluginName = "Cuddlefish Recall Mod SN";
-        private const string VersionString = "1.5.0";
+        private const string VersionString = "1.5.1";
 
         private const string AssetBundleName = "cuddlefishrecallassetbundle";
         private const string PingIndicatorTextureName = "CuddlefishPingIcon.png";
@@ -27,7 +27,6 @@ namespace DaftAppleGames.CuddlefishRecall_SN
         // Config file / UI initialisation
         internal static ModConfigFile ConfigFile = OptionsPanelHandler.RegisterModOptions<ModConfigFile>();
         private static readonly Harmony Harmony = new Harmony(MyGuid);
-        public static ManualLogSource Log = new ManualLogSource(PluginName);
         internal static ModAssetBundleUtils ModAssetUtils;
 
         // Mod Debug Log
@@ -69,7 +68,6 @@ namespace DaftAppleGames.CuddlefishRecall_SN
             // Patch in our MOD
             Harmony.PatchAll();
             Logger.LogInfo($"PluginName: {PluginName}, VersionString: {VersionString} is loaded.");
-            Log = Logger;
         }
     }
 }

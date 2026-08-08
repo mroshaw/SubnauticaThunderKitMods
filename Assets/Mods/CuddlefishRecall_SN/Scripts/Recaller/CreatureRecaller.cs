@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using static DaftAppleGames.CuddlefishRecall_SN.CuddlefishRecallPlugin;
 
 namespace DaftAppleGames.CuddlefishRecall_SN
 {
@@ -14,9 +15,9 @@ namespace DaftAppleGames.CuddlefishRecall_SN
         /// </summary>
         private void RefreshCreatureRecallListeners()
         {
-            CuddlefishRecallPlugin.Log.LogDebug("Refreshing CreatureRecallListeners...");
+            ModDebugLog.LogDebug("Refreshing CreatureRecallListeners...");
             _allCreatureRecallListeners = FindObjectsOfType<CreatureRecallListener>();
-            CuddlefishRecallPlugin.Log.LogDebug($"Found {_allCreatureRecallListeners.Length} CreatureRecallListeners.");
+            ModDebugLog.LogDebug($"Found {_allCreatureRecallListeners.Length} CreatureRecallListeners.");
         }
 
         private bool ReportRecallProgress()
@@ -55,18 +56,18 @@ namespace DaftAppleGames.CuddlefishRecall_SN
                 return;
             }
 
-            CuddlefishRecallPlugin.Log.LogDebug($"Recalling all RecallCreatureListeners ({_allCreatureRecallListeners.Length})");
+            ModDebugLog.LogDebug($"Recalling all RecallCreatureListeners ({_allCreatureRecallListeners.Length})");
             float buffer = 1.0f;
 
             int numCreatures = 0;
             
             foreach (CreatureRecallListener listener in _allCreatureRecallListeners)
             {
-                CuddlefishRecallPlugin.Log.LogDebug($"Recalling {listener.gameObject.name}...");
+                ModDebugLog.LogDebug($"Recalling {listener.gameObject.name}...");
                 
                 listener.RecallCreature(buffer, numCreatures + 1);
                 buffer++;
-                CuddlefishRecallPlugin.Log.LogDebug($"{listener.gameObject.name} recalled.");
+                ModDebugLog.LogDebug($"{listener.gameObject.name} recalled.");
                 numCreatures++;
             }
 

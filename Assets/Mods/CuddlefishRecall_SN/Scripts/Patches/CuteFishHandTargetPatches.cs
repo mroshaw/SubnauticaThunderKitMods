@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using static DaftAppleGames.CuddlefishRecall_SN.CuddlefishRecallPlugin;
 
 namespace DaftAppleGames.CuddlefishRecall_SN.Patches
 {
@@ -18,13 +19,13 @@ namespace DaftAppleGames.CuddlefishRecall_SN.Patches
             [HarmonyPostfix]
             public static void PrepareCinematicMode_Postfix(CuteFishHandTarget __instance, Player setPlayer, global::CuteFishHandTarget.CuteFishCinematic cinematic)
             {
-                CuddlefishRecallPlugin.Log.LogDebug($"Cuddlefish clicked. Playing: {cinematic.itemPrefab.name}");
+                ModDebugLog.LogDebug($"Cuddlefish clicked. Playing: {cinematic.itemPrefab.name}");
                 if (cinematic.itemPrefab.name == SnackAnimationPrefabName)
                 {
-                    CuddlefishRecallPlugin.Log.LogDebug($"Replenish Cuddlefish health...");
+                    ModDebugLog.LogDebug($"Replenish Cuddlefish health...");
                     __instance.cuteFish.GetComponent<LiveMixin>().ResetHealth();
                     ErrorMessage.AddMessage(HealthReplenished);
-                    CuddlefishRecallPlugin.Log.LogDebug($"Cuddlefish health replenished.");
+                    ModDebugLog.LogDebug($"Cuddlefish health replenished.");
                 }
             }
         }

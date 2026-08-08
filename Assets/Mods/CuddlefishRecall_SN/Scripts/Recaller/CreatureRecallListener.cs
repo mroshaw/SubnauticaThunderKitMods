@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using static DaftAppleGames.CuddlefishRecall_SN.CuddlefishRecallPlugin;
 
 namespace DaftAppleGames.CuddlefishRecall_SN
@@ -22,7 +21,7 @@ namespace DaftAppleGames.CuddlefishRecall_SN
         /// </summary>
         private void Awake()
         {
-            Log.LogDebug("Finding CreatureRecallAction...");
+            ModDebugLog.LogDebug("Finding CreatureRecallAction...");
             creatureRecallAction = GetComponent<CreatureRecallAction>();
             rigidbodyComponent = GetComponent<Rigidbody>();
         }
@@ -36,7 +35,7 @@ namespace DaftAppleGames.CuddlefishRecall_SN
             if (ConfigFile.RecallMoveMethod == RecallMoveMethod.Teleport)
             {
                 Vector3 targetPosition = Player.main.transform.position + (Camera.main.transform.forward * (buffer * 2));
-                Log.LogDebug($"Teleporting GameObject to: {targetPosition}");
+                ModDebugLog.LogDebug($"Teleporting GameObject to: {targetPosition}");
 
                 if (IsTeleportDestinationBlocked(targetPosition))
                 {
@@ -48,14 +47,14 @@ namespace DaftAppleGames.CuddlefishRecall_SN
                 rigidbodyComponent.velocity = Vector3.zero;
                 rigidbodyComponent.angularVelocity = Vector3.zero;
                 creatureRecallAction.CompleteTeleportRecall(creatureIndex);
-                Log.LogDebug("GameObject teleported.");
+                ModDebugLog.LogDebug("GameObject teleported.");
             }
 
             // Swim to method
             if (ConfigFile.RecallMoveMethod == RecallMoveMethod.SwimTo)
             {
-                Log.LogDebug($"Swimming to Player position");
-                Log.LogDebug("Swimming to player in progress...");
+                ModDebugLog.LogDebug($"Swimming to Player position");
+                ModDebugLog.LogDebug("Swimming to player in progress...");
                 creatureRecallAction.BeginRecall(creatureIndex);
             }
         }

@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using static DaftAppleGames.CuddlefishRecall_SN.CuddlefishRecallPlugin;
 
 namespace DaftAppleGames.CuddlefishRecall_SN.Patches
 {
@@ -16,12 +17,12 @@ namespace DaftAppleGames.CuddlefishRecall_SN.Patches
             {
                 // Add the CreatureRecaller component
                 __instance.gameObject.AddComponent<CreatureRecaller>();
-                CuddlefishRecallPlugin.Log.LogDebug("Added CreatureRecaller component.");
+                ModDebugLog.LogDebug("Added CreatureRecaller component.");
 
                 // Add the Mod Input Manager to the Player GameObject.
                 // Ensures there is only one component, monitoring keyboard input.
                 __instance.gameObject.AddComponent<CreatureRecallerInputManager>();
-                CuddlefishRecallPlugin.Log.LogDebug("Added ModInputManager component.");
+                ModDebugLog.LogDebug("Added ModInputManager component.");
             }
         }
     }

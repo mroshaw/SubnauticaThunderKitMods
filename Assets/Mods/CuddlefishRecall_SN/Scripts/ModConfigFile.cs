@@ -19,5 +19,11 @@ namespace DaftAppleGames.CuddlefishRecall_SN
 
         [Slider("Recall Swim Velocity", Step = 0.1f, Format = "{0:F2}", Min = 1.0f, Max = 10.0f, DefaultValue = 3.0f)]
         public float RecallSwimVelocity = 3.0f;
+        
+        /// <summary>
+        /// Enable detailed logging
+        /// </summary>
+        [Toggle("Detailed logging", Tooltip="Use this to produce a detailed log when reporting bugs. Logs are written to %LOCALAPPDATA%low\\Unknown Worlds\\Subnautica\\Player.log")]
+        public bool DetailedLogging = false;
     }
 }

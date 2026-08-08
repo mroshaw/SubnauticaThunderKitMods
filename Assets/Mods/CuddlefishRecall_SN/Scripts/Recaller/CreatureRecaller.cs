@@ -19,12 +19,42 @@ namespace DaftAppleGames.CuddlefishRecall_SN
             CuddlefishRecallPlugin.Log.LogDebug($"Found {_allCreatureRecallListeners.Length} CreatureRecallListeners.");
         }
 
+        private bool ReportRecallProgress()
+        {
+            bool recallInProgress = false;
+
+            foreach (CreatureRecallListener listener in _allCreatureRecallListeners)
+            {
+                if (!listener.IsRecallInProgress)
+                {
+                    continue;
+                }
+
+                if (!recallInProgress)
+                {
+                    ErrorMessage.AddMessage("Recall in progress...");
+                    recallInProgress = true;
+                }
+
+                ErrorMessage.AddMessage(
+                    $"Cuddlefish {listener.RecallCreatureIndex}: {listener.DistanceToPlayer:0.0}m away.");
+            }
+
+            return recallInProgress;
+        }
+
         /// <summary>
         /// Public method to recall all Listeners to current transform location
         /// </summary>
         internal void RecallAllCreatures()
         {
             RefreshCreatureRecallListeners();
+
+            if (ReportRecallProgress())
+            {
+                return;
+            }
+
             CuddlefishRecallPlugin.Log.LogDebug($"Recalling all RecallCreatureListeners ({_allCreatureRecallListeners.Length})");
             float buffer = 1.0f;
 

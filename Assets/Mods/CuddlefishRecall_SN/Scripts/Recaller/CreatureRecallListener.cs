@@ -6,50 +6,25 @@ namespace DaftAppleGames.CuddlefishRecall_SN
 {
     internal class CreatureRecallListener : MonoBehaviour
     {
-        // Determines how close to the player before considered "arrived"
-        private const float ArrivalTolerance = 1.5f;
-        private SwimBehaviour _swimBehaviour;
-        private SwimRandom _swimRandom;
+        private const float TeleportClearanceRadius = 0.75f;
 
-        private int _creatureIndex;
-        
-        // Parameters for the "Swim To" function
-        private bool _isBeingRecalled;
+        private CreatureRecallAction creatureRecallAction;
+        private Rigidbody rigidbodyComponent;
+
+        internal bool IsRecallInProgress => creatureRecallAction.IsRecalling;
+
+        internal int RecallCreatureIndex => creatureRecallAction.CreatureIndex;
+
+        internal float DistanceToPlayer => creatureRecallAction.DistanceToPlayer;
 
         /// <summary>
         /// Initialise the component
         /// </summary>
-        private void Start()
+        private void Awake()
         {
-            Log.LogDebug("Finding SwimBehaviour...");
-            _swimBehaviour = GetComponent<SwimBehaviour>();
-            _swimRandom = GetComponent<SwimRandom>();
-        }
-
-        /// <summary>
-        /// Used to call the SwimTo behaviour, if enabled
-        /// </summary>
-        private void Update()
-        {
-            if (!_isBeingRecalled)
-            {
-                return;
-            }
-
-            // Check to see if we've arrived
-            if (Vector3.Distance(transform.position, Player.main.transform.position) < ArrivalTolerance)
-            {
-                ErrorMessage.AddMessage($"Cuddlefish {_creatureIndex} has arrived!");
-                _swimRandom.enabled = true;
-                _isBeingRecalled = false;
-                return;
-            }
-
-            // Swim to target
-            if (ConfigFile.RecallMoveMethod == RecallMoveMethod.SwimTo)
-            {
-                _swimBehaviour.SwimTo(Player.main.transform.position, ConfigFile.RecallSwimVelocity);
-            }
+            Log.LogDebug("Finding CreatureRecallAction...");
+            creatureRecallAction = GetComponent<CreatureRecallAction>();
+            rigidbodyComponent = GetComponent<Rigidbody>();
         }
 
         /// <summary>
@@ -57,49 +32,62 @@ namespace DaftAppleGames.CuddlefishRecall_SN
         /// </summary>
         internal void RecallCreature(float buffer, int creatureIndex)
         {
-            // Already being recalled
-            if (_isBeingRecalled)
-            {
-                return;
-            }
-
-            _creatureIndex = creatureIndex;
-            
             // Teleport method
             if (ConfigFile.RecallMoveMethod == RecallMoveMethod.Teleport)
             {
-                Vector3 targetPosition = Player.main.transform.position + (Vector3.forward * buffer);
+                Vector3 targetPosition = Player.main.transform.position + (Camera.main.transform.forward * (buffer * 2));
                 Log.LogDebug($"Teleporting GameObject to: {targetPosition}");
 
-                if (Player.main.GetBiomeString().StartsWith("precursor", StringComparison.OrdinalIgnoreCase))
+                if (IsTeleportDestinationBlocked(targetPosition))
                 {
-                    ErrorMessage.AddMessage($"Cuddlefish {_creatureIndex} cannot be recalled to this Precursor location!");
+                    ErrorMessage.AddMessage($"Cuddlefish {creatureIndex} is blocked and cannot be recalled to this location!");
                     return;
                 }
 
-                // Check if there are any obstacles blocking the cuddle fish
-                int num = UWE.Utils.OverlapSphereIntoSharedBuffer(transform.position, 5f, -1, QueryTriggerInteraction.UseGlobal);
-                for (int i = 0; i < num; i++)
-                {
-                    if (UWE.Utils.sharedColliderBuffer[i].GetComponentInParent<SubRoot>())
-                    {
-                        ErrorMessage.AddMessage($"Cuddlefish {_creatureIndex} is blocked and cannot be recalled to this location!");
-                        return;
-                    }
-                }
-
-                gameObject.transform.position = targetPosition;
+                transform.position = targetPosition;
+                rigidbodyComponent.velocity = Vector3.zero;
+                rigidbodyComponent.angularVelocity = Vector3.zero;
+                creatureRecallAction.CompleteTeleportRecall(creatureIndex);
                 Log.LogDebug("GameObject teleported.");
             }
 
             // Swim to method
             if (ConfigFile.RecallMoveMethod == RecallMoveMethod.SwimTo)
             {
-                _isBeingRecalled = true;
                 Log.LogDebug($"Swimming to Player position");
                 Log.LogDebug("Swimming to player in progress...");
-                _swimRandom.enabled = false;
+                creatureRecallAction.BeginRecall(creatureIndex);
             }
+        }
+
+        private bool IsTeleportDestinationBlocked(Vector3 targetPosition)
+        {
+            int numColliders = UWE.Utils.OverlapSphereIntoSharedBuffer(
+                targetPosition,
+                TeleportClearanceRadius,
+                -1,
+                QueryTriggerInteraction.Ignore);
+
+            foreach (Collider obstacleCollider in UWE.Utils.sharedColliderBuffer)
+            {
+                if (numColliders <= 0)
+                {
+                    break;
+                }
+
+                numColliders--;
+
+                if (!obstacleCollider ||
+                    obstacleCollider.transform.IsChildOf(transform) ||
+                    obstacleCollider.transform.IsChildOf(Player.main.transform))
+                {
+                    continue;
+                }
+
+                return true;
+            }
+
+            return false;
         }
     }
 }

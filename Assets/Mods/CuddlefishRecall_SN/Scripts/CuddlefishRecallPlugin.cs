@@ -37,7 +37,7 @@ namespace DaftAppleGames.CuddlefishRecall_SN
 
         // New input system
         public static GameInput.Button _recallButton = EnumHandler.AddEntry<GameInput.Button>("RecallAllCuddlefish")
-            .CreateInput("Recall All Cuddlefish")
+            .CreateInput("Recall All Cuddlefish", tooltip: "Use <ctrl> with this key binding to recall all Cuddlefish. Use <ctrl> + <shift> with this key binding to cancel all active recalls.")
             .WithKeyboardBinding(GameInputHandler.Paths.Keyboard.R)
             .WithCategory("Cuddlefish Recall");
 

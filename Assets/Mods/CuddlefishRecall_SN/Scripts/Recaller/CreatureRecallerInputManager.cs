@@ -32,20 +32,28 @@ namespace DaftAppleGames.CuddlefishRecall_SN
             bool controlPressedThisFrame = keyboard.leftCtrlKey.wasPressedThisFrame ||
                                            keyboard.rightCtrlKey.wasPressedThisFrame;
 
-            if (GameInput.GetButtonDown(_recallButton) &&
-                keyboard.ctrlKey.isPressed &&
-                !controlPressedThisFrame)
+            bool recallButtonPressed = GameInput.GetButtonDown(_recallButton);
+            if (!recallButtonPressed || !keyboard.ctrlKey.isPressed || controlPressedThisFrame)
             {
-                if (!Player.main.IsUnderwaterForSwimming())
-                {
-                    ErrorMessage.AddMessage("Cuddlefish recall is only available while underwater.");
-                    return;
-                }
-
-                ModDebugLog.LogDebug("Recall keypress detected...");
-                _creatureRecaller.RecallAllCreatures();
-                ModDebugLog.LogDebug("All creatures recalled!");
+                return;
             }
+
+            if (keyboard.shiftKey.isPressed)
+            {
+                ModDebugLog.LogDebug("Cancel recall keypress detected...");
+                _creatureRecaller.CancelAllActiveRecalls();
+                return;
+            }
+
+            if (!Player.main.IsUnderwaterForSwimming())
+            {
+                ErrorMessage.AddMessage("Cuddlefish recall is only available while underwater.");
+                return;
+            }
+
+            ModDebugLog.LogDebug("Recall keypress detected...");
+            _creatureRecaller.RecallAllCreatures();
+            ModDebugLog.LogDebug("All creatures recalled!");
         }
     }
 }

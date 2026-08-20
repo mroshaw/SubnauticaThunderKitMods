@@ -76,5 +76,30 @@ namespace DaftAppleGames.CuddlefishRecall_SN
                 ErrorMessage.AddMessage($"Attempting to recall {numCreatures} Cuddlefish...");
             }
         }
+
+        /// <summary>
+        /// Cancels every active Cuddlefish recall.
+        /// </summary>
+        internal void CancelAllActiveRecalls()
+        {
+            RefreshCreatureRecallListeners();
+
+            int cancelledRecalls = 0;
+            foreach (CreatureRecallListener listener in _allCreatureRecallListeners)
+            {
+                if (!listener.IsRecallInProgress)
+                {
+                    continue;
+                }
+
+                listener.CancelRecall();
+                cancelledRecalls++;
+            }
+
+            if (cancelledRecalls > 0)
+            {
+                ErrorMessage.AddMessage($"Cancelled {cancelledRecalls} Cuddlefish recall(s).");
+            }
+        }
     }
 }

@@ -59,6 +59,14 @@ namespace DaftAppleGames.CuddlefishRecall_SN
             }
         }
 
+        /// <summary>
+        /// Cancels this creature's active recall.
+        /// </summary>
+        internal void CancelRecall()
+        {
+            creatureRecallAction.CancelRecall();
+        }
+
         private bool IsTeleportDestinationBlocked(Vector3 targetPosition)
         {
             int numColliders = UWE.Utils.OverlapSphereIntoSharedBuffer(

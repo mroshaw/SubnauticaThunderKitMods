@@ -6,9 +6,9 @@ namespace DaftAppleGames.MoreAquariums
     /// <summary>
     /// Describes a Double Aquarium prefab
     /// </summary>
-    public class DoubleAquariumPrefab : InteroirAquariumPrefab
+    public class DoubleAquariumPrefab : AquariumPrefab
     {
-        public static PrefabInfo PrefabInfo;
+        public static PrefabInfo PrefabInfo { get; private set; }
         
         /// Properties of the aquarium
         private const string ClassId = "DoubleAquarium";

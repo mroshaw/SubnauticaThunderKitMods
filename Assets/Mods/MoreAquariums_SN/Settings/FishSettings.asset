@@ -36,5 +36,5 @@ MonoBehaviour:
   steerFromBounds: 1
   boundaryMargin: 0.05
   boundarySteerStrength: 0.5
-  culling: 0
+  culling: 1
   cullingDistanceFromPlayer: 30

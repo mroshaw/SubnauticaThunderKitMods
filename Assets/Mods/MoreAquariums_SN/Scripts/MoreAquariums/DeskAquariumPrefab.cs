@@ -9,10 +9,10 @@ namespace DaftAppleGames.MoreAquariums
     /// <summary>
     /// Describes a Desk Aquarium prefab
     /// </summary>
-    public class DeskAquariumPrefab : InteroirAquariumPrefab
+    public class DeskAquariumPrefab : AquariumPrefab
     {
-        public static PrefabInfo PrefabInfo;
-        
+        public static PrefabInfo PrefabInfo { get; private set; }
+
         /// Properties of the aquarium
         private const string ClassId = "DeskAquarium";
         private const string DisplayName = "Desk Aquarium";
@@ -33,7 +33,7 @@ namespace DaftAppleGames.MoreAquariums
         /// </summary>
         private static void ResizeBubbleParticles(GameObject newPrefabGo)
         {
-            ModDebugLog.LogError("Running PostConfigAction for DeskAquarium...");
+            ModDebugLog.LogDebug("Running PostConfigAction for DeskAquarium...");
             Transform mainBubblesTransform = newPrefabGo.transform.Find("Bubbles/xBubbles");
             if (!mainBubblesTransform)
             {

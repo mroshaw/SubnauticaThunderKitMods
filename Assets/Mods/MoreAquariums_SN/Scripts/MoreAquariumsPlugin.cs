@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Reflection;
 using BepInEx;
 using DaftAppleGames.ModTools;
@@ -13,14 +13,9 @@ namespace DaftAppleGames.MoreAquariums
     {
         private const string MyGuid = "com.mroshaw.biggeraquariumssn";
         private const string PluginName = "More Aquariums SN";
-        private const string VersionString = "1.3.0";
+        private const string VersionString = "1.5.0";
+        
         private const string AssetBundleName = "biggeraquariumsassetbundle";
-
-        // Public PetSaver as a persistent list of active pets
-        internal static AquariumSaver AquariumSaver;
-
-        // SaveData instance for managing loading of Pet config data
-        internal static HashSet<AquariumSaver.AquariumDetails> LoadedAquariumDetailsHashSet;
         
         // Bubble audio asset for use by custom emitters
         private const string BubblesAudioClipName = "AquariumBubblesLoop2_Quiet";
@@ -31,21 +26,20 @@ namespace DaftAppleGames.MoreAquariums
         private static readonly Harmony Harmony = new Harmony(MyGuid);
 #if !UNITY_EDITOR
         internal static readonly ModConfigFile ConfigFile = OptionsPanelHandler.RegisterModOptions<ModConfigFile>();
+        internal static ModLog ModDebugLog;
 #else
         internal static readonly ModConfigFile ConfigFile;
+        internal static ModLog ModDebugLog = new ModLog(null, true);
 #endif
-        internal static ModLog ModDebugLog;
-
+        
         private void Awake()
         {
             // Set up logging and asset bundle
-#if UNITY_EDITOR
-            ModDebugLog =  new ModLog(Logger, true);
-            return;
-#else
+
             ModDebugLog =  new ModLog(Logger, ConfigFile.DetailedLogging);
             ModAssetUtils = new ModAssetBundleUtils(AssetBundleName, Assembly.GetExecutingAssembly(),true, ModDebugLog);
-#endif
+            BaseAquariumPersistence.Initialize();
+            
             // Register custom sounds
             RegisterCustomSounds();
 
@@ -69,6 +63,13 @@ namespace DaftAppleGames.MoreAquariums
             ModDebugLog.LogDebug("Registering FMOD asset...");
             ModAudioUtils.RegisterSound(BubblesAudioClipName, AudioUtils.BusPaths.SFX, ModAssetUtils, ModDebugLog, 0.1f, 8.0f, 0, true);
             BubblesFMODAsset = AudioUtils.GetFmodAsset(BubblesAudioClipName);
+            if (!BubblesFMODAsset)
+            {
+                ModDebugLog.LogError(
+                    $"Could not retrieve registered FMOD asset '{BubblesAudioClipName}'.");
+                return;
+            }
+
             ModDebugLog.LogDebug($"Registered FMOD Asset: {BubblesFMODAsset.name}");
         }
     }

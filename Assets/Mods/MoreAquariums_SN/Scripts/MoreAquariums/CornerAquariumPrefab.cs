@@ -3,9 +3,9 @@ using Nautilus.Crafting;
 
 namespace DaftAppleGames.MoreAquariums
 {
-    public class CornerAquariumPrefab : InteroirAquariumPrefab
+    public class CornerAquariumPrefab : AquariumPrefab
     {
-        public static PrefabInfo PrefabInfo;
+        public static PrefabInfo PrefabInfo { get; private set; }
         
         private const string ClassId = "CornerAquarium";
         private const string DisplayName = "Corner Aquarium";

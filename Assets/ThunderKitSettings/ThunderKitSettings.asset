@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9057f7f601990a4883b2cb295c4f43e, type: 3}
   m_Name: ThunderKitSettings
   m_EditorClassIdentifier: 
-  FirstLoad: 0
+  FirstLoad: 1
   ShowOnStartup: 1
   GameExecutable: Subnautica.exe
   GamePath: E:\Games\Steam\steamapps\common\Subnautica
@@ -28,7 +28,7 @@ MonoBehaviour:
   CacheSize: 0.51
   MarkdownOpenMode: 1
   SelectedPipeline: {fileID: 11400000, guid: 89793f049bf8dad4cb972b24037457db, type: 2}
-  SelectedManifest: {fileID: 11400000, guid: 613d843feae198348800e55bdbc2c415, type: 2}
+  SelectedManifest: {fileID: 11400000, guid: 87fefca873535b841bb06e2482f7d0a4, type: 2}
   QuickAccessPipelines:
   - {fileID: 11400000, guid: 89eed8e7c6029014489a91df2b3e3f65, type: 2}
   - {fileID: 11400000, guid: 89793f049bf8dad4cb972b24037457db, type: 2}

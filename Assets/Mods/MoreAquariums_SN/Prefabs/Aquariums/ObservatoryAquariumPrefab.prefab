@@ -9775,7 +9775,7 @@ MonoBehaviour:
   newGlassGameObjects:
   - {fileID: 1742857071379672015}
   - {fileID: 5738616191315581861}
-  - {fileID: 0}
+  - {fileID: 4776425626572387257}
   interactionObject: {fileID: 8903971316336941536}
 --- !u!1 &7686413612265715574
 GameObject:

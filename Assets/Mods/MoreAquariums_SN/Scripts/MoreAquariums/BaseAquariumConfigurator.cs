@@ -110,7 +110,13 @@ namespace DaftAppleGames.MoreAquariums
                 basePieceGameObject, interactionMarker, interactionBounds);
             runtimeModel = ConfigureModel(
                 basePieceGameObject, newAquariumModel.transform);
-            ConfigurePermanentWaterVisual(basePieceGameObject);
+            
+            // Only add the Flood Water components if enabled in Mod Config
+            if (ConfigFile.UseObservatoryFloodWater)
+            {
+                ConfigurePermanentWaterVisual(basePieceGameObject);
+            }
+
             instantiatedObjects =
                 new Dictionary<GameObject, GameObject>();
             instantiatedObjects.Add(newAquariumModel, runtimeModel);
@@ -165,7 +171,7 @@ namespace DaftAppleGames.MoreAquariums
 
             if (basePieceGameObject && runtimeModel)
             {
-                ConfigureSkyAppliers(basePieceGameObject, instantiatedObjects);
+                ConfigureBaseSkyAppliers(basePieceGameObject, instantiatedObjects);
             }
 
             Destroy(configurationInstance);
@@ -181,6 +187,14 @@ namespace DaftAppleGames.MoreAquariums
                 basePieceGameObject.transform.Find(FloodVisualObjectName);
             Renderer[] existingRenderers =
                 basePieceGameObject.GetComponentsInChildren<Renderer>(true);
+
+            GameObject newModel = Instantiate(newModelMarker.gameObject,
+                basePieceGameObject.transform, false);
+            newModel.name = newModelMarker.name;
+            CopyLocalTransform(newModelMarker, newModel.transform);
+            ApplyNativeObservatoryMaterials(existingRenderers, newModel);
+            RemoveDeferredMaterialApplicators(newModel);
+
             foreach (Renderer existingRenderer in existingRenderers)
             {
                 if (floodVisualTransform &&
@@ -192,11 +206,108 @@ namespace DaftAppleGames.MoreAquariums
                 existingRenderer.enabled = false;
             }
 
-            GameObject newModel = Instantiate(newModelMarker.gameObject,
-                basePieceGameObject.transform, false);
-            newModel.name = newModelMarker.name;
-            CopyLocalTransform(newModelMarker, newModel.transform);
             return newModel;
+        }
+
+        private static void ApplyNativeObservatoryMaterials(
+            Renderer[] observatoryRenderers, GameObject newModel)
+        {
+            Dictionary<string, Material> nativeMaterials =
+                new Dictionary<string, Material>();
+            foreach (Renderer observatoryRenderer in observatoryRenderers)
+            {
+                Material[] materials = observatoryRenderer.sharedMaterials;
+                foreach (Material material in materials)
+                {
+                    if (!material)
+                    {
+                        continue;
+                    }
+
+                    string materialName = NormalizeMaterialName(material.name);
+                    if (!nativeMaterials.ContainsKey(materialName))
+                    {
+                        nativeMaterials.Add(materialName, material);
+                    }
+                }
+            }
+
+            int replacedMaterialCount = 0;
+            Renderer[] newModelRenderers =
+                newModel.GetComponentsInChildren<Renderer>(true);
+            foreach (Renderer newModelRenderer in newModelRenderers)
+            {
+                Material[] materials = newModelRenderer.sharedMaterials;
+                bool materialsChanged = false;
+                for (int materialIndex = 0;
+                     materialIndex < materials.Length;
+                     materialIndex++)
+                {
+                    Material currentMaterial = materials[materialIndex];
+                    if (!currentMaterial)
+                    {
+                        continue;
+                    }
+
+                    string materialName =
+                        NormalizeMaterialName(currentMaterial.name);
+                    if (!nativeMaterials.TryGetValue(
+                            materialName, out Material nativeMaterial))
+                    {
+                        continue;
+                    }
+
+                    materials[materialIndex] = nativeMaterial;
+                    materialsChanged = true;
+                    replacedMaterialCount++;
+                }
+
+                if (materialsChanged)
+                {
+                    newModelRenderer.sharedMaterials = materials;
+                }
+            }
+
+            ModDebugLog.LogInfo(
+                $"Applied {replacedMaterialCount} native Observatory material " +
+                $"bindings to the custom model.");
+        }
+
+        private static void RemoveDeferredMaterialApplicators(GameObject newModel)
+        {
+            ApplyAquariumMaterial[] materialApplicators =
+                newModel.GetComponentsInChildren<ApplyAquariumMaterial>(true);
+            foreach (ApplyAquariumMaterial materialApplicator in materialApplicators)
+            {
+                materialApplicator.enabled = false;
+                Destroy(materialApplicator);
+            }
+
+            ModDebugLog.LogDebug(
+                $"Removed {materialApplicators.Length} deferred material applicators " +
+                $"from the custom Observatory model.");
+        }
+
+        private static string NormalizeMaterialName(string materialName)
+        {
+            const string InstanceSuffix = " (Instance)";
+            if (materialName.EndsWith(InstanceSuffix))
+            {
+                materialName = materialName.Substring(
+                    0, materialName.Length - InstanceSuffix.Length);
+            }
+
+            int suffixSeparatorIndex = materialName.LastIndexOf('.');
+            int suffixLength = materialName.Length - suffixSeparatorIndex - 1;
+            if (suffixSeparatorIndex >= 0 && suffixLength == 3 &&
+                char.IsDigit(materialName[suffixSeparatorIndex + 1]) &&
+                char.IsDigit(materialName[suffixSeparatorIndex + 2]) &&
+                char.IsDigit(materialName[suffixSeparatorIndex + 3]))
+            {
+                materialName = materialName.Substring(0, suffixSeparatorIndex);
+            }
+
+            return materialName;
         }
 
         private static void ConfigurePermanentWaterVisual(
@@ -242,6 +353,7 @@ namespace DaftAppleGames.MoreAquariums
 
             StorageContainer storageContainer =
                 storageGameObject.AddComponent<StorageContainer>();
+            storageContainer.onUse = new StorageContainer.UseEvent();
             storageContainer.prefabRoot = basePieceGameObject;
             storageContainer.width = storageWidth;
             storageContainer.height = storageHeight;

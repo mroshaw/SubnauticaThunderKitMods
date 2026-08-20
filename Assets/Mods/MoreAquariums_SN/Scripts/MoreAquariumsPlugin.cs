@@ -13,7 +13,7 @@ namespace DaftAppleGames.MoreAquariums
     {
         private const string MyGuid = "com.mroshaw.biggeraquariumssn";
         private const string PluginName = "More Aquariums SN";
-        private const string VersionString = "1.5.0";
+        private const string VersionString = "1.6.0";
         
         private const string AssetBundleName = "biggeraquariumsassetbundle";
         

@@ -1,4 +1,3 @@
-using System.Collections;
 using HarmonyLib;
 using UnityEngine;
 using static DaftAppleGames.MoreAquariums.MoreAquariumsPlugin;
@@ -36,12 +35,6 @@ namespace DaftAppleGames.MoreAquariums.Patches
                 BaseAquariumPersistence.ContainsLocation(__result.transform.position);
             if (!newAquariumPlacement && !persistedAquarium)
             {
-                if (recipe == TechType.BaseObservatory)
-                {
-                    UWE.CoroutineHost.StartCoroutine(
-                        LogVanillaObservatorySkyAsync(__result.gameObject));
-                }
-
                 return;
             }
 
@@ -57,19 +50,6 @@ namespace DaftAppleGames.MoreAquariums.Patches
                 $"{__result.recipe}.");
             ObservatoryAquariumPrefab.ConfigureCompletedBasePiece(
                 __result.gameObject);
-        }
-
-        private static IEnumerator LogVanillaObservatorySkyAsync(
-            GameObject observatoryGameObject)
-        {
-            yield return null;
-            yield return null;
-
-            if (observatoryGameObject)
-            {
-                AquariumConfigurator.LogBasePieceSkyDiagnostics(
-                    observatoryGameObject, "Vanilla Observatory");
-            }
         }
 
         /// <summary>
@@ -95,9 +75,6 @@ namespace DaftAppleGames.MoreAquariums.Patches
 
             reason = Language.main.Get("DeconstructNonEmptyStorageContainerError");
             __result = false;
-            ModDebugLog.LogDebug(
-                $"Prevented Observatory Aquarium deconstruction at " +
-                $"{__instance.transform.position} because it contains fish.");
             return false;
         }
 

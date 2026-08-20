@@ -624,7 +624,7 @@ namespace DaftAppleGames.MoreAquariums
                 {
                     glassSkyApplier = skyApplier;
                 }
-                else
+                else if (skyApplier.anchorSky == Skies.Auto)
                 {
                     nonGlassSkyApplier = skyApplier;
                 }
@@ -664,103 +664,93 @@ namespace DaftAppleGames.MoreAquariums
             glassSkyApplier.renderers = ToRendererArray(glassRenderers);
             nonGlassSkyApplier.renderers = nonGlassRenderers.ToArray();
 
-            LogSkyApplierDiagnostics("Glass before refresh", glassSkyApplier,
-                aquariumGameObject.transform);
-            LogSkyApplierDiagnostics("Non-glass before refresh", nonGlassSkyApplier,
-                aquariumGameObject.transform);
-
             // Apply the current sky to renderers added after SkyApplier.Start.
             glassSkyApplier.DebugRefreshSky();
             nonGlassSkyApplier.DebugRefreshSky();
-
-            LogSkyApplierDiagnostics("Glass after refresh", glassSkyApplier,
-                aquariumGameObject.transform);
-            LogSkyApplierDiagnostics("Non-glass after refresh", nonGlassSkyApplier,
-                aquariumGameObject.transform);
 
             ModDebugLog.LogDebug(
                 $"Configured {nonGlassSkyApplier.renderers.Length} non-glass and " +
                 $"{glassSkyApplier.renderers.Length} glass SkyApplier renderers.");
         }
 
-        private static void LogSkyApplierDiagnostics(string label,
-            SkyApplier skyApplier, Transform aquariumRoot)
+        /// <summary>
+        /// Rebuilds the three renderer collections used by an Observatory base piece.
+        /// </summary>
+        protected void ConfigureBaseSkyAppliers(GameObject basePieceGameObject,
+            Dictionary<GameObject, GameObject> instantiatedObjects)
         {
-            string environmentSkyName = skyApplier.InspectorEnvironmentSky
-                ? skyApplier.InspectorEnvironmentSky.name
-                : "null";
-            string applySkyName = skyApplier.InspectorApplySky
-                ? skyApplier.InspectorApplySky.name
-                : "null";
-            ModDebugLog.LogInfo(
-                $"SkyApplier diagnostic [{label}]: object='{skyApplier.name}', " +
-                $"anchor={skyApplier.anchorSky}, enabled={skyApplier.enabled}, " +
-                $"dynamic={skyApplier.dynamic}, environmentSky='{environmentSkyName}', " +
-                $"applySky='{applySkyName}', renderers={skyApplier.renderers.Length}.");
-
-            foreach (Renderer renderer in skyApplier.renderers)
+            ModDebugLog.LogDebug("Configuring Observatory SkyAppliers...");
+            SkyApplier exteriorSkyApplier = null;
+            SkyApplier glassSkyApplier = null;
+            SkyApplier interiorSkyApplier = null;
+            SkyApplier[] rootSkyAppliers =
+                basePieceGameObject.GetComponents<SkyApplier>();
+            foreach (SkyApplier skyApplier in rootSkyAppliers)
             {
-                if (!renderer)
+                switch (skyApplier.anchorSky)
                 {
-                    ModDebugLog.LogInfo(
-                        $"SkyApplier diagnostic [{label}]: null renderer entry.");
-                    continue;
-                }
-
-                string rendererPath = GetRelativePath(
-                    aquariumRoot, renderer.transform);
-                Material[] materials = renderer.sharedMaterials;
-                ModDebugLog.LogInfo(
-                    $"SkyApplier diagnostic [{label}]: renderer='{rendererPath}', " +
-                    $"type={renderer.GetType().Name}, enabled={renderer.enabled}, " +
-                    $"active={renderer.gameObject.activeInHierarchy}, " +
-                    $"hasPropertyBlock={renderer.HasPropertyBlock()}, " +
-                    $"materials={materials.Length}.");
-
-                int materialIndex = 0;
-                foreach (Material material in materials)
-                {
-                    string materialName = material ? material.name : "null";
-                    string shaderName = material && material.shader
-                        ? material.shader.name
-                        : "null";
-                    string keywords = material
-                        ? string.Join(",", material.shaderKeywords)
-                        : string.Empty;
-                    ModDebugLog.LogInfo(
-                        $"SkyApplier diagnostic [{label}]: renderer='{rendererPath}', " +
-                        $"material[{materialIndex}]='{materialName}', shader='{shaderName}', " +
-                        $"keywords='{keywords}'.");
-                    materialIndex++;
+                    case Skies.Auto:
+                        exteriorSkyApplier = skyApplier;
+                        break;
+                    case Skies.BaseGlass:
+                        glassSkyApplier = skyApplier;
+                        break;
+                    case Skies.BaseInterior:
+                        interiorSkyApplier = skyApplier;
+                        break;
                 }
             }
-        }
 
-        /// <summary>
-        /// Logs the lighting configuration of every SkyApplier below a generated base piece.
-        /// </summary>
-        internal static void LogBasePieceSkyDiagnostics(GameObject basePieceGameObject,
-            string label)
-        {
-            if (!basePieceGameObject)
+            if (!exteriorSkyApplier || !glassSkyApplier || !interiorSkyApplier)
             {
-                ModDebugLog.LogInfo(
-                    $"SkyApplier diagnostic [{label}]: base piece is null.");
+                ModDebugLog.LogError(
+                    "Could not find the Observatory Auto, BaseGlass, and " +
+                    "BaseInterior SkyAppliers on the generated base-piece root.");
                 return;
             }
 
-            SkyApplier[] skyAppliers =
-                basePieceGameObject.GetComponentsInChildren<SkyApplier>(true);
-            ModDebugLog.LogInfo(
-                $"SkyApplier diagnostic [{label}]: basePiece='{basePieceGameObject.name}', " +
-                $"position={basePieceGameObject.transform.position}, " +
-                $"skyAppliers={skyAppliers.Length}.");
+            HashSet<Renderer> glassRenderers = new HashSet<Renderer>();
+            AddRenderers(glassRenderers, glassSkyApplier.renderers);
+            AddMappedRenderers(
+                glassRenderers, newGlassGameObjects, instantiatedObjects);
 
-            foreach (SkyApplier skyApplier in skyAppliers)
+            HashSet<Renderer> explicitNonGlassRenderers = new HashSet<Renderer>();
+            AddMappedRenderers(explicitNonGlassRenderers,
+                newNonGlassGameObjects, instantiatedObjects);
+            foreach (Renderer nonGlassRenderer in explicitNonGlassRenderers)
             {
-                LogSkyApplierDiagnostics(label, skyApplier,
-                    basePieceGameObject.transform);
+                glassRenderers.Remove(nonGlassRenderer);
             }
+
+            HashSet<Renderer> interiorRenderers = new HashSet<Renderer>();
+            AddRenderers(interiorRenderers, interiorSkyApplier.renderers);
+
+            List<Renderer> exteriorRenderers = new List<Renderer>();
+            Renderer[] allRenderers =
+                basePieceGameObject.GetComponentsInChildren<Renderer>(true);
+            foreach (Renderer renderer in allRenderers)
+            {
+                if (renderer &&
+                    !glassRenderers.Contains(renderer) &&
+                    !interiorRenderers.Contains(renderer))
+                {
+                    exteriorRenderers.Add(renderer);
+                }
+            }
+
+            exteriorSkyApplier.renderers = exteriorRenderers.ToArray();
+            glassSkyApplier.renderers = ToRendererArray(glassRenderers);
+            interiorSkyApplier.renderers = ToRendererArray(interiorRenderers);
+
+            exteriorSkyApplier.DebugRefreshSky();
+            glassSkyApplier.DebugRefreshSky();
+            interiorSkyApplier.DebugRefreshSky();
+
+            ModDebugLog.LogDebug(
+                $"Configured Observatory SkyAppliers with " +
+                $"{exteriorSkyApplier.renderers.Length} exterior, " +
+                $"{glassSkyApplier.renderers.Length} glass, and " +
+                $"{interiorSkyApplier.renderers.Length} interior renderers.");
         }
 
         /// <summary>

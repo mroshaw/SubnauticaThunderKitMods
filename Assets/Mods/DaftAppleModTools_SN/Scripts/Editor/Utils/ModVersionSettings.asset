@@ -18,7 +18,7 @@ MonoBehaviour:
     manifest: {fileID: 11400000, guid: 87fefca873535b841bb06e2482f7d0a4, type: 2}
     version:
       major: 1
-      minor: 5
+      minor: 6
       patch: 0
     nexusMods:
       fileGroupId: 2428891
@@ -26,7 +26,7 @@ MonoBehaviour:
       gameDomain: subnautica
       displayName: BiggerAquariums_SN
       description: Main mod file
-      fileCategory: Main
+      fileCategory: main
       archiveExistingVersion: 1
       updateModVersion: 1
       primaryModManagerDownload: 1

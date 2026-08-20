@@ -1,0 +1,34 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1c4294d3c9d84540a17e3c6c84554f7, type: 3}
+  m_Name: ModVersionSettings
+  m_EditorClassIdentifier: 
+  mods:
+  - name: More Aquariums SN
+    pluginScript: {fileID: 11500000, guid: fb5ed69f47c501b4fbb5ac7df2c07fc1, type: 3}
+    manifest: {fileID: 11400000, guid: 87fefca873535b841bb06e2482f7d0a4, type: 2}
+    version:
+      major: 1
+      minor: 5
+      patch: 0
+    nexusMods:
+      fileGroupId: 2428891
+      gameScopedModId: 2695
+      gameDomain: subnautica
+      displayName: BiggerAquariums_SN
+      description: Main mod file
+      fileCategory: Main
+      archiveExistingVersion: 1
+      updateModVersion: 1
+      primaryModManagerDownload: 1
+      allowModManagerDownload: 1
+      showRequirementsPopup: 1

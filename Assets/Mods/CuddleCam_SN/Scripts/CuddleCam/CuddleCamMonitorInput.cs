@@ -10,7 +10,7 @@ namespace DaftAppleGames.CuddleCam_SN
     internal class CuddleCamMonitorInput : uGUI_InputGroup, uGUI_IButtonReceiver, IPointerHoverHandler,
         IPointerClickHandler
     {
-        private const string HoverTextKey = "CuddleCamMonitor";
+        private const string HoverTextKey = "CuddleCam Monitor";
         private const float TerminationSqrDistance = 9f;
 
         [SerializeField] private CanvasGroup headingCanvasGroup;

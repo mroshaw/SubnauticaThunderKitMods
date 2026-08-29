@@ -16,7 +16,7 @@ MonoBehaviour:
   Author: Daft Apple Games
   Name: CuddleCam_SN
   Description: See through the eyes of your adoring Cuddlefish!
-  Version: 1.0.0
+  Version: 1.0.1
   Dependencies: []
 --- !u!114 &11400000
 MonoBehaviour:
@@ -57,6 +57,7 @@ MonoBehaviour:
     - {fileID: 6772009282351278985, guid: 4c91eb94eaf672f4b8a9a18fb2636908, type: 3}
     - {fileID: 2800000, guid: 68e3ea99ffdfe014d96c7a4b83614259, type: 3}
     - {fileID: 7587892888279479892, guid: 85a7af0741aca8047977782505485828, type: 3}
+    - {fileID: 2800000, guid: 264d095cb3925f649bbf5ee59a071d45, type: 3}
 --- !u!114 &8876472120765660631
 MonoBehaviour:
   m_ObjectHideFlags: 0

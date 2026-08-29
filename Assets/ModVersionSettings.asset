@@ -12,4 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1c4294d3c9d84540a17e3c6c84554f7, type: 3}
   m_Name: ModVersionSettings
   m_EditorClassIdentifier: 
-  mods: []
+  mods:
+  - name: CuddleCam_SN
+    pluginScript: {fileID: 11500000, guid: 473db868ddeea4a4c9cb1822f639949c, type: 3}
+    manifest: {fileID: 11400000, guid: 18c34aa92e989be41b953dd54b6b22ae, type: 2}
+    version:
+      major: 1
+      minor: 0
+      patch: 1
+    nexusMods:
+      fileGroupId: 7879512
+      gameScopedModId: 4147
+      gameDomain: subnautica
+      displayName: CuddleCam_SN
+      description: Main mod file
+      fileCategory: main
+      archiveExistingVersion: 1
+      updateModVersion: 1
+      primaryModManagerDownload: 1
+      allowModManagerDownload: 1
+      showRequirementsPopup: 1

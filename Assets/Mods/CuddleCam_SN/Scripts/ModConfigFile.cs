@@ -24,14 +24,6 @@ namespace DaftAppleGames.CuddleCam_SN
         public int FeedRefreshRate = 30;
 
         /// <summary>
-        /// Enable vanilla underwater waterscape rendering on CuddleCam feeds
-        /// </summary>
-        [Toggle(
-            "Underwater waterscape effects",
-            Tooltip = "Applies the game's underwater fog, scattering, colour attenuation, and caustics to CuddleCam feeds.")]
-        public bool EnableWaterscapeEffects = true;
-
-        /// <summary>
         /// Resolution used for CuddleCam feeds
         /// </summary>
         [Choice(
@@ -71,6 +63,15 @@ namespace DaftAppleGames.CuddleCam_SN
             DefaultValue = 30)]
         public int MonitorActivationDistance = 30;
 
+        /// <summary>
+        /// Enable vanilla underwater waterscape rendering on CuddleCam feeds
+        /// </summary>
+        [Toggle(
+            "Underwater effects",
+            Tooltip = "Applies the game's underwater fog, scattering, colour attenuation, and caustics to CuddleCam feeds.")]
+        public bool EnableWaterscapeEffects = true;
+
+        
         /// <summary>
         /// Enable detailed logging
         /// </summary>

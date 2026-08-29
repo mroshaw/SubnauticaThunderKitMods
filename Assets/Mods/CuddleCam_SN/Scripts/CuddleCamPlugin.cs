@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using BepInEx;
 using HarmonyLib;
 using Nautilus.Handlers;
@@ -12,7 +12,7 @@ namespace DaftAppleGames.CuddleCam_SN
     {
         private const string MyGuid = "com.mroshaw.cuddlecamsn";
         private const string PluginName = "CuddleCam SN";
-        private const string VersionString = "1.0.0";
+        private const string VersionString = "1.0.1";
 
         private const string AssetBundleName = "cuddlecamassetbundle";
         private const string ManagerPrefabName = "CuddleCamManager.prefab";

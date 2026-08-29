@@ -19,6 +19,11 @@ namespace DaftAppleGames.CuddleCam_SN
         [SerializeField] private GameObject signalLostDisplay;
         [SerializeField] private Renderer visibilityRenderer;
         [SerializeField] private GameObject monitorCanvas;
+
+        [Header("Custom Texture Settings")]
+        [SerializeField] private GameObject modelPlaceholder;
+
+        internal GameObject ModelPlaceholder => modelPlaceholder;
         
         private readonly Plane[] frustumPlanes = new Plane[6];
         private Constructable constructable;

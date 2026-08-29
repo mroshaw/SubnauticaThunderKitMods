@@ -22,19 +22,19 @@ namespace DaftAppleGames.Editor
         private static readonly string SnGameAssemblyPath =
             Path.Combine(SnGamePath, "Subnautica_Data\\Managed\\Assembly-CSharp.dll");
 
-        [MenuItem("Tools/Run DnSpy (SN)")]
+        [MenuItem("Tools/Shortcuts/Run DnSpy (SN)")]
         private static void RunDnsSpySn()
         {
             LaunchProcess("dnSpy.exe", DnSpyPath, SnGameAssemblyPath);
         }
 
-        [MenuItem("Tools/Open Subnautica Folder")]
+        [MenuItem("Tools/Shortcuts/Open Subnautica Folder")]
         private static void OpenSnFolder()
         {
             OpenExplorer(SnBepInExPluginPath);
         }
 
-        [MenuItem("Tools/Open SN Player Log")]
+        [MenuItem("Tools/Shortcuts/Open SN Player Log")]
         private static void OpenSnLog()
         {
             OpenLog(SnLogPath);

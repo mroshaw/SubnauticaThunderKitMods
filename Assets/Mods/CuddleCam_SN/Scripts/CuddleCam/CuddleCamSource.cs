@@ -21,6 +21,7 @@ namespace DaftAppleGames.CuddleCam_SN
         private CuteFish cuddlefish;
         private RenderTexture renderTexture;
         private WaterscapeVolumeOnCamera waterscapeEffect;
+        private bool waterscapeConfigured;
         private float nextRenderTime;
         private float renderPeriod;
         private int lastRenderedFrame = -1;
@@ -291,6 +292,12 @@ namespace DaftAppleGames.CuddleCam_SN
                     waterscapeEffect.enabled = false;
                 }
 
+                waterscapeConfigured = false;
+                return;
+            }
+
+            if (waterscapeConfigured && waterscapeEffect && waterscapeEffect.enabled)
+            {
                 return;
             }
 
@@ -323,6 +330,7 @@ namespace DaftAppleGames.CuddleCam_SN
 
             waterscapeEffect.settings = mainWaterscapeEffect.settings;
             waterscapeEffect.enabled = true;
+            waterscapeConfigured = true;
             ModDebugLog.LogDebug($"Configured waterscape rendering for '{gameObject.name}'.");
         }
 

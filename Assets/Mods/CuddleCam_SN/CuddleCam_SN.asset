@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-121899452589423327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f22bb7fd1d3b56a48bc52f8e407901d6, type: 3}
+  m_Name: ManifestIdentity
+  m_EditorClassIdentifier: 
+  StagingPaths: []
+  Author: Daft Apple Games
+  Name: CuddleCam_SN
+  Description: See through the eyes of your adoring Cuddlefish!
+  Version: 1.0.0
+  Dependencies: []
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e563561e08b6a3642a487177f5cfbb37, type: 3}
+  m_Name: CuddleCam_SN
+  m_EditorClassIdentifier: 
+  Data:
+  - {fileID: -121899452589423327}
+  - {fileID: 8876472120765660631}
+  - {fileID: 530457045679721738}
+  identity: {fileID: -121899452589423327}
+  QuickAccess: 1
+--- !u!114 &530457045679721738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17d1008b78cb6e846889b7778282fbef, type: 3}
+  m_Name: AssetBundleDefinitions
+  m_EditorClassIdentifier: 
+  StagingPaths:
+  - <ManifestPluginStaging>/Assets
+  assetBundles:
+  - assetBundleName: cuddlecamassetbundle
+    assets:
+    - {fileID: 2423902947260898540, guid: d5cb003b6ef6a9c47ac9dacc0b585af2, type: 3}
+    - {fileID: 6772009282351278985, guid: 4c91eb94eaf672f4b8a9a18fb2636908, type: 3}
+    - {fileID: 2800000, guid: 68e3ea99ffdfe014d96c7a4b83614259, type: 3}
+    - {fileID: 7587892888279479892, guid: 85a7af0741aca8047977782505485828, type: 3}
+--- !u!114 &8876472120765660631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b7e13dda513544419a89926bd12ad8a, type: 3}
+  m_Name: AssemblyDefinitions
+  m_EditorClassIdentifier: 
+  StagingPaths:
+  - <ManifestPluginStaging>
+  definitions:
+  - {fileID: 5897886265953266890, guid: 879852264cde6e34f82f50b7bb9c3964, type: 3}
+  - {fileID: 5897886265953266890, guid: a8101a7f788ddab4d835833e6de817ac, type: 3}

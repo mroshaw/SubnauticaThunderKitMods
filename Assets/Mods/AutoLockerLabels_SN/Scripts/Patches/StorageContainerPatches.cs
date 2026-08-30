@@ -17,13 +17,18 @@ namespace DaftAppleGames.AutoLockerLabels_SN.Patches
         private static void AwakePostFix(StorageContainer __instance)
         {
             // Reuse the check from the LockerLabel mod
-            if (!StorageContainerPatch.ShouldHandle(__instance))
+            if (StorageContainerPatch.ShouldHandle(__instance))
             {
+                __instance.gameObject.EnsureComponent<FreeStandingController>();
+                ModDebugLog.LogDebug($"LockerLabelModLabelController added to storage container on: '{__instance.name}'. ");
                 return;
             }
 
-            __instance.gameObject.EnsureComponent<AutoLockerLabelController>();
-            ModDebugLog.LogDebug($"AutoLockerLabelController added to storage container on: '{__instance.name}'. ");
+            if (CraftData.GetTechType(__instance.gameObject) == TechType.SmallLocker)
+            {
+                __instance.gameObject.EnsureComponent<WallController>();
+                ModDebugLog.LogDebug($"WallLockerLabelController added to storage container on: '{__instance.name}'. ");
+            }
         }
         
         [HarmonyPatch(nameof(StorageContainer.OnHandClick))]
@@ -33,24 +38,11 @@ namespace DaftAppleGames.AutoLockerLabels_SN.Patches
         private static bool OnHandClickPrefix(
             StorageContainer __instance)
         {
-            if (!StorageContainerPatch.ShouldHandle(__instance))
+            if (!AutoLabelInput.IsToggleModifierPressed() || !__instance.TryGetComponent<AutoLabelController>(out AutoLabelController controller))
             {
                 return true;
             }
-
-            if (!AutoLockerLabelInput.IsToggleModifierPressed())
-            {
-                return true;
-            }
-
-            AutoLockerLabelController controller =
-                __instance.GetComponent<AutoLockerLabelController>();
-
-            if (controller == null)
-            {
-                return true;
-            }
-
+            
             controller.ToggleAutomatic();
 
             string message = controller.IsAutomatic
@@ -71,9 +63,8 @@ namespace DaftAppleGames.AutoLockerLabels_SN.Patches
         private static void OnHandHoverPostfix(
             StorageContainer __instance)
         {
-            if (!StorageContainerPatch.ShouldHandle(__instance) || !AutoLockerLabelInput.IsToggleModifierPressed() ||
-                !__instance.TryGetComponent<AutoLockerLabelController>(
-                    out AutoLockerLabelController controller))
+            if (!AutoLabelInput.IsToggleModifierPressed() || !__instance.TryGetComponent<AutoLabelController>(
+                    out AutoLabelController controller))
             {
                 return;
             }

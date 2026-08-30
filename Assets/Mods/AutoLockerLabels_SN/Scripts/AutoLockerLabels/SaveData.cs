@@ -9,9 +9,9 @@ namespace DaftAppleGames.AutoLockerLabels_SN
     /// current save slot.
     /// </summary>
     [FileName("auto_locker_labels")]
-    internal sealed class AutoLockerLabelSaveData : SaveDataCache
+    internal sealed class SaveData : SaveDataCache
     {
-        private HashSet<string> AutomaticLockerIds { get; set; } =
+        public HashSet<string> AutomaticLockerIds { get; set; } =
             new HashSet<string>();
         
         internal bool IsAutomatic(string lockerId)

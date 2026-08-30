@@ -1,46 +1,39 @@
-﻿using LockerLabel.Components;
-using UnityEngine;
+﻿using UnityEngine;
 using static DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabelsPlugin;
 
 namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
 {
-    public class AutoLockerLabelController : MonoBehaviour
+    public abstract class AutoLabelController : MonoBehaviour
     {
-        // Reference to the LocalLabelController component from the LockerLabel mod
-        private LockerLabelController lockerLabelController;
+        protected StorageContainer StorageContainer;
+        private Constructable constructable;
         
-        private StorageContainer storageContainer;
         private bool isAutomatic;
-        private bool recalculationPending;
         private string lastGeneratedLabel;
         private string lockerId;
         
         internal bool IsAutomatic => isAutomatic;
         
-        private void Start()
+        internal virtual void Start()
         {
-            storageContainer = GetComponent<StorageContainer>();
+            StorageContainer = GetComponent<StorageContainer>();
+            constructable = GetComponent<Constructable>();
             
-            // get the LockerLabelController from the locker
-            lockerLabelController = GetComponent<LockerLabelController>();
-            enabled = lockerLabelController != null;
-            
-            if (storageContainer == null ||
-                storageContainer.container == null ||
-                lockerLabelController == null)
+            if (StorageContainer == null ||
+                StorageContainer.container == null)
             {
                 enabled = false;
                 return;
             }
             
-            // Use the LockerLabel generated Id for consistency
-            lockerId = lockerLabelController.ComputeSaveId();
+            // Get a unique Id for the locker for our save file
+            lockerId = GetLockerId();
             
             // Check to see if this is a locker we've saved
-            isAutomatic = SaveData.IsAutomatic(lockerId);
+            isAutomatic = AutoLockerLabelsPlugin.SaveData.IsAutomatic(lockerId);
 
-            storageContainer.container.onAddItem += OnItemAdded;
-            storageContainer.container.onRemoveItem += OnItemRemoved;
+            StorageContainer.container.onAddItem += OnItemAdded;
+            StorageContainer.container.onRemoveItem += OnItemRemoved;
             
             if (isAutomatic)
             {
@@ -50,15 +43,30 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
         
         private void OnDestroy()
         {
-            if (storageContainer == null ||
-                storageContainer.container == null)
+            // If the locker is deconstructed, remove it from the save file
+            if (constructable != null &&
+                constructable.constructedAmount <= 0f &&
+                !string.IsNullOrWhiteSpace(lockerId))
+            {
+                AutoLockerLabelsPlugin.SaveData.DisableAutomatic(lockerId);
+            }
+            
+            if (StorageContainer == null|| StorageContainer.container == null)
             {
                 return;
             }
 
-            // Cleanup listeners
-            storageContainer.container.onAddItem -= OnItemAdded;
-            storageContainer.container.onRemoveItem -= OnItemRemoved;
+            // Clean-up listeners
+            StorageContainer.container.onAddItem -= OnItemAdded;
+            StorageContainer.container.onRemoveItem -= OnItemRemoved;
+        }
+
+        protected abstract string GetLockerId();
+        protected abstract void SetLabel(string newLabel);
+
+        protected virtual bool IsValidLocker()
+        {
+            return StorageContainer != null && StorageContainer.container != null;
         }
         
         /// <summary>
@@ -107,7 +115,7 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
                 return;
             }
 
-            SaveData.EnableAutomatic(lockerId);
+            AutoLockerLabelsPlugin.SaveData.EnableAutomatic(lockerId);
 
             isAutomatic = true;
             ApplyAutomaticLabel();
@@ -123,7 +131,7 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
                 return;
             }
 
-            SaveData.DisableAutomatic(lockerId);
+            AutoLockerLabelsPlugin.SaveData.DisableAutomatic(lockerId);
 
             isAutomatic = false;
         }
@@ -134,15 +142,17 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
         /// </summary>
         private void ApplyAutomaticLabel()
         {
-            string newSeneratedLabel = "TEST";
+            string newGeneratedLabel = LabelGenerator.Generate(StorageContainer.container).ToUpper();
             
-            if (lastGeneratedLabel == newSeneratedLabel)
+            if (lastGeneratedLabel == newGeneratedLabel)
             {
                 // Label has not changed
                 return;
             }
-            lockerLabelController.SetCustomLabel(newSeneratedLabel);
+            SetLabel(newGeneratedLabel);
+            lastGeneratedLabel = newGeneratedLabel;
         }
+        
     }
 }
 

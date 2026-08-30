@@ -28,16 +28,19 @@ namespace DaftAppleGames.AutoLockerLabels_SN
 #endif
 
         // Save data
-        internal static AutoLockerLabelSaveData SaveData { get; private set; }
+        internal static SaveData SaveData { get; private set; }
         
         private void Awake()
         {
             // Initialise Logger
             ModDebugLog = new ModLog(Logger, ConfigFile.DetailedLogging);
             
+            // Initialise localisation
+            LanguageHandler.RegisterLocalizationFolder();
+            
             // Initialise save data
             SaveData =
-                SaveDataHandler.RegisterSaveDataCache<AutoLockerLabelSaveData>();
+                SaveDataHandler.RegisterSaveDataCache<SaveData>();
             
             // Patch in our MOD
             Harmony.PatchAll();

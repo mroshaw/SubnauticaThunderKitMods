@@ -13,7 +13,7 @@ namespace DaftAppleGames.AutoLockerLabels_SN.Patches
         [HarmonyPrefix]
         private static bool IsRenameModifierPressedPrefix(ref bool __result)
         {
-            if (!AutoLockerLabelInput.IsToggleModifierPressed())
+            if (!AutoLabelInput.IsToggleModifierPressed())
             {
                 return true;
             }

@@ -3,9 +3,10 @@
 namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
 {
     /// <summary>
-    /// Mimick LockerLabel, but adds an additional modifier
+    /// Mimic LockerLabel, but adds an additional modifier.
+    /// So shift + alt + click on locker
     /// </summary>
-    internal static class AutoLockerLabelInput
+    internal static class AutoLabelInput
     {
         internal static bool IsToggleModifierPressed()
         {

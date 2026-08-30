@@ -8,6 +8,9 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
         private const string MixedCategoryKey = "AutoLockerLabels_Category_Mixed";
         private const string MixedCategoryFallback = "Mixed";
 
+        private const string EmptyCategoryKey = "Empty_Category_Mixed";
+        private const string EmptyCategoryFallback = "Empty";
+        
         private static readonly AutomaticLabelCategory[] Categories =
         {
             new AutomaticLabelCategory(
@@ -214,7 +217,7 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
         {
             if (container == null || container.count == 0)
             {
-                return GetLocalizedLabel("AutoLockerLabels_Category_Empty", "Empty");
+                return GetLocalizedLabel(EmptyCategoryKey, EmptyCategoryFallback);
             }
 
             List<TechType> itemTypes = container.GetItemTypes();

@@ -8,7 +8,7 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
         private const string MixedCategoryKey = "AutoLockerLabels_Category_Mixed";
         private const string MixedCategoryFallback = "Mixed";
 
-        private const string EmptyCategoryKey = "Empty_Category_Mixed";
+        private const string EmptyCategoryKey = "AutoLockerLabels_Category_Empty";
         private const string EmptyCategoryFallback = "Empty";
         
         private static readonly AutomaticLabelCategory[] Categories =
@@ -38,6 +38,16 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
                     TechType.Kyanite
                 }),
             new AutomaticLabelCategory(
+                "AutoLockerLabels_Category_Batteries",
+                "Batteries",
+                new[]
+                {
+                    TechType.Battery,
+                    TechType.PrecursorIonBattery,
+                    TechType.PowerCell,
+                    TechType.PrecursorIonPowerCell
+                }),
+            new AutomaticLabelCategory(
                 "AutoLockerLabels_Category_Electronics",
                 "Electronics",
                 new[]
@@ -61,6 +71,7 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
                     TechType.Snack1,
                     TechType.Snack2,
                     TechType.Snack3,
+                    TechType.Coffee,
                     TechType.HoleFish,
                     TechType.Peeper,
                     TechType.Bladderfish,
@@ -116,7 +127,8 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
                 {
                     TechType.FilteredWater,
                     TechType.DisinfectedWater,
-                    TechType.BigFilteredWater
+                    TechType.BigFilteredWater,
+                    TechType.WaterFiltrationSuitWater
                 }),
             new AutomaticLabelCategory(
                 "AutoLockerLabels_Category_Tools",
@@ -135,6 +147,13 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
                     TechType.StasisRifle,
                     TechType.Terraformer,
                     TechType.PropulsionCannon,
+                    TechType.RepulsionCannon,
+                    TechType.Seaglide,
+                    TechType.Constructor,
+                    TechType.Beacon,
+                    TechType.Gravsphere,
+                    TechType.SmallStorage,
+                    TechType.CyclopsDecoy,
                     TechType.LEDLight,
                     TechType.Transfuser
                 }),
@@ -145,15 +164,24 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
                 {
                     TechType.Tank,
                     TechType.DoubleTank,
+                    TechType.PlasteelTank,
+                    TechType.HighCapacityTank,
                     TechType.Fins,
+                    TechType.UltraGlideFins,
+                    TechType.SwimChargeFins,
                     TechType.RadiationSuit,
+                    TechType.RadiationHelmet,
+                    TechType.RadiationGloves,
                     TechType.ReinforcedDiveSuit,
+                    TechType.ReinforcedGloves,
                     TechType.WaterFiltrationSuit,
                     TechType.FirstAidKit,
                     TechType.FireExtinguisher,
                     TechType.Rebreather,
                     TechType.Compass,
                     TechType.Thermometer,
+                    TechType.MapRoomHUDChip,
+                    TechType.MapRoomCamera,
                     TechType.Pipe,
                     TechType.PipeSurfaceFloater,
                     TechType.PrecursorKey_Purple,
@@ -182,7 +210,92 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
                     TechType.HatchingEnzymes
                 }),
             new AutomaticLabelCategory(
-                "AutoLockerLabels_Category_Raw Materials",
+                "AutoLockerLabels_Category_Vehicle_Upgrades",
+                "Vehicle Upgrades",
+                new[]
+                {
+                    TechType.HullReinforcementModule,
+                    TechType.PowerUpgradeModule,
+                    TechType.CyclopsHullModule1,
+                    TechType.CyclopsHullModule2,
+                    TechType.CyclopsHullModule3,
+                    TechType.CyclopsShieldModule,
+                    TechType.CyclopsSonarModule,
+                    TechType.CyclopsSeamothRepairModule,
+                    TechType.CyclopsDecoyModule,
+                    TechType.CyclopsFireSuppressionModule,
+                    TechType.CyclopsThermalReactorModule,
+                    TechType.SeamothReinforcementModule,
+                    TechType.VehiclePowerUpgradeModule,
+                    TechType.SeamothSolarCharge,
+                    TechType.VehicleStorageModule,
+                    TechType.SeamothElectricalDefense,
+                    TechType.VehicleArmorPlating,
+                    TechType.SeamothTorpedoModule,
+                    TechType.SeamothSonarModule,
+                    TechType.VehicleHullModule1,
+                    TechType.VehicleHullModule2,
+                    TechType.VehicleHullModule3,
+                    TechType.ExosuitJetUpgradeModule,
+                    TechType.ExosuitDrillArmModule,
+                    TechType.ExosuitThermalReactorModule,
+                    TechType.ExosuitClawArmModule,
+                    TechType.ExosuitPropulsionArmModule,
+                    TechType.ExosuitGrapplingArmModule,
+                    TechType.ExosuitTorpedoArmModule,
+                    TechType.GasTorpedo,
+                    TechType.WhirlpoolTorpedo
+                }),
+            new AutomaticLabelCategory(
+                "AutoLockerLabels_Category_Eggs",
+                "Eggs",
+                new[]
+                {
+                    TechType.SafeShallowsEgg,
+                    TechType.KelpForestEgg,
+                    TechType.GrassyPlateausEgg,
+                    TechType.GrandReefsEgg,
+                    TechType.MushroomForestEgg,
+                    TechType.KooshZoneEgg,
+                    TechType.TwistyBridgesEgg,
+                    TechType.LavaZoneEgg,
+                    TechType.StalkerEgg,
+                    TechType.ReefbackEgg,
+                    TechType.SpadefishEgg,
+                    TechType.RabbitrayEgg,
+                    TechType.MesmerEgg,
+                    TechType.JumperEgg,
+                    TechType.SandsharkEgg,
+                    TechType.JellyrayEgg,
+                    TechType.BonesharkEgg,
+                    TechType.CrabsnakeEgg,
+                    TechType.ShockerEgg,
+                    TechType.GasopodEgg,
+                    TechType.CrashEgg,
+                    TechType.CrabsquidEgg,
+                    TechType.CutefishEgg,
+                    TechType.LavaLizardEgg
+                }),
+            new AutomaticLabelCategory(
+                "AutoLockerLabels_Category_Collectibles",
+                "Collectibles",
+                new[]
+                {
+                    TechType.ArcadeGorgetoy,
+                    TechType.LabEquipment1,
+                    TechType.LabEquipment2,
+                    TechType.LabEquipment3,
+                    TechType.Cap1,
+                    TechType.Cap2,
+                    TechType.StarshipSouvenir,
+                    TechType.PosterAurora,
+                    TechType.PosterExoSuit1,
+                    TechType.PosterExoSuit2,
+                    TechType.PosterKitty,
+                    TechType.ToyCar
+                }),
+            new AutomaticLabelCategory(
+                "AutoLockerLabels_Category_Raw_Materials",
                 "Raw Materials",
                 new[]
                 {
@@ -201,15 +314,54 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
                     TechType.Salt,
                     TechType.Sulphur,
                     TechType.UraniniteCrystal,
+                    TechType.PrecursorIonCrystal,
                     TechType.ScrapMetal,
+                    TechType.DepletedReactorRod,
                     TechType.StalkerTooth,
                     TechType.GasPod,
+                    TechType.Floater,
                     TechType.BloodOil,
                     TechType.AcidMushroom,
                     TechType.WhiteMushroom,
                     TechType.JellyPlant,
                     TechType.CreepvinePiece,
-                    TechType.CreepvineSeedCluster
+                    TechType.CreepvineSeedCluster,
+                    TechType.CoralChunk,
+                    TechType.JeweledDiskPiece,
+                    TechType.KooshChunk,
+                    TechType.TreeMushroomPiece,
+                    TechType.PurpleBrainCoralPiece,
+                    TechType.SeaTreaderPoop,
+                    TechType.OrangeMushroomSpore,
+                    TechType.PurpleVasePlantSeed,
+                    TechType.AcidMushroomSpore,
+                    TechType.WhiteMushroomSpore,
+                    TechType.PinkMushroomSpore,
+                    TechType.PurpleRattleSpore,
+                    TechType.MelonSeed,
+                    TechType.SpikePlantSeed,
+                    TechType.BluePalmSeed,
+                    TechType.PurpleFanSeed,
+                    TechType.SmallFanSeed,
+                    TechType.PurpleTentacleSeed,
+                    TechType.JellyPlantSeed,
+                    TechType.GabeSFeatherSeed,
+                    TechType.SeaCrownSeed,
+                    TechType.MembrainTreeSeed,
+                    TechType.PinkFlowerSeed,
+                    TechType.FernPalmSeed,
+                    TechType.OrangePetalsPlantSeed,
+                    TechType.EyesPlantSeed,
+                    TechType.RedGreenTentacleSeed,
+                    TechType.PurpleStalkSeed,
+                    TechType.RedBasketPlantSeed,
+                    TechType.RedBushSeed,
+                    TechType.RedConePlantSeed,
+                    TechType.ShellGrassSeed,
+                    TechType.SpottedLeavesPlantSeed,
+                    TechType.RedRollPlantSeed,
+                    TechType.PurpleBranchesSeed,
+                    TechType.SnakeMushroomSpore
                 })
         };
 

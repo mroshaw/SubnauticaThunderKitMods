@@ -10,7 +10,7 @@ namespace DaftAppleGames.AutoLockerLabels_SN
     {
         private const string MyGuid = "com.mroshaw.autolockerlabels";
         private const string PluginName = "AutoLockerLabels SN";
-        private const string VersionString = "1.0.0";
+        private const string VersionString = "1.0.2";
         
         private const string AssetBundleName = "autolockerlabelassetbundle";
         private const string ManagerPrefabName = "Label.prefab";

@@ -50,7 +50,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StagingPaths:
   - <ManifestPluginStaging>/Assets
-  assetBundles: []
+  assetBundles:
+  - assetBundleName: autolockerlabelassetbundle
+    assets:
+    - {fileID: 8671410353059926114, guid: 8514fd3aa32d68e409a9abeee97484fc, type: 3}
+    - {fileID: 7813790020144079554, guid: f7a74898b3adf524eb84f58a9507b754, type: 3}
 --- !u!114 &8876472120765660631
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,10 +1,10 @@
 using System.Collections.Generic;
+using static DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabelsPlugin;
 
 namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
 {
     internal static class LabelGenerator
     {
-        private const float DominantItemRatio = 0.6f;
         private const string MixedCategoryKey = "AutoLockerLabels_Category_Mixed";
         private const string MixedCategoryFallback = "Mixed";
 
@@ -285,13 +285,14 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
             int highestCount,
             int totalCount)
         {
+            float dominantItemRatio = ConfigFile.DominantItemRatio / 100f;
             if (totalCount <= 0)
             {
                 return false;
             }
 
             return (float)highestCount / totalCount >=
-                   DominantItemRatio;
+                   dominantItemRatio;
         }
 
         private static string GetItemLabel(TechType techType)

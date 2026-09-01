@@ -1,3 +1,4 @@
+using System.Reflection;
 using BepInEx;
 using HarmonyLib;
 using DaftAppleGames.ModTools;
@@ -5,18 +6,17 @@ using Nautilus.Handlers;
 
 namespace DaftAppleGames.AutoLockerLabels_SN
 {
-    [BepInDependency(
-        LockerLabelModGuid,
-        BepInDependency.DependencyFlags.HardDependency)]
     [BepInPlugin(MyGuid, PluginName, VersionString)] public class AutoLockerLabelsPlugin : BaseUnityPlugin
     {
         private const string MyGuid = "com.mroshaw.autolockerlabels";
         private const string PluginName = "AutoLockerLabels SN";
         private const string VersionString = "1.0.0";
         
-        internal const string LockerLabelModGuid = "mod.0ctop3dus.lockerlabel";
+        private const string AssetBundleName = "autolockerlabelassetbundle";
+        private const string ManagerPrefabName = "Label.prefab";
         
         private static readonly Harmony Harmony = new Harmony(MyGuid);
+        internal static ModAssetBundleUtils ModAssetUtils;
         
         // Config file / Log initialisation
 #if !UNITY_EDITOR
@@ -37,6 +37,10 @@ namespace DaftAppleGames.AutoLockerLabels_SN
             
             // Initialise localisation
             LanguageHandler.RegisterLocalizationFolder();
+            
+            // Initialise AssetBundle
+            ModAssetUtils =
+                new ModAssetBundleUtils(AssetBundleName, Assembly.GetExecutingAssembly(), true, ModDebugLog);
             
             // Initialise save data
             SaveData =

@@ -1,7 +1,8 @@
 {
     "name": "AutoLockerLabels_SN",
     "references": [
-        "GUID:a8101a7f788ddab4d835833e6de817ac"
+        "GUID:a8101a7f788ddab4d835833e6de817ac",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -12,8 +13,7 @@
         "0Harmony.dll",
         "Assembly-CSharp.dll",
         "Nautilus.dll",
-        "Assembly-CSharp-firstpass.dll",
-        "LockerLabel_publicized.dll"
+        "Assembly-CSharp-firstpass.dll"
     ],
     "autoReferenced": true,
     "defineConstraints": [],

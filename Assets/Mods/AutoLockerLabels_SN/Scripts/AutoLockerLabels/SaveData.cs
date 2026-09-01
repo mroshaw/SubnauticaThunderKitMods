@@ -13,6 +13,8 @@ namespace DaftAppleGames.AutoLockerLabels_SN
     {
         public HashSet<string> AutomaticLockerIds { get; set; } =
             new HashSet<string>();
+
+        public Dictionary<string, string> CustomLabels { get; set; } = new Dictionary<string, string>();
         
         internal bool IsAutomatic(string lockerId)
         {
@@ -38,6 +40,33 @@ namespace DaftAppleGames.AutoLockerLabels_SN
             }
 
             AutomaticLockerIds.Remove(lockerId);
+        }
+
+        internal bool TryGetCustomLabel(string lockerId, out string label)
+        {
+            label = string.Empty;
+            return !string.IsNullOrWhiteSpace(lockerId) && CustomLabels.TryGetValue(lockerId, out label);
+        }
+
+        internal void SetCustomLabel(string lockerId, string label)
+        {
+            if (string.IsNullOrWhiteSpace(lockerId))
+            {
+                return;
+            }
+
+            CustomLabels[lockerId] = label ?? string.Empty;
+        }
+
+        internal void RemoveLocker(string lockerId)
+        {
+            if (string.IsNullOrWhiteSpace(lockerId))
+            {
+                return;
+            }
+
+            AutomaticLockerIds.Remove(lockerId);
+            CustomLabels.Remove(lockerId);
         }
     }
 }

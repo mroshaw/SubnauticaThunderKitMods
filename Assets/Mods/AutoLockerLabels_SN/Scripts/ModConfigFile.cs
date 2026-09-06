@@ -1,6 +1,8 @@
 ﻿using Nautilus.Json;
 using Nautilus.Options;
 using Nautilus.Options.Attributes;
+using UnityEngine;
+using DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels;
 using static DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabelsPlugin;
 
 namespace DaftAppleGames.AutoLockerLabels_SN
@@ -11,6 +13,39 @@ namespace DaftAppleGames.AutoLockerLabels_SN
     [Menu("Auto Locker Labels")]
     public class ModConfigFile : ConfigFile
     {
+        private const string CategoryConfigUiPrefabAssetName = "CategoryConfigUi.prefab";
+        private static GameObject categoryConfigUi;
+        private static CategoryConfigDialog categoryConfigDialog;
+
+        /// <summary>
+        /// Opens the automatic locker category configuration dialog.
+        /// </summary>
+        [Button("Configure Categories")]
+        public void ConfigureCategories(ButtonClickedEventArgs eventArgs)
+        {
+            if (!categoryConfigDialog)
+            {
+                categoryConfigUi = ModAssetUtils.GetPrefabInstanceFromAssetBundle(
+                    CategoryConfigUiPrefabAssetName,
+                    false);
+                if (!categoryConfigUi)
+                {
+                    ModDebugLog.LogError("Could not load the category configuration UI prefab.");
+                    return;
+                }
+
+                categoryConfigDialog = categoryConfigUi.GetComponentInChildren<CategoryConfigDialog>(true);
+                if (!categoryConfigDialog)
+                {
+                    ModDebugLog.LogError("The category configuration UI has no CategoryConfigDialog component.");
+                    return;
+                }
+            }
+
+            categoryConfigDialog.Reparent();
+            categoryConfigDialog.Show();
+        }
+
         /// <summary>
         /// Threshold for an item to override the locker label
         /// </summary>

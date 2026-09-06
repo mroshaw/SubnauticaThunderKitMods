@@ -412,11 +412,16 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
                 MixedCategoryFallback);
         }
 
+        internal static void InitializeCategories()
+        {
+            CategoryService.Initialize(Categories);
+        }
+
         private static bool TryGetCommonCategoryLabel(
             List<TechType> itemTypes,
             out string categoryLabel)
         {
-            foreach (AutomaticLabelCategory category in Categories)
+            foreach (CategoryDefinition category in CategoryService.ActiveCategories)
             {
                 if (!category.ContainsAll(itemTypes))
                 {
@@ -463,6 +468,11 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
             string languageKey,
             string fallbackLabel)
         {
+            if (string.IsNullOrWhiteSpace(languageKey))
+            {
+                return fallbackLabel;
+            }
+
             Language language = Language.main;
 
             if (language == null)
@@ -481,35 +491,19 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
             return localizedLabel;
         }
 
-        private sealed class AutomaticLabelCategory
+        private sealed class AutomaticLabelCategory : CategoryDefinition
         {
-            private readonly HashSet<TechType> itemTypes;
-
-            internal string LanguageKey { get; }
-
-            internal string FallbackLabel { get; }
-
             internal AutomaticLabelCategory(
                 string languageKey,
                 string fallbackLabel,
                 IEnumerable<TechType> itemTypes)
+                : base(
+                    languageKey,
+                    languageKey,
+                    fallbackLabel,
+                    0,
+                    itemTypes)
             {
-                LanguageKey = languageKey;
-                FallbackLabel = fallbackLabel;
-                this.itemTypes = new HashSet<TechType>(itemTypes);
-            }
-
-            internal bool ContainsAll(List<TechType> contents)
-            {
-                foreach (TechType techType in contents)
-                {
-                    if (!itemTypes.Contains(techType))
-                    {
-                        return false;
-                    }
-                }
-
-                return true;
             }
         }
     }

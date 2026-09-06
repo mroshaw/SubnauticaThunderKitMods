@@ -78,6 +78,7 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
             
             storageContainer.container.onAddItem += OnItemAdded;
             storageContainer.container.onRemoveItem += OnItemRemoved;
+            CategoryService.CategoriesChanged += OnCategoriesChanged;
 
             if (isAutomatic)
             {
@@ -91,6 +92,8 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
 
         private void OnDestroy()
         {
+            CategoryService.CategoriesChanged -= OnCategoriesChanged;
+
             if (constructable != null &&
                 constructable.constructedAmount <= 0f &&
                 !string.IsNullOrWhiteSpace(lockerId))
@@ -115,6 +118,15 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
 
             storageContainer.container.onAddItem -= OnItemAdded;
             storageContainer.container.onRemoveItem -= OnItemRemoved;
+        }
+
+        private void OnCategoriesChanged()
+        {
+            if (isAutomatic)
+            {
+                lastGeneratedLabel = null;
+                ApplyAutomaticLabel();
+            }
         }
 
         private bool IsValidLocker()

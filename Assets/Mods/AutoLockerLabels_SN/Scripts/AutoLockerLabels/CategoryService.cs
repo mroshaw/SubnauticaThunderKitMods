@@ -13,6 +13,7 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
             new List<CategoryDefinition>();
 
         private static CategoryDefinition[] builtInCategories;
+        private static readonly HashSet<string> builtInIds = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
         internal static event Action CategoriesChanged;
 
@@ -24,6 +25,12 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
         internal static void Initialize(CategoryDefinition[] defaults)
         {
             builtInCategories = defaults;
+            builtInIds.Clear();
+            foreach (CategoryDefinition category in defaults)
+            {
+                builtInIds.Add(category.Id);
+            }
+
             OverrideFile = new CategoryOverrideFile();
 
             try
@@ -39,7 +46,7 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
             ApplyOverrides(false);
         }
 
-        internal static void ApplyOverrides(bool save)
+        private static void ApplyOverrides(bool save)
         {
             if (builtInCategories == null)
             {
@@ -78,10 +85,7 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
             }
 
             activeCategories.Clear();
-            foreach (CategoryDefinition category in effectiveCategories.Values)
-            {
-                activeCategories.Add(category);
-            }
+            activeCategories.AddRange(effectiveCategories.Values);
 
             activeCategories.Sort(ComparePriority);
             ApplyCategoryOrder();
@@ -91,45 +95,15 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
                 OverrideFile.Save();
             }
 
-            Action handler = CategoriesChanged;
-            if (handler != null)
-            {
-                handler();
-            }
-        }
-
-        internal static void RestoreDefaults()
-        {
-            OverrideFile.Categories = new List<CategoryOverride>();
-            OverrideFile.RemovedCategories = new List<string>();
-            OverrideFile.CategoryOrder = new List<string>();
-            ApplyOverrides(true);
+            CategoriesChanged?.Invoke();
         }
 
         internal static List<EditableCategory> CreateDraft()
         {
-            List<EditableCategory> draft = new List<EditableCategory>();
-            HashSet<string> builtInIds = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            foreach (CategoryDefinition category in builtInCategories)
-            {
-                builtInIds.Add(category.Id);
-            }
-
+            List<EditableCategory> draft = new List<EditableCategory>(activeCategories.Count);
             foreach (CategoryDefinition category in activeCategories)
             {
-                EditableCategory editableCategory = new EditableCategory
-                {
-                    Id = category.Id,
-                    DisplayName = GetDisplayName(category),
-                    IsBuiltIn = builtInIds.Contains(category.Id),
-                    IsModified = category.LanguageKey == null
-                };
-                foreach (TechType techType in category.ItemTypes)
-                {
-                    editableCategory.TechTypes.Add(techType);
-                }
-
-                draft.Add(editableCategory);
+                draft.Add(CreateEditableCategory(category, builtInIds.Contains(category.Id), category.LanguageKey is null));
             }
 
             return draft;
@@ -137,25 +111,41 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
 
         internal static List<EditableCategory> CreateDefaultDraft()
         {
-            List<EditableCategory> draft = new List<EditableCategory>();
+            List<EditableCategory> draft = new List<EditableCategory>(builtInCategories.Length);
             foreach (CategoryDefinition category in builtInCategories)
             {
-                EditableCategory editableCategory = new EditableCategory
-                {
-                    Id = category.Id,
-                    DisplayName = GetDisplayName(category),
-                    IsBuiltIn = true,
-                    IsModified = false
-                };
-                foreach (TechType techType in category.ItemTypes)
-                {
-                    editableCategory.TechTypes.Add(techType);
-                }
-
-                draft.Add(editableCategory);
+                draft.Add(CreateEditableCategory(category, true, false));
             }
 
             return draft;
+        }
+
+        internal static bool TryCreateDefaultCategory(string categoryId, out EditableCategory category)
+        {
+            foreach (CategoryDefinition builtInCategory in builtInCategories)
+            {
+                if (string.Equals(builtInCategory.Id, categoryId, StringComparison.OrdinalIgnoreCase))
+                {
+                    category = CreateEditableCategory(builtInCategory, true, false);
+                    return true;
+                }
+            }
+
+            category = null;
+            return false;
+        }
+
+        private static EditableCategory CreateEditableCategory(CategoryDefinition category, bool isBuiltIn, bool isModified)
+        {
+            EditableCategory editableCategory = new EditableCategory
+            {
+                Id = category.Id,
+                DisplayName = LabelGenerator.GetLocalizedLabel(category.LanguageKey, category.FallbackLabel),
+                IsBuiltIn = isBuiltIn,
+                IsModified = isModified
+            };
+            editableCategory.TechTypes.AddRange(category.ItemTypes);
+            return editableCategory;
         }
 
         internal static void ApplyDraft(List<EditableCategory> draft)
@@ -221,6 +211,11 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
             List<CategoryDefinition> orderedCategories = new List<CategoryDefinition>();
             foreach (string categoryId in OverrideFile.CategoryOrder)
             {
+                if (string.IsNullOrWhiteSpace(categoryId))
+                {
+                    continue;
+                }
+
                 CategoryDefinition category;
                 if (categoriesById.TryGetValue(categoryId, out category))
                 {
@@ -239,19 +234,6 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
 
             activeCategories.Clear();
             activeCategories.AddRange(orderedCategories);
-        }
-
-        private static string GetDisplayName(CategoryDefinition category)
-        {
-            if (string.IsNullOrWhiteSpace(category.LanguageKey) || Language.main == null)
-            {
-                return category.FallbackLabel;
-            }
-
-            string localizedName = Language.main.Get(category.LanguageKey);
-            return string.IsNullOrWhiteSpace(localizedName) || localizedName == category.LanguageKey
-                ? category.FallbackLabel
-                : localizedName;
         }
 
         private static HashSet<string> CreateRemovedCategorySet()
@@ -299,11 +281,6 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
                 }
 
                 itemTypes.Add(techType);
-            }
-
-            if (itemTypes.Count == 0)
-            {
-                return false;
             }
 
             category = new CategoryDefinition(

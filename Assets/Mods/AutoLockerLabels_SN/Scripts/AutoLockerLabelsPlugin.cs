@@ -14,7 +14,6 @@ namespace DaftAppleGames.AutoLockerLabels_SN
         internal const string VersionString = "1.0.2";
         
         private const string AssetBundleName = "autolockerlabelassetbundle";
-        private const string ManagerPrefabName = "Label.prefab";
         
         private static readonly Harmony Harmony = new Harmony(MyGuid);
         internal static ModAssetBundleUtils ModAssetUtils;
@@ -23,9 +22,11 @@ namespace DaftAppleGames.AutoLockerLabels_SN
 #if !UNITY_EDITOR
         internal static ModConfigFile ConfigFile = OptionsPanelHandler.RegisterModOptions<ModConfigFile>();
         internal static ModLog ModDebugLog;
+        internal static bool DetailedLoggingEnabled => ConfigFile.DetailedLogging;
 #else
         internal static readonly ModConfigFile ConfigFile;
         internal static ModLog ModDebugLog = new ModLog(null, true);
+        internal static bool DetailedLoggingEnabled => true;
 #endif
 
         // Save data

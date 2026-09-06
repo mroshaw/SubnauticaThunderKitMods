@@ -421,8 +421,10 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
             List<TechType> itemTypes,
             out string categoryLabel)
         {
-            foreach (CategoryDefinition category in CategoryService.ActiveCategories)
+            IReadOnlyList<CategoryDefinition> categories = CategoryService.ActiveCategories;
+            for (int index = 0; index < categories.Count; index++)
             {
+                CategoryDefinition category = categories[index];
                 if (!category.ContainsAll(itemTypes))
                 {
                     continue;
@@ -464,7 +466,7 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
                 : localizedName;
         }
 
-        private static string GetLocalizedLabel(
+        internal static string GetLocalizedLabel(
             string languageKey,
             string fallbackLabel)
         {

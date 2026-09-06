@@ -19,16 +19,14 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
             selected = callback;
             nameText.text = categoryName;
             statusText.text = status;
-            selectButton.onClick.RemoveListener(Select);
-            selectButton.onClick.AddListener(Select);
         }
 
-        private void Select()
+        /// <summary>
+        /// Selects this category in the configuration dialog.
+        /// </summary>
+        public void Select()
         {
-            if (selected != null)
-            {
-                selected(index);
-            }
+            selected?.Invoke(index);
         }
     }
 }

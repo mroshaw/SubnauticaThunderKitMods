@@ -14,7 +14,6 @@ namespace DaftAppleGames.AutoLockerLabels_SN
     public class ModConfigFile : ConfigFile
     {
         private const string CategoryConfigUiPrefabAssetName = "CategoryConfigUi.prefab";
-        private static GameObject categoryConfigUi;
         private static CategoryConfigDialog categoryConfigDialog;
 
         /// <summary>
@@ -25,7 +24,7 @@ namespace DaftAppleGames.AutoLockerLabels_SN
         {
             if (!categoryConfigDialog)
             {
-                categoryConfigUi = ModAssetUtils.GetPrefabInstanceFromAssetBundle(
+                GameObject categoryConfigUi = ModAssetUtils.GetPrefabInstanceFromAssetBundle(
                     CategoryConfigUiPrefabAssetName,
                     false);
                 if (!categoryConfigUi)
@@ -38,6 +37,7 @@ namespace DaftAppleGames.AutoLockerLabels_SN
                 if (!categoryConfigDialog)
                 {
                     ModDebugLog.LogError("The category configuration UI has no CategoryConfigDialog component.");
+                    Object.Destroy(categoryConfigUi);
                     return;
                 }
             }

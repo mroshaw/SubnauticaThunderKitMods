@@ -2,8 +2,10 @@ using System;
 using DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels;
 using TMPro;
 using UnityEditor;
+using UnityEditor.Events;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
@@ -190,13 +192,62 @@ namespace DaftAppleGames.AutoLockerLabels_SN.Editor
         }
 
         /// <summary>
+        /// Configures serialized dialog events and upgrades the TechType picker for multi-selection.
+        /// </summary>
+        [MenuItem("Daft Apple Games/Auto Locker Labels/Configure Category UI Events And Multi-Select")]
+        public static void ConfigureEventsAndMultiSelect()
+        {
+            ConfigureCategoryEntryPrefab();
+            ConfigureTechTypeEntryPrefab();
+            ConfigurePickerEntryPrefab();
+
+            string prefabPath = PrefabFolder + "/CategoryConfigUi.prefab";
+            GameObject root = PrefabUtility.LoadPrefabContents(prefabPath);
+            try
+            {
+                CategoryConfigDialog dialog = root.GetComponentInChildren<CategoryConfigDialog>(true);
+                Transform panel = dialog.transform;
+                Transform picker = panel.Find("TechTypePickerOverlay/TechTypePicker");
+                Transform footer = picker.Find("PickerFooter");
+                Button addSelectedButton;
+                if (footer == null)
+                {
+                    Button closeButton = picker.Find("Close").GetComponent<Button>();
+                    GameObject footerObject = CreateUiObject("PickerFooter", picker);
+                    ConfigureRowLayout(footerObject, 12f);
+                    SetRect((RectTransform)footerObject.transform, new Vector2(0.05f, 0.035f), new Vector2(0.95f, 0.115f), Vector2.zero, Vector2.zero);
+                    GameObject spacer = CreateUiObject("Spacer", footerObject.transform);
+                    AddLayoutElement(spacer, -1f, -1f, 1f, 1f);
+                    addSelectedButton = CreateLayoutButton("AddSelected", footerObject.transform, "Add", 20, 180f);
+                    closeButton.transform.SetParent(footerObject.transform, false);
+                    AddLayoutElement(closeButton.gameObject, 180f, -1f, 0f, 1f);
+                }
+                else
+                {
+                    addSelectedButton = footer.Find("AddSelected").GetComponent<Button>();
+                }
+
+                TMP_Text newButtonLabel = panel.Find("Footer/AddCategory/Label").GetComponent<TMP_Text>();
+                newButtonLabel.text = "New";
+                SetReference(dialog, "pickerAddButton", addSelectedButton);
+                ConfigureDialogEvents(dialog);
+                PrefabUtility.SaveAsPrefabAsset(root, prefabPath);
+                Debug.Log("Auto Locker Labels dialog events and TechType multi-select configured.");
+            }
+            finally
+            {
+                PrefabUtility.UnloadPrefabContents(root);
+            }
+        }
+
+        /// <summary>
         /// Validates the generated hierarchy and every required serialized reference.
         /// </summary>
         [MenuItem("Daft Apple Games/Auto Locker Labels/Validate Category UI Prefabs")]
         public static void Validate()
         {
             GameObject dialogPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(PrefabFolder + "/CategoryConfigUi.prefab");
-            CategoryConfigDialog dialog = dialogPrefab.GetComponentInChildren<CategoryConfigDialog>(true);
+            CategoryConfigDialog dialog = dialogPrefab == null ? null : dialogPrefab.GetComponentInChildren<CategoryConfigDialog>(true);
             if (dialog == null)
             {
                 throw new InvalidOperationException("CategoryConfigDialog is missing.");
@@ -207,11 +258,10 @@ namespace DaftAppleGames.AutoLockerLabels_SN.Editor
             {
                 "mainPanel", "versionText", "categoryContent", "techTypeContent",
                 "categoryEntryPrefab", "techTypeEntryPrefab", "categoryNameInput",
-                "categoryStatusText", "addButton", "removeButton", "moveUpButton",
-                "moveDownButton", "applyButton", "doneButton", "cancelButton",
-                "restoreDefaultsButton", "addTechTypeButton", "pickerPanel",
+                "categoryStatusText", "removeButton", "moveUpButton", "moveDownButton",
+                "addTechTypeButton", "pickerPanel",
                 "pickerSearchInput", "pickerCustomOnlyToggle", "pickerContent", "pickerEntryPrefab",
-                "pickerEmptyText", "pickerCloseButton"
+                "pickerEmptyText", "pickerAddButton"
             };
             foreach (string propertyName in requiredProperties)
             {
@@ -230,9 +280,10 @@ namespace DaftAppleGames.AutoLockerLabels_SN.Editor
 
             ValidateRow<CategoryListEntry>("CategoryListEntry.prefab", "selectButton", "nameText", "statusText");
             ValidateRow<TechTypeListEntry>("TechTypeListEntry.prefab", "nameText", "iconImage", "sourceText", "removeButton");
-            ValidateRow<TechTypePickerEntry>("TechTypePickerEntry.prefab", "nameText", "iconImage", "sourceText", "selectButton");
-            ValidateScrollView(dialog.transform, "CategoryPane/CategoryScrollView");
-            ValidateScrollView(dialog.transform, "DetailPane/TechTypeScrollView");
+            ValidateRow<TechTypePickerEntry>("TechTypePickerEntry.prefab", "nameText", "iconImage", "sourceText", "selectionToggle");
+            ValidateScrollView(dialog.transform, "ContentRow/CategoryPane/CategoryScrollView");
+            ValidateScrollView(dialog.transform, "ContentRow/DetailPane/TechTypeScrollView");
+            ValidateScrollView(dialog.transform, "TechTypePickerOverlay/TechTypePicker/PickerScrollView");
             Debug.Log("Auto Locker Labels category UI prefabs validated successfully.");
         }
 
@@ -240,7 +291,8 @@ namespace DaftAppleGames.AutoLockerLabels_SN.Editor
         {
             Transform scrollTransform = dialog.Find(path);
             ScrollRect scrollRect = scrollTransform == null ? null : scrollTransform.GetComponent<ScrollRect>();
-            if (scrollRect == null || scrollRect.verticalScrollbar == null || scrollRect.verticalScrollbar.handleRect == null)
+            if (scrollRect == null || scrollRect.content == null || scrollRect.viewport == null ||
+                scrollRect.verticalScrollbar == null || scrollRect.verticalScrollbar.handleRect == null)
             {
                 throw new InvalidOperationException(path + " has no usable vertical scrollbar.");
             }
@@ -291,11 +343,8 @@ namespace DaftAppleGames.AutoLockerLabels_SN.Editor
             SetReference(entry, "selectButton", button);
             SetReference(entry, "nameText", name);
             SetReference(entry, "statusText", status);
+            UnityEventTools.AddPersistentListener(button.onClick, entry.Select);
             GameObject prefab = PrefabUtility.SaveAsPrefabAsset(root, PrefabFolder + "/CategoryListEntry.prefab");
-            SetReference(
-                prefab.GetComponent<CategoryListEntry>(),
-                "statusText",
-                prefab.transform.Find("Status").GetComponent<TMP_Text>());
             Object.DestroyImmediate(root);
             return prefab.GetComponent<CategoryListEntry>();
         }
@@ -322,6 +371,7 @@ namespace DaftAppleGames.AutoLockerLabels_SN.Editor
             SetReference(entry, "iconImage", icon);
             SetReference(entry, "sourceText", source);
             SetReference(entry, "removeButton", remove);
+            UnityEventTools.AddPersistentListener(remove.onClick, entry.Remove);
             GameObject prefab = PrefabUtility.SaveAsPrefabAsset(root, PrefabFolder + "/TechTypeListEntry.prefab");
             Object.DestroyImmediate(root);
             return prefab.GetComponent<TechTypeListEntry>();
@@ -332,8 +382,8 @@ namespace DaftAppleGames.AutoLockerLabels_SN.Editor
             GameObject root = CreateUiObject("TechTypePickerEntry", null);
             Image image = root.AddComponent<Image>();
             image.color = RowColor;
-            Button button = root.AddComponent<Button>();
-            button.targetGraphic = image;
+            Toggle toggle = root.AddComponent<Toggle>();
+            toggle.targetGraphic = image;
             LayoutElement layout = root.AddComponent<LayoutElement>();
             layout.preferredHeight = 52f;
             layout.flexibleWidth = 1f;
@@ -343,12 +393,15 @@ namespace DaftAppleGames.AutoLockerLabels_SN.Editor
             SetRect(name.rectTransform, new Vector2(0.095f, 0f), new Vector2(0.72f, 1f), Vector2.zero, new Vector2(-8f, 0f));
             TMP_Text source = CreateText("Source", root.transform, "Subnautica", 16, TextAlignmentOptions.MidlineRight);
             source.color = new Color(0.42f, 0.84f, 1f, 1f);
-            SetRect(source.rectTransform, new Vector2(0.72f, 0f), Vector2.one, new Vector2(4f, 0f), new Vector2(-14f, 0f));
+            SetRect(source.rectTransform, new Vector2(0.72f, 0f), new Vector2(0.91f, 1f), new Vector2(4f, 0f), new Vector2(-8f, 0f));
+            Graphic checkmark = CreateSelectionCheckbox(root.transform);
+            toggle.graphic = checkmark;
             TechTypePickerEntry entry = root.AddComponent<TechTypePickerEntry>();
             SetReference(entry, "nameText", name);
             SetReference(entry, "iconImage", icon);
             SetReference(entry, "sourceText", source);
-            SetReference(entry, "selectButton", button);
+            SetReference(entry, "selectionToggle", toggle);
+            UnityEventTools.AddPersistentListener(toggle.onValueChanged, entry.SetSelected);
             GameObject prefab = PrefabUtility.SaveAsPrefabAsset(root, PrefabFolder + "/TechTypePickerEntry.prefab");
             Object.DestroyImmediate(root);
             return prefab.GetComponent<TechTypePickerEntry>();
@@ -438,16 +491,17 @@ namespace DaftAppleGames.AutoLockerLabels_SN.Editor
             GameObject footer = CreateUiObject("Footer", panel.transform);
             ConfigureRowLayout(footer, 10f);
             AddLayoutElement(footer, -1f, 74f, 1f, 0f);
-            Button add = CreateLayoutButton("AddCategory", footer.transform, "Duplicate as New", 20, 180f);
+            CreateLayoutButton("AddCategory", footer.transform, "New", 20, 180f);
             Button remove = CreateLayoutButton("RemoveCategory", footer.transform, "Remove", 20, 140f);
             Button up = CreateLayoutButton("MoveUp", footer.transform, "Move Up", 20, 140f);
             Button down = CreateLayoutButton("MoveDown", footer.transform, "Move Down", 20, 140f);
             GameObject footerSpacer = CreateUiObject("Spacer", footer.transform);
             AddLayoutElement(footerSpacer, -1f, -1f, 1f, 1f);
-            Button restore = CreateLayoutButton("RestoreDefaults", footer.transform, "Restore Defaults", 20, 220f);
-            Button apply = CreateLayoutButton("Apply", footer.transform, "Apply", 20, 150f);
-            Button done = CreateLayoutButton("Done", footer.transform, "Done", 20, 150f);
-            Button cancel = CreateLayoutButton("Cancel", footer.transform, "Cancel", 20, 150f);
+            CreateLayoutButton("RestoreDefault", footer.transform, "Restore Defaults", 20, 220f);
+            CreateLayoutButton("RestoreAllDefaults", footer.transform, "Reset all defaults", 20, 220f);
+            CreateLayoutButton("Apply", footer.transform, "Apply", 20, 150f);
+            CreateLayoutButton("Done", footer.transform, "Done", 20, 150f);
+            CreateLayoutButton("Cancel", footer.transform, "Cancel", 20, 150f);
 
             GameObject pickerOverlay = CreatePanel("TechTypePickerOverlay", panel.transform, new Color(0.01f, 0.10f, 0.16f, 0.94f));
             LayoutElement pickerOverlayLayout = pickerOverlay.AddComponent<LayoutElement>();
@@ -468,8 +522,13 @@ namespace DaftAppleGames.AutoLockerLabels_SN.Editor
             TMP_Text pickerEmpty = CreateText("Empty", picker.transform, "No matching TechTypes", 22, TextAlignmentOptions.Center);
             pickerEmpty.color = new Color(0.80f, 0.93f, 1f);
             SetRect(pickerEmpty.rectTransform, new Vector2(0.08f, 0.40f), new Vector2(0.92f, 0.55f), Vector2.zero, Vector2.zero);
-            Button pickerClose = CreateButton("Close", picker.transform, "Cancel", 20);
-            SetRect((RectTransform)pickerClose.transform, new Vector2(0.76f, 0.035f), new Vector2(0.95f, 0.115f), Vector2.zero, Vector2.zero);
+            GameObject pickerFooter = CreateUiObject("PickerFooter", picker.transform);
+            ConfigureRowLayout(pickerFooter, 12f);
+            SetRect((RectTransform)pickerFooter.transform, new Vector2(0.05f, 0.035f), new Vector2(0.95f, 0.115f), Vector2.zero, Vector2.zero);
+            GameObject pickerFooterSpacer = CreateUiObject("Spacer", pickerFooter.transform);
+            AddLayoutElement(pickerFooterSpacer, -1f, -1f, 1f, 1f);
+            Button pickerAdd = CreateLayoutButton("AddSelected", pickerFooter.transform, "Add", 20, 180f);
+            CreateLayoutButton("Close", pickerFooter.transform, "Cancel", 20, 180f);
 
             SetReference(dialog, "mainPanel", panel);
             SetReference(dialog, "versionText", version);
@@ -479,10 +538,8 @@ namespace DaftAppleGames.AutoLockerLabels_SN.Editor
             SetReference(dialog, "techTypeEntryPrefab", techTypePrefab);
             SetReference(dialog, "categoryNameInput", nameInput);
             SetReference(dialog, "categoryStatusText", status);
-            SetReference(dialog, "addButton", add); SetReference(dialog, "removeButton", remove);
+            SetReference(dialog, "removeButton", remove);
             SetReference(dialog, "moveUpButton", up); SetReference(dialog, "moveDownButton", down);
-            SetReference(dialog, "applyButton", apply); SetReference(dialog, "doneButton", done);
-            SetReference(dialog, "cancelButton", cancel); SetReference(dialog, "restoreDefaultsButton", restore);
             SetReference(dialog, "addTechTypeButton", addTechType);
             SetReference(dialog, "pickerPanel", pickerOverlay);
             SetReference(dialog, "pickerSearchInput", pickerSearch);
@@ -490,7 +547,8 @@ namespace DaftAppleGames.AutoLockerLabels_SN.Editor
             SetReference(dialog, "pickerContent", pickerContent);
             SetReference(dialog, "pickerEntryPrefab", pickerEntryPrefab);
             SetReference(dialog, "pickerEmptyText", pickerEmpty);
-            SetReference(dialog, "pickerCloseButton", pickerClose);
+            SetReference(dialog, "pickerAddButton", pickerAdd);
+            ConfigureDialogEvents(dialog);
 
             pickerOverlay.SetActive(false);
 
@@ -569,6 +627,133 @@ namespace DaftAppleGames.AutoLockerLabels_SN.Editor
             toggle.graphic = checkmark;
             toggle.isOn = false;
             return toggle;
+        }
+
+        private static Graphic CreateSelectionCheckbox(Transform parent)
+        {
+            GameObject box = CreatePanel("SelectionBox", parent, ContentColor);
+            SetRect((RectTransform)box.transform, new Vector2(0.935f, 0.18f), new Vector2(0.985f, 0.82f), Vector2.zero, Vector2.zero);
+            TMP_Text checkmark = CreateText("Checkmark", box.transform, "✓", 24, TextAlignmentOptions.Center);
+            checkmark.color = AccentColor;
+            SetRect(checkmark.rectTransform, Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero);
+            return checkmark;
+        }
+
+        private static void ConfigurePickerEntryPrefab()
+        {
+            string prefabPath = PrefabFolder + "/TechTypePickerEntry.prefab";
+            GameObject root = PrefabUtility.LoadPrefabContents(prefabPath);
+            try
+            {
+                Button button = root.GetComponent<Button>();
+                if (button != null)
+                {
+                    Object.DestroyImmediate(button, true);
+                }
+
+                Toggle toggle = root.GetComponent<Toggle>();
+                if (toggle == null)
+                {
+                    toggle = root.AddComponent<Toggle>();
+                }
+
+                toggle.targetGraphic = root.GetComponent<Image>();
+                Transform existingBox = root.transform.Find("SelectionBox");
+                Graphic checkmark = existingBox == null
+                    ? CreateSelectionCheckbox(root.transform)
+                    : existingBox.Find("Checkmark").GetComponent<TMP_Text>();
+                toggle.graphic = checkmark;
+                TMP_Text source = root.transform.Find("Source").GetComponent<TMP_Text>();
+                SetRect(source.rectTransform, new Vector2(0.72f, 0f), new Vector2(0.91f, 1f), new Vector2(4f, 0f), new Vector2(-8f, 0f));
+
+                TechTypePickerEntry entry = root.GetComponent<TechTypePickerEntry>();
+                SetReference(entry, "selectionToggle", toggle);
+                ClearPersistentListeners(toggle.onValueChanged);
+                UnityEventTools.AddPersistentListener(toggle.onValueChanged, entry.SetSelected);
+                PrefabUtility.SaveAsPrefabAsset(root, prefabPath);
+            }
+            finally
+            {
+                PrefabUtility.UnloadPrefabContents(root);
+            }
+        }
+
+        private static void ConfigureCategoryEntryPrefab()
+        {
+            string prefabPath = PrefabFolder + "/CategoryListEntry.prefab";
+            GameObject root = PrefabUtility.LoadPrefabContents(prefabPath);
+            try
+            {
+                CategoryListEntry entry = root.GetComponent<CategoryListEntry>();
+                Button button = root.GetComponent<Button>();
+                ClearPersistentListeners(button.onClick);
+                UnityEventTools.AddPersistentListener(button.onClick, entry.Select);
+                PrefabUtility.SaveAsPrefabAsset(root, prefabPath);
+            }
+            finally
+            {
+                PrefabUtility.UnloadPrefabContents(root);
+            }
+        }
+
+        private static void ConfigureTechTypeEntryPrefab()
+        {
+            string prefabPath = PrefabFolder + "/TechTypeListEntry.prefab";
+            GameObject root = PrefabUtility.LoadPrefabContents(prefabPath);
+            try
+            {
+                TechTypeListEntry entry = root.GetComponent<TechTypeListEntry>();
+                Button button = root.transform.Find("Remove").GetComponent<Button>();
+                ClearPersistentListeners(button.onClick);
+                UnityEventTools.AddPersistentListener(button.onClick, entry.Remove);
+                PrefabUtility.SaveAsPrefabAsset(root, prefabPath);
+            }
+            finally
+            {
+                PrefabUtility.UnloadPrefabContents(root);
+            }
+        }
+
+        private static void ConfigureDialogEvents(CategoryConfigDialog dialog)
+        {
+            Transform panel = dialog.transform;
+            WireButton(panel, "Footer/AddCategory", dialog.AddCategory);
+            WireButton(panel, "Footer/RemoveCategory", dialog.RemoveCategory);
+            WireButton(panel, "Footer/MoveUp", dialog.MoveUp);
+            WireButton(panel, "Footer/MoveDown", dialog.MoveDown);
+            WireButton(panel, "Footer/RestoreDefault", dialog.RestoreSelectedCategoryDefault);
+            WireButton(panel, "Footer/RestoreAllDefaults", dialog.RestoreDefaults);
+            WireButton(panel, "Footer/Apply", dialog.Apply);
+            WireButton(panel, "Footer/Done", dialog.Done);
+            WireButton(panel, "Footer/Cancel", dialog.Cancel);
+            WireButton(panel, "ContentRow/DetailPane/TechHeader/AddTechType", dialog.OpenTechTypePicker);
+            WireButton(panel, "TechTypePickerOverlay/TechTypePicker/PickerFooter/AddSelected", dialog.AddSelectedTechTypes);
+            WireButton(panel, "TechTypePickerOverlay/TechTypePicker/PickerFooter/Close", dialog.CloseTechTypePicker);
+
+            TMP_InputField categoryName = panel.Find("ContentRow/DetailPane/NameRow/CategoryName").GetComponent<TMP_InputField>();
+            ClearPersistentListeners(categoryName.onEndEdit);
+            UnityEventTools.AddPersistentListener(categoryName.onEndEdit, dialog.RenameSelectedCategory);
+            TMP_InputField search = panel.Find("TechTypePickerOverlay/TechTypePicker/SearchRow/Search").GetComponent<TMP_InputField>();
+            ClearPersistentListeners(search.onValueChanged);
+            UnityEventTools.AddPersistentListener(search.onValueChanged, dialog.RefreshTechTypePicker);
+            Toggle customOnly = panel.Find("TechTypePickerOverlay/TechTypePicker/SearchRow/CustomOnly").GetComponent<Toggle>();
+            ClearPersistentListeners(customOnly.onValueChanged);
+            UnityEventTools.AddPersistentListener(customOnly.onValueChanged, dialog.FilterTechTypePickerBySource);
+        }
+
+        private static void WireButton(Transform root, string path, UnityAction action)
+        {
+            Button button = root.Find(path).GetComponent<Button>();
+            ClearPersistentListeners(button.onClick);
+            UnityEventTools.AddPersistentListener(button.onClick, action);
+        }
+
+        private static void ClearPersistentListeners(UnityEventBase unityEvent)
+        {
+            for (int index = unityEvent.GetPersistentEventCount() - 1; index >= 0; index--)
+            {
+                UnityEventTools.RemovePersistentListener(unityEvent, index);
+            }
         }
 
         private static TMP_InputField CreateInput(string name, Transform parent, string placeholderText)

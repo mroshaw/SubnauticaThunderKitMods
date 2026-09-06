@@ -10,36 +10,31 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
         [SerializeField] private TMP_Text nameText;
         [SerializeField] private Image iconImage;
         [SerializeField] private TMP_Text sourceText;
-        [SerializeField] private Button selectButton;
+        [SerializeField] private Toggle selectionToggle;
         private TechType techType;
-        private Action<TechType> selected;
+        private Action<TechType, bool> selectionChanged;
 
         internal void Bind(
-            TechType value,
-            string displayName,
-            string sourceName,
-            bool isModded,
-            Action<TechType> callback)
+            TechTypeDisplayData data,
+            bool selected,
+            Action<TechType, bool> callback)
         {
-            techType = value;
-            selected = callback;
-            nameText.text = displayName;
-            sourceText.text = sourceName;
-            sourceText.color = isModded
-                ? new Color(1f, 0.68f, 0.05f, 1f)
-                : new Color(0.42f, 0.84f, 1f, 1f);
-            iconImage.sprite = SpriteManager.Get(techType);
+            techType = data.TechType;
+            selectionChanged = callback;
+            nameText.text = data.DisplayName;
+            sourceText.text = data.SourceName;
+            sourceText.color = data.SourceColor;
+            iconImage.sprite = data.Icon;
             iconImage.enabled = iconImage.sprite != null;
-            selectButton.onClick.RemoveListener(Select);
-            selectButton.onClick.AddListener(Select);
+            selectionToggle.SetIsOnWithoutNotify(selected);
         }
 
-        private void Select()
+        /// <summary>
+        /// Reports the row's checkbox state to the category dialog.
+        /// </summary>
+        public void SetSelected(bool selected)
         {
-            if (selected != null)
-            {
-                selected(techType);
-            }
+            selectionChanged?.Invoke(techType, selected);
         }
     }
 }

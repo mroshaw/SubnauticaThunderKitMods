@@ -15,33 +15,24 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
         private Action<TechType> removed;
 
         internal void Bind(
-            TechType value,
-            string sourceName,
-            bool isModded,
+            TechTypeDisplayData data,
             Action<TechType> callback)
         {
-            techType = value;
+            techType = data.TechType;
             removed = callback;
-            string localizedName = Language.main == null ? string.Empty : Language.main.Get(techType);
-            nameText.text = string.IsNullOrWhiteSpace(localizedName)
-                ? techType.ToString()
-                : $"{localizedName}  ({techType})";
-            iconImage.sprite = SpriteManager.Get(techType);
+            nameText.text = data.AssignedDisplayName;
+            iconImage.sprite = data.Icon;
             iconImage.enabled = iconImage.sprite != null;
-            sourceText.text = sourceName;
-            sourceText.color = isModded
-                ? new Color(1f, 0.68f, 0.05f, 1f)
-                : new Color(0.42f, 0.84f, 1f, 1f);
-            removeButton.onClick.RemoveListener(Remove);
-            removeButton.onClick.AddListener(Remove);
+            sourceText.text = data.SourceName;
+            sourceText.color = data.SourceColor;
         }
 
-        private void Remove()
+        /// <summary>
+        /// Removes this TechType from its category.
+        /// </summary>
+        public void Remove()
         {
-            if (removed != null)
-            {
-                removed(techType);
-            }
+            removed?.Invoke(techType);
         }
     }
 }

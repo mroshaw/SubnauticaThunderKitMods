@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Text;
-using BepInEx.Bootstrap;
 using DaftAppleGames.ModTools.Extensions;
 using Nautilus.Handlers;
 using TMPro;
@@ -28,14 +26,9 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
         [SerializeField] private TechTypeListEntry techTypeEntryPrefab;
         [SerializeField] private TMP_InputField categoryNameInput;
         [SerializeField] private TMP_Text categoryStatusText;
-        [SerializeField] private Button addButton;
         [SerializeField] private Button removeButton;
         [SerializeField] private Button moveUpButton;
         [SerializeField] private Button moveDownButton;
-        [SerializeField] private Button applyButton;
-        [SerializeField] private Button doneButton;
-        [SerializeField] private Button cancelButton;
-        [SerializeField] private Button restoreDefaultsButton;
         [SerializeField] private Button addTechTypeButton;
         [SerializeField] private GameObject pickerPanel;
         [SerializeField] private TMP_InputField pickerSearchInput;
@@ -43,13 +36,16 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
         [SerializeField] private Transform pickerContent;
         [SerializeField] private TechTypePickerEntry pickerEntryPrefab;
         [SerializeField] private TMP_Text pickerEmptyText;
-        [SerializeField] private Button pickerCloseButton;
+        [SerializeField] private Button pickerAddButton;
 
         private readonly List<CategoryListEntry> categoryEntries = new List<CategoryListEntry>();
         private readonly List<TechTypeListEntry> techTypeEntries = new List<TechTypeListEntry>();
         private readonly List<TechTypePickerEntry> pickerEntries = new List<TechTypePickerEntry>();
         private readonly List<TechType> availableTechTypes = new List<TechType>();
         private readonly List<TechType> candidateTechTypes = new List<TechType>();
+        private readonly Dictionary<TechType, TechTypeDisplayData> pickerDisplayData =
+            new Dictionary<TechType, TechTypeDisplayData>();
+        private readonly HashSet<TechType> selectedTechTypes = new HashSet<TechType>();
         private readonly InventoryTechTypeCatalog inventoryTechTypeCatalog =
             new InventoryTechTypeCatalog();
         private List<EditableCategory> draft;
@@ -61,20 +57,6 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
         private void Awake()
         {
             versionText.text = $"v{VersionString}";
-            addButton.onClick.AddListener(AddCategory);
-            removeButton.onClick.AddListener(RemoveCategory);
-            moveUpButton.onClick.AddListener(MoveUp);
-            moveDownButton.onClick.AddListener(MoveDown);
-            applyButton.onClick.AddListener(Apply);
-            doneButton.onClick.AddListener(Done);
-            cancelButton.onClick.AddListener(Cancel);
-            restoreDefaultsButton.onClick.AddListener(RestoreDefaults);
-            addTechTypeButton.onClick.AddListener(OpenTechTypePicker);
-            pickerCloseButton.onClick.AddListener(CloseTechTypePicker);
-            pickerSearchInput.onValueChanged.AddListener(FilterTechTypePicker);
-            pickerCustomOnlyToggle.onValueChanged.AddListener(FilterTechTypePickerBySource);
-            categoryNameInput.onEndEdit.AddListener(RenameSelectedCategory);
-            pickerPanel.SetActive(false);
             Hide();
         }
 
@@ -107,9 +89,11 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
             RefreshAll();
         }
 
-        private void AddCategory()
+        /// <summary>
+        /// Adds a new empty category to the working copy.
+        /// </summary>
+        public void AddCategory()
         {
-            EditableCategory source = GetSelectedCategory();
             EditableCategory category = new EditableCategory
             {
                 Id = "custom-" + Guid.NewGuid().ToString("N"),
@@ -117,18 +101,16 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
                 IsBuiltIn = false,
                 IsModified = true
             };
-            if (source != null)
-            {
-                category.TechTypes.AddRange(source.TechTypes);
-            }
-
             draft.Add(category);
             selectedIndex = draft.Count - 1;
             RefreshAll();
             categoryNameInput.Select();
         }
 
-        private void RemoveCategory()
+        /// <summary>
+        /// Removes the selected category from the working copy.
+        /// </summary>
+        public void RemoveCategory()
         {
             if (selectedIndex < 0 || selectedIndex >= draft.Count)
             {
@@ -144,12 +126,18 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
             RefreshAll();
         }
 
-        private void MoveUp()
+        /// <summary>
+        /// Moves the selected category up one position.
+        /// </summary>
+        public void MoveUp()
         {
             MoveSelected(-1);
         }
 
-        private void MoveDown()
+        /// <summary>
+        /// Moves the selected category down one position.
+        /// </summary>
+        public void MoveDown()
         {
             MoveSelected(1);
         }
@@ -169,7 +157,10 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
             RefreshAll();
         }
 
-        private void RenameSelectedCategory(string categoryName)
+        /// <summary>
+        /// Applies an edited name to the selected category.
+        /// </summary>
+        public void RenameSelectedCategory(string categoryName)
         {
             EditableCategory category = GetSelectedCategory();
             if (category == null || string.IsNullOrWhiteSpace(categoryName))
@@ -194,23 +185,20 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
         private void RemoveTechType(TechType techType)
         {
             EditableCategory category = GetSelectedCategory();
-            if (category == null)
+            if (category is null || !category.TechTypes.Remove(techType))
             {
                 return;
             }
 
-            if (category.TechTypes.Count <= 1)
-            {
-                return;
-            }
-
-            category.TechTypes.Remove(techType);
             category.IsModified = true;
             RefreshTechTypes();
             RefreshCategories();
         }
 
-        private void OpenTechTypePicker()
+        /// <summary>
+        /// Opens the TechType picker for the selected category.
+        /// </summary>
+        public void OpenTechTypePicker()
         {
             if (GetSelectedCategory() == null)
             {
@@ -223,9 +211,10 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
             availableTechTypes.Sort(CompareTechTypeNames);
             pickerSearchInput.SetTextWithoutNotify(string.Empty);
             pickerCustomOnlyToggle.SetIsOnWithoutNotify(false);
+            selectedTechTypes.Clear();
+            pickerAddButton.interactable = false;
             pickerSearchInput.interactable = true;
             pickerPanel.SetActive(true);
-            ClearEntries(pickerEntries);
 
             // Prefab inspection is retained for diagnostics, but is too expensive for normal picker use.
             // catalogCoroutine = StartCoroutine(inventoryTechTypeCatalog.Filter(
@@ -239,7 +228,10 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
             pickerSearchInput.Select();
         }
 
-        private void CloseTechTypePicker()
+        /// <summary>
+        /// Closes the TechType picker without adding its selection.
+        /// </summary>
+        public void CloseTechTypePicker()
         {
             if (catalogCoroutine != null)
             {
@@ -249,27 +241,53 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
 
             pickerPanel.SetActive(false);
             ClearEntries(pickerEntries);
+            pickerDisplayData.Clear();
+            selectedTechTypes.Clear();
+            availableTechTypes.Clear();
+            candidateTechTypes.Clear();
         }
 
-        private void FilterTechTypePicker(string searchText)
-        {
-            RefreshTechTypePicker(searchText);
-        }
-
-        private void FilterTechTypePickerBySource(bool customOnly)
+        /// <summary>
+        /// Refreshes the picker after its source filter changes.
+        /// </summary>
+        public void FilterTechTypePickerBySource(bool customOnly)
         {
             RefreshTechTypePicker(pickerSearchInput.text);
         }
 
-        private void SelectTechType(TechType techType)
+        private void SetTechTypeSelected(TechType techType, bool selected)
+        {
+            if (selected)
+            {
+                selectedTechTypes.Add(techType);
+            }
+            else
+            {
+                selectedTechTypes.Remove(techType);
+            }
+
+            pickerAddButton.interactable = selectedTechTypes.Count > 0;
+        }
+
+        /// <summary>
+        /// Adds every selected TechType to the current category.
+        /// </summary>
+        public void AddSelectedTechTypes()
         {
             EditableCategory category = GetSelectedCategory();
-            if (category == null || category.TechTypes.Contains(techType))
+            if (category is null || selectedTechTypes.Count == 0)
             {
                 return;
             }
 
-            category.TechTypes.Add(techType);
+            foreach (TechType techType in availableTechTypes)
+            {
+                if (selectedTechTypes.Contains(techType))
+                {
+                    category.TechTypes.Add(techType);
+                }
+            }
+
             category.IsModified = true;
             CloseTechTypePicker();
             RefreshTechTypes();
@@ -308,9 +326,11 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
         private void BuildCandidateTechTypes()
         {
             candidateTechTypes.Clear();
+            pickerDisplayData.Clear();
             EditableCategory category = GetSelectedCategory();
             HashSet<TechType> uniqueTechTypes = new HashSet<TechType>();
-            Array values = Enum.GetValues(typeof(TechType));
+            HashSet<TechType> assignedTechTypes = new HashSet<TechType>(category.TechTypes);
+            TechType[] values = (TechType[])Enum.GetValues(typeof(TechType));
             int noneCount = 0;
             int duplicateCount = 0;
             int assignedCount = 0;
@@ -319,10 +339,9 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
             int missingRegisteredIconCount = 0;
             int vanillaExclusionCount = 0;
             int exceptionCount = 0;
-            StringBuilder exclusionSamples = new StringBuilder();
-            foreach (object value in values)
+            StringBuilder exclusionSamples = DetailedLoggingEnabled ? new StringBuilder() : null;
+            foreach (TechType techType in values)
             {
-                TechType techType = (TechType)value;
                 if (techType == TechType.None)
                 {
                     noneCount++;
@@ -335,7 +354,7 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
                     continue;
                 }
 
-                if (category.TechTypes.Contains(techType))
+                if (assignedTechTypes.Contains(techType))
                 {
                     assignedCount++;
                     continue;
@@ -361,7 +380,7 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
                         exceptionCount++;
                     }
 
-                    if (exclusionSamples.Length < 1800)
+                    if (exclusionSamples != null && exclusionSamples.Length < 1800)
                     {
                         exclusionSamples.Append(techType);
                         exclusionSamples.Append(" [");
@@ -372,7 +391,7 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
                     continue;
                 }
 
-                GetTechTypeSource(techType, out bool isModded);
+                bool isModded = EnumHandler.TryGetOwnerAssembly(techType, out _);
                 if (!isModded && VanillaTechTypeExclusions.Contains(techType))
                 {
                     vanillaExclusionCount++;
@@ -380,54 +399,61 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
                 }
 
                 candidateTechTypes.Add(techType);
+                pickerDisplayData.Add(techType, new TechTypeDisplayData(techType));
             }
 
-            ModDebugLog.LogInfo(
-                "TechType picker catalogue: enumerated=" + values.Length +
-                ", metadata candidates=" + candidateTechTypes.Count +
-                ", none=" + noneCount +
-                ", duplicates=" + duplicateCount +
-                ", already assigned=" + assignedCount +
-                ", missing class ID=" + missingClassIdCount +
-                ", missing localized name=" + missingNameCount +
-                ", missing registered icon=" + missingRegisteredIconCount +
-                ", known vanilla non-pickupable=" + vanillaExclusionCount +
-                ", exceptions=" + exceptionCount + ".");
-            ModDebugLog.LogDebug("TechType picker exclusion samples: " + exclusionSamples);
-            LogTechTypeProbe(TechType.Titanium);
-            LogTechTypeProbe(TechType.Copper);
-            LogTechTypeProbe(TechType.Battery);
+            if (DetailedLoggingEnabled)
+            {
+                ModDebugLog.LogDebug(
+                    "TechType picker catalogue: enumerated=" + values.Length +
+                    ", metadata candidates=" + candidateTechTypes.Count +
+                    ", none=" + noneCount +
+                    ", duplicates=" + duplicateCount +
+                    ", already assigned=" + assignedCount +
+                    ", missing class ID=" + missingClassIdCount +
+                    ", missing localized name=" + missingNameCount +
+                    ", missing registered icon=" + missingRegisteredIconCount +
+                    ", known vanilla non-pickupable=" + vanillaExclusionCount +
+                    ", exceptions=" + exceptionCount + ".");
+                ModDebugLog.LogDebug("TechType picker exclusion samples: " + exclusionSamples);
+                LogTechTypeProbe(TechType.Titanium);
+                LogTechTypeProbe(TechType.Copper);
+                LogTechTypeProbe(TechType.Battery);
+            }
         }
 
-        private void RefreshTechTypePicker(string searchText)
+        /// <summary>
+        /// Filters the TechType picker using item, enum, or source text.
+        /// </summary>
+        public void RefreshTechTypePicker(string searchText)
         {
-            ClearEntries(pickerEntries);
             string normalizedSearch = string.IsNullOrWhiteSpace(searchText)
                 ? string.Empty
                 : searchText.Trim();
+            int visibleCount = 0;
             foreach (TechType techType in availableTechTypes)
             {
-                string displayName = GetTechTypeDisplayName(techType);
-                string sourceName = GetTechTypeSource(techType, out bool isModded);
-                if (pickerCustomOnlyToggle.isOn && !isModded)
+                TechTypeDisplayData data = pickerDisplayData[techType];
+                if (pickerCustomOnlyToggle.isOn && !data.IsModded)
                 {
                     continue;
                 }
 
                 if (normalizedSearch.Length > 0 &&
-                    displayName.IndexOf(normalizedSearch, StringComparison.OrdinalIgnoreCase) < 0 &&
-                    sourceName.IndexOf(normalizedSearch, StringComparison.OrdinalIgnoreCase) < 0)
+                    data.DisplayName.IndexOf(normalizedSearch, StringComparison.OrdinalIgnoreCase) < 0 &&
+                    data.SourceName.IndexOf(normalizedSearch, StringComparison.OrdinalIgnoreCase) < 0)
                 {
                     continue;
                 }
 
-                TechTypePickerEntry entry = Instantiate(pickerEntryPrefab, pickerContent);
+                TechTypePickerEntry entry = GetOrCreateEntry(pickerEntries, visibleCount, pickerEntryPrefab, pickerContent);
+                entry.Bind(data, selectedTechTypes.Contains(techType), SetTechTypeSelected);
                 entry.gameObject.SetActive(true);
-                entry.Bind(techType, displayName, sourceName, isModded, SelectTechType);
-                pickerEntries.Add(entry);
+                visibleCount++;
             }
 
-            pickerEmptyText.gameObject.SetActive(pickerEntries.Count == 0);
+            HideUnusedEntries(pickerEntries, visibleCount);
+            pickerEmptyText.gameObject.SetActive(visibleCount == 0);
         }
 
         private static bool IsSelectableTechType(TechType techType, out string exclusionReason)
@@ -435,20 +461,20 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
             try
             {
                 string classId = CraftData.GetClassIdForTechType(techType);
-                string localizedName = Language.main == null ? string.Empty : Language.main.Get(techType);
-                Sprite icon = SpriteManager.Get(techType);
                 if (string.IsNullOrWhiteSpace(classId))
                 {
                     exclusionReason = "class ID";
                     return false;
                 }
 
+                string localizedName = Language.main == null ? string.Empty : Language.main.Get(techType);
                 if (string.IsNullOrWhiteSpace(localizedName))
                 {
                     exclusionReason = "localized name";
                     return false;
                 }
 
+                Sprite icon = SpriteManager.Get(techType);
                 if (icon == null || icon == SpriteManager.defaultSprite)
                 {
                     exclusionReason = "registered icon";
@@ -488,43 +514,12 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
             }
         }
 
-        private static int CompareTechTypeNames(TechType first, TechType second)
+        private int CompareTechTypeNames(TechType first, TechType second)
         {
             return string.Compare(
-                GetTechTypeDisplayName(first),
-                GetTechTypeDisplayName(second),
+                pickerDisplayData[first].DisplayName,
+                pickerDisplayData[second].DisplayName,
                 StringComparison.OrdinalIgnoreCase);
-        }
-
-        private static string GetTechTypeDisplayName(TechType techType)
-        {
-            string techTypeName = techType.ToString();
-            string localizedName = Language.main == null ? string.Empty : Language.main.Get(techType);
-            return string.IsNullOrWhiteSpace(localizedName) || localizedName == techTypeName
-                ? techTypeName
-                : localizedName + "  (" + techTypeName + ")";
-        }
-
-        private static string GetTechTypeSource(TechType techType, out bool isModded)
-        {
-            Assembly ownerAssembly;
-            if (!EnumHandler.TryGetOwnerAssembly(techType, out ownerAssembly))
-            {
-                isModded = false;
-                return "Subnautica";
-            }
-
-            isModded = true;
-            foreach (KeyValuePair<string, BepInEx.PluginInfo> plugin in Chainloader.PluginInfos)
-            {
-                if (plugin.Value.Instance != null &&
-                    plugin.Value.Instance.GetType().Assembly == ownerAssembly)
-                {
-                    return plugin.Value.Metadata.Name;
-                }
-            }
-
-            return ownerAssembly.GetName().Name;
         }
 
         private void SelectCategory(int index)
@@ -535,7 +530,10 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
             UpdateButtons();
         }
 
-        private void Apply()
+        /// <summary>
+        /// Applies and saves the current category working copy.
+        /// </summary>
+        public void Apply()
         {
             RenameSelectedCategory(categoryNameInput.text);
 
@@ -545,21 +543,51 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
             RefreshAll();
         }
 
-        private void Done()
+        /// <summary>
+        /// Applies the working copy and closes the dialog.
+        /// </summary>
+        public void Done()
         {
             Apply();
             Hide();
         }
 
-        private void Cancel()
+        /// <summary>
+        /// Discards the working copy and closes the dialog.
+        /// </summary>
+        public void Cancel()
         {
             Hide();
         }
 
-        private void RestoreDefaults()
+        /// <summary>
+        /// Replaces the working copy with the built-in categories.
+        /// </summary>
+        public void RestoreDefaults()
         {
             draft = CategoryService.CreateDefaultDraft();
             selectedIndex = draft.Count == 0 ? -1 : 0;
+            RefreshAll();
+        }
+
+        /// <summary>
+        /// Restores the selected built-in category without changing the other categories.
+        /// </summary>
+        public void RestoreSelectedCategoryDefault()
+        {
+            EditableCategory selectedCategory = GetSelectedCategory();
+            if (selectedCategory is null)
+            {
+                return;
+            }
+
+            EditableCategory defaultCategory;
+            if (!CategoryService.TryCreateDefaultCategory(selectedCategory.Id, out defaultCategory))
+            {
+                return;
+            }
+
+            draft[selectedIndex] = defaultCategory;
             RefreshAll();
         }
 
@@ -573,15 +601,15 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
 
         private void RefreshCategories()
         {
-            ClearEntries(categoryEntries);
             for (int index = 0; index < draft.Count; index++)
             {
                 EditableCategory category = draft[index];
-                CategoryListEntry entry = Instantiate(categoryEntryPrefab, categoryContent);
-                entry.gameObject.SetActive(true);
+                CategoryListEntry entry = GetOrCreateEntry(categoryEntries, index, categoryEntryPrefab, categoryContent);
                 entry.Bind(index, category.DisplayName, GetStatus(category), SelectCategory);
-                categoryEntries.Add(entry);
+                entry.gameObject.SetActive(true);
             }
+
+            HideUnusedEntries(categoryEntries, draft.Count);
         }
 
         private void RefreshDetails()
@@ -594,21 +622,22 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
 
         private void RefreshTechTypes()
         {
-            ClearEntries(techTypeEntries);
             EditableCategory category = GetSelectedCategory();
-            if (category == null)
+            if (category is null)
             {
+                HideUnusedEntries(techTypeEntries, 0);
                 return;
             }
 
-            foreach (TechType techType in category.TechTypes)
+            for (int index = 0; index < category.TechTypes.Count; index++)
             {
-                string sourceName = GetTechTypeSource(techType, out bool isModded);
-                TechTypeListEntry entry = Instantiate(techTypeEntryPrefab, techTypeContent);
+                TechTypeDisplayData data = new TechTypeDisplayData(category.TechTypes[index]);
+                TechTypeListEntry entry = GetOrCreateEntry(techTypeEntries, index, techTypeEntryPrefab, techTypeContent);
+                entry.Bind(data, RemoveTechType);
                 entry.gameObject.SetActive(true);
-                entry.Bind(techType, sourceName, isModded, RemoveTechType);
-                techTypeEntries.Add(entry);
             }
+
+            HideUnusedEntries(techTypeEntries, category.TechTypes.Count);
         }
 
         private void UpdateButtons()
@@ -635,10 +664,31 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
             return category.IsModified ? "MODIFIED" : "DEFAULT";
         }
 
+        // Reuse prefab rows while editing; release them when their dialog closes.
+        private static T GetOrCreateEntry<T>(List<T> entries, int index, T prefab, Transform parent) where T : Component
+        {
+            if (index == entries.Count)
+            {
+                entries.Add(Instantiate(prefab, parent));
+            }
+
+            return entries[index];
+        }
+
+        private static void HideUnusedEntries<T>(List<T> entries, int usedCount) where T : Component
+        {
+            for (int index = usedCount; index < entries.Count; index++)
+            {
+                entries[index].gameObject.SetActive(false);
+            }
+        }
+
         private static void ClearEntries<T>(List<T> entries) where T : Component
         {
             foreach (T entry in entries)
             {
+                // Destroy is deferred; inactive rows must stop participating in layout immediately.
+                entry.gameObject.SetActive(false);
                 Destroy(entry.gameObject);
             }
 
@@ -649,6 +699,8 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
         {
             CloseTechTypePicker();
             mainPanel.SetActive(false);
+            ClearEntries(categoryEntries);
+            ClearEntries(techTypeEntries);
             SetParentInteraction(true);
             isShowing = false;
         }

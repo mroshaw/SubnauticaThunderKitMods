@@ -4,6 +4,7 @@
 
   "slug": "more-aquariums-sn",
   "name": "More Aquariums SN",
+  "description" : "Adds beautiful new interior and exterior aquariums to the habitat builder.",
   "supportedGameId": "subnautica",
 
   "releaseAssets": ["BiggerAquariums_SN*.zip"],

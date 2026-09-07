@@ -4,6 +4,7 @@
 
   "slug": "cuddle-cam-sn",
   "name": "CuddleCam SN",
+  "description" : "Ever wondered what your Cuddlefish gets up to when you're sitting all cosy and comfy in your base? Well, wonder no more!",
   "supportedGameId": "subnautica",
 
   "releaseAssets": ["CuddleCam_SN*.zip"],

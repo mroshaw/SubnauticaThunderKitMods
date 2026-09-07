@@ -4,6 +4,7 @@
 
   "slug": "auto-locker-labels-sn",
   "name": "Auto Locker Labels SN",
+  "description" : "Adds editable labels to freestanding lockers and a toggleable 'auto' mode that automatically sets the labels based on their contents.",
   "supportedGameId": "subnautica",
 
   "releaseAssets": ["AutoLockerLabels_SN*.zip"],

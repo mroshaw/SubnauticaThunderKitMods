@@ -4,6 +4,7 @@
 
   "slug": "cuddlefish-recall-sn",
   "name": "Cuddlefish Recall SN",
+  "description" : "Lost your precious Cuddlefish? No problem, the Cuddlefish Recall mod is here to help!",
   "supportedGameId": "subnautica",
 
   "releaseAssets": ["CuddlefishRecall_SN*.zip"],

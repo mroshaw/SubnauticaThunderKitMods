@@ -1,0 +1,46 @@
+{
+  "$schema": "https://openmods.net/manifest.schema.json",
+  "schemaVersion": 2,
+
+  "slug": "cuddlefish-recall-sn",
+  "name": "Cuddlefish Recall SN",
+  "supportedGameId": "subnautica",
+
+  "releaseAssets": ["CuddlefishRecall_SN*.zip"],
+  "primaryAsset": "CuddlefishRecall_SN*.zip",
+
+  "readme": "README.md",
+
+  "thumbnail": "Media/thumbnail.png",
+  
+  "links": [
+    { "label": "Discord", "icon": "chat", "url": "https://discord.gg/BJtGSdnRm" },
+    { "label": "Website", "url": "https://github.com/mroshaw/SubnauticaThunderKitMods" }
+  ],
+
+  "media": [
+    { "type": "image", "url": "Media/CuddlefishHasArrived.png", "label": "Cuddlefish has arrived!" },
+    { "type": "image", "url": "Media/RecallInAction.jpg", "label": "Recall in action" },
+    { "type": "image", "url": "Media/CuddlefishOptions.png", "label": "Recall options" },
+    { "type": "image", "url": "Media/CuddlefishInputOptions.png", "label": "Input options" }
+  ],
+
+  "faq": [
+    { "question": "How do I install?", "answer": "Use the OpenMods Manager or extract the zip into your game folder." }
+  ],
+
+  "dependencies": {
+    "1.0.0": [
+      { "modId": 30, "release": "1.0.0-pre.50" },
+      { "modId": 31, "release": "5.4.23.5" }
+    ]
+  },
+
+  "install": {
+    "path": "BepInEx/plugins",
+    "custom-path": {
+      "src/plugin.dll": "BepInEx/plugins/",
+      "config/":       "BepInEx/config/"
+    }
+  }
+}

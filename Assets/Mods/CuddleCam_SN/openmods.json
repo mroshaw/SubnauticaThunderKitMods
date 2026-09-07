@@ -1,0 +1,45 @@
+{
+  "$schema": "https://openmods.net/manifest.schema.json",
+  "schemaVersion": 2,
+
+  "slug": "cuddle-cam-sn",
+  "name": "CuddleCam SN",
+  "supportedGameId": "subnautica",
+
+  "releaseAssets": ["CuddleCam_SN*.zip"],
+  "primaryAsset": "CuddleCam_SN*.zip",
+
+  "readme": "README.md",
+
+  "thumbnail": "Media/thumbnail.png",
+  
+  "links": [
+    { "label": "Discord", "icon": "chat", "url": "https://discord.gg/BJtGSdnRm" },
+    { "label": "Website", "url": "https://github.com/mroshaw/SubnauticaThunderKitMods" }
+  ],
+
+  "media": [
+    { "type": "image", "url": "Media/CuddleCamConstruction.png", "label": "In the builder" },
+    { "type": "image", "url": "Media/CuddleCamScreenshot.png", "label": "CuddleCam in action" },
+    { "type": "image", "url": "Media/CuddleCamOptions.png", "label": "Performance tuning options" }
+  ],
+
+  "faq": [
+    { "question": "How do I install?", "answer": "Use the OpenMods Manager or extract the zip into your game folder." }
+  ],
+
+  "dependencies": {
+    "1.0.0": [
+      { "modId": 30, "release": "1.0.0-pre.50" },
+      { "modId": 31, "release": "5.4.23.5" }
+    ]
+  },
+
+  "install": {
+    "path": "BepInEx/plugins",
+    "custom-path": {
+      "src/plugin.dll": "BepInEx/plugins/",
+      "config/":       "BepInEx/config/"
+    }
+  }
+}

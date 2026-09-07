@@ -48,7 +48,7 @@ Go into Options > Mods where you can tweak some settings:
 
 ## Installation and Dependencies
 
-> **IMPORTANT!** This mod uses [BepInEx](https://www.nexusmods.com/subnautica/mods/1108)﻿﻿ ﻿﻿and [Nautilus](https://www.nexusmods.com/subnautica/mods/1262)﻿﻿. You must install the latest versions of these to use this mod. The mod supports Vortex, but you must use the latest version of Vortex and the [Subnautica Support extension](https://www.nexusmods.com/site/mods/202)﻿﻿﻿. Just unzip the mod into <gamefolder>\BepInEx\plugins, or let Vortex do its thing. Only works with the 2025 patch and later game versions.
+> ***IMPORTANT!** This mod uses **BepInEx** ﻿﻿and **Nautilus**﻿﻿. You **must** install the latest versions of these to use this mod. As the 2025 patch broke a lot of mods, you must use **Nautilus version 1.0.0-pre.50** or later.*
 
 ## Source Code
 

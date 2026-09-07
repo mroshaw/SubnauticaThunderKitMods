@@ -11,7 +11,7 @@
 
   "readme": "README.md",
 
-  "thumbnail": "Media/thumbnail.png",
+  "thumbnail": "thumbnail.png",
   
   "links": [
     { "label": "Discord", "icon": "chat", "url": "https://discord.gg/BJtGSdnRm" },
@@ -19,9 +19,9 @@
   ],
 
   "media": [
-    { "type": "image", "url": "Media/CuddleCamConstruction.png", "label": "In the builder" },
-    { "type": "image", "url": "Media/CuddleCamScreenshot.png", "label": "CuddleCam in action" },
-    { "type": "image", "url": "Media/CuddleCamOptions.png", "label": "Performance tuning options" }
+    { "type": "image", "url": "CuddleCamConstruction.png", "label": "In the builder" },
+    { "type": "image", "url": "CuddleCamScreenshot.png", "label": "CuddleCam in action" },
+    { "type": "image", "url": "CuddleCamOptions.png", "label": "Performance tuning options" }
   ],
 
   "faq": [

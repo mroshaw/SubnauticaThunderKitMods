@@ -11,7 +11,7 @@
 
   "readme": "README.md",
 
-  "thumbnail": "Media/thumbnail.png",
+  "thumbnail": "thumbnail.png",
   
   "links": [
     { "label": "Discord", "icon": "chat", "url": "https://discord.gg/BJtGSdnRm" },
@@ -19,10 +19,10 @@
   ],
 
   "media": [
-    { "type": "image", "url": "Media/CuddlefishHasArrived.png", "label": "Cuddlefish has arrived!" },
-    { "type": "image", "url": "Media/RecallInAction.jpg", "label": "Recall in action" },
-    { "type": "image", "url": "Media/CuddlefishOptions.png", "label": "Recall options" },
-    { "type": "image", "url": "Media/CuddlefishInputOptions.png", "label": "Input options" }
+    { "type": "image", "url": "CuddlefishHasArrived.png", "label": "Cuddlefish has arrived!" },
+    { "type": "image", "url": "RecallInAction.jpg", "label": "Recall in action" },
+    { "type": "image", "url": "CuddlefishOptions.png", "label": "Recall options" },
+    { "type": "image", "url": "CuddlefishInputOptions.png", "label": "Input options" }
   ],
 
   "faq": [

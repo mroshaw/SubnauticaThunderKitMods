@@ -11,7 +11,7 @@
 
   "readme": "README.md",
 
-  "thumbnail": "Media/thumbnail.png",
+  "thumbnail": "thumbnail.png",
   
   "links": [
     { "label": "Discord", "icon": "chat", "url": "https://discord.gg/BJtGSdnRm" },
@@ -19,9 +19,9 @@
   ],
 
   "media": [
-    { "type": "image", "url": "Media/AutoLabelScreenshot.png", "label": "Auto labels in use" },
-    { "type": "image", "url": "Media/CategoryCustomisationScreenshot.jpg", "label": "Category customisation" },
-    { "type": "image", "url": "Media/AddTechTypesScreenshot.png", "label": "Category item customisation" }
+    { "type": "image", "url": "AutoLabelScreenshot.png", "label": "Auto labels in use" },
+    { "type": "image", "url": "CategoryCustomisationScreenshot.jpg", "label": "Category customisation" },
+    { "type": "image", "url": "AddTechTypesScreenshot.png", "label": "Category item customisation" }
   ],
 
   "faq": [

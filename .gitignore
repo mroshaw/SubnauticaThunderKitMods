@@ -111,7 +111,3 @@ crashlytics-build.properties
 # Include the RipperAssetImporter package submodule
 !/[Pp]ackages/RippedAssetImporter
 !/[Pp]ackages/RippedAssetImporter/**
-
-# Mod media, screenshots, videos, etc.
-**/Media/
-**/Media.meta

@@ -1,0 +1,4 @@
+"Auto Locker Labels" mod for Subnautica and Below Zero
+
+I've just published a new mod for both Subnautica and Below Zero: "Auto Locker Labels". The mod generates a dynamic label based on what you put in each locker. So if you put a load of copper into the locker, the label becomes "COPPER". Add some titanium, and the label becomes "METALS". Add some quartz, and the label becomes "RAW MATERIALS". And so on. There are a number of different categories and groupings to best show exactly what's in each locker. To make it even more useful, the mod adds a label to existing freestanding lockers and adds a toggle control to the native interface for both freestanding and wall lockers.
+The mod is called "Auto Locker Labels SN" and "Auto Locker Labels BZ" and is available for download on Nexus Mods.

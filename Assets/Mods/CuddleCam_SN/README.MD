@@ -2,6 +2,8 @@
 
 Have you ever wondered what your Cuddlefish gets up to when you're sitting all cosy and comfortable in your base? Well, wonder no more, thanks to CuddleCam, the amazing new home entertainment product from Alterra!
 
+![](./media/CuddleCamBanner.png)
+
 ## Features
 
 With the new CuddleCam from Alterra, you now have access to several great features:

@@ -1,0 +1,47 @@
+{
+  "$schema": "https://openmods.net/manifest.schema.json",
+  "schemaVersion": 2,
+
+  "slug": "subnautica-pets-2-sn",
+  "name": "Subnautica Pets 2 SN",
+  "description" : "A failed experiment to tame and weaponise the creatures of 4546B presents an opportunity: to use the tech for good, and bring companionship and hope in your struggle to survive!",
+  "supportedGameId": "subnautica",
+
+  "releaseAssets": ["SubnauticaPets2_SN*.zip"],
+  "primaryAsset": "SubnauticaPets2_SN*.zip",
+
+  "readme": "README.md",
+
+  "thumbnail": "thumbnail.png",
+  
+  "links": [
+    { "label": "Discord", "icon": "chat", "url": "https://discord.gg/BJtGSdnRm" },
+    { "label": "Website", "url": "https://github.com/mroshaw/SubnauticaThunderKitMods" }
+  ],
+
+  "media": [
+    { "type": "image", "url": "BillyScreenshot.png", "label": "Pet Billy!" },
+    { "type": "image", "url": "RobbieScreenshot.jpg", "label": "Robot pet Robbie!" },
+    { "type": "image", "url": "ConsoleScreenshot.png", "label": "The new Pet Console" },
+    { "type": "image", "url": "DnaScreenshot.png", "label": "Pet DNA to discover!" }
+  ],
+
+  "faq": [
+    { "question": "How do I install?", "answer": "Use the OpenMods Manager or extract the zip into your game folder." }
+  ],
+
+  "dependencies": {
+    "1.0.0": [
+      { "modId": 30, "release": "1.0.0-pre.50" },
+      { "modId": 31, "release": "5.4.23.5" }
+    ]
+  },
+
+  "install": {
+    "path": "BepInEx/plugins",
+    "custom-path": {
+      "src/plugin.dll": "BepInEx/plugins/",
+      "config/":       "BepInEx/config/"
+    }
+  }
+}

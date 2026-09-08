@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ModVersionSettings
   m_EditorClassIdentifier: 
   mods:
-  - name: CuddleCam_SN
+  - name: Cuddle Cam SN
     pluginScript: {fileID: 11500000, guid: 473db868ddeea4a4c9cb1822f639949c, type: 3}
     manifest: {fileID: 11400000, guid: 18c34aa92e989be41b953dd54b6b22ae, type: 2}
     version:
@@ -24,6 +24,7 @@ MonoBehaviour:
       major: 0
       minor: 0
       patch: 0
+    publishingSites: 3
     nexusMods:
       fileGroupId: 7879512
       gameScopedModId: 4147
@@ -36,17 +37,25 @@ MonoBehaviour:
       primaryModManagerDownload: 1
       allowModManagerDownload: 1
       showRequirementsPopup: 1
-  - name: AutoLockerLabels_SN
+    gitHub:
+      tagNameTemplate: '{archiveName}-v{version}'
+      releaseTitleTemplate: '{displayName} v{version}'
+      targetCommitish: 
+      draft: 0
+      prerelease: 0
+      generateReleaseNotes: 0
+  - name: Auto Locker Labels SN
     pluginScript: {fileID: 11500000, guid: cc250c09ee1c4d7449cec39794487bfd, type: 3}
     manifest: {fileID: 11400000, guid: 2902aab298b6abf48bd6fddb3e14f092, type: 2}
     version:
       major: 1
       minor: 0
-      patch: 3
+      patch: 4
     currentPublishedVersion:
-      major: 0
+      major: 1
       minor: 0
-      patch: 0
+      patch: 4
+    publishingSites: 3
     nexusMods:
       fileGroupId: 7895037
       gameScopedModId: 4152
@@ -59,3 +68,41 @@ MonoBehaviour:
       primaryModManagerDownload: 1
       allowModManagerDownload: 1
       showRequirementsPopup: 1
+    gitHub:
+      tagNameTemplate: '{archiveName}-v{version}'
+      releaseTitleTemplate: '{displayName} v{version}'
+      targetCommitish: 
+      draft: 0
+      prerelease: 0
+      generateReleaseNotes: 0
+  - name: Subnautica Pets 2 SN
+    pluginScript: {fileID: 11500000, guid: 3aec9a9d662fe0c479f6e8e3fd971655, type: 3}
+    manifest: {fileID: 11400000, guid: 1046126c490d7384799f2de26323218c, type: 2}
+    version:
+      major: 2
+      minor: 12
+      patch: 0
+    currentPublishedVersion:
+      major: 2
+      minor: 12
+      patch: 0
+    publishingSites: 2
+    nexusMods:
+      fileGroupId: 7895037
+      gameScopedModId: 4152
+      gameDomain: subnautica
+      displayName: AutoLockerLabels SN
+      description: Main mod file
+      fileCategory: main
+      archiveExistingVersion: 1
+      updateModVersion: 1
+      primaryModManagerDownload: 1
+      allowModManagerDownload: 1
+      showRequirementsPopup: 1
+    gitHub:
+      tagNameTemplate: '{archiveName}-v{version}'
+      releaseTitleTemplate: '{displayName} v{version}'
+      targetCommitish: 
+      draft: 0
+      prerelease: 0
+      generateReleaseNotes: 0

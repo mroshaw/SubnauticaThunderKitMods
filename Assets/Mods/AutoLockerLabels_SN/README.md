@@ -8,9 +8,13 @@ This mod automatically generates locker labels based on the items stored within.
 - Lots of different items - the locker label will be 'MIXED'.
 - Details of all the categories and item mappings can be found in [this document](https://github.com/mroshaw/SubnauticaThunderKitMods/blob/main/Assets/Mods/AutoLockerLabels_SN/CATEGORIES.md).
 
-![](./Media/LabelExample.png)
+![](./media/LabelExample.png)
 
-To ensure you get the most out of this functionality, the mod also adds a customisable label to the larger, freestanding locker, with equivalent UI controls, including the colour selector from the small locker.
+To ensure you get the most out of this functionality, the mod also adds a customisable label to the larger, freestanding locker, with equivalent UI controls, including the colour selector from the small locker. Auto labelling is available on:
+
+- Large freestanding lockers.
+- Wall lockers.
+- Waterproof lockers
 
 ## Features
 
@@ -24,17 +28,27 @@ The mod adds these new features:
 
 ## User Guide
 
-Interact with a locker label as you would normally. Use the new toggle control to toggle automatic labelling on or off:
+Interact with a locker label as you would normally. Use the new toggle control to toggle automatic labelling on or off.
 
-![](./Media/LabelUserGuide.png)
+### Large locker
+
+![](./media/LargeLockerGuide.png)
+
+### Wall locker
+
+![](./media/WallLockerGuide.png)
+
+### Waterproof locker
+
+![](./media/FloatingLockerGuide.png)
 
 You can view, amend, add and remove categories and mapping of categories to items via the Options > Mods menu. Under the "Auto Locker Label" heading, you'll see a "Configure Categories" button. Click this to access the customisation UI:
 
-![](./Media/CategoryCustomisationScreenshot.png)
+![](./media/CategoryCustomisationScreenshot.png)
 
 The UI itself is self-explanatory, but do create a post if you're unsure. When clicking the "Add TechType" button to add items to a category, you can use the "Custom Only" checkbox to show items added by other mods:
 
-![](./Media/AddTechTypesScreenshot.png)
+![](./media/AddTechTypesScreenshot.png)
 
 This makes it really easy to categorise custom items, such as "Food" items from the excellent [AlterraWays](https://www.nexusmods.com/subnautica/mods/1516) mod.
 

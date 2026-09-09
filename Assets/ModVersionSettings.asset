@@ -50,7 +50,7 @@ MonoBehaviour:
     version:
       major: 1
       minor: 0
-      patch: 4
+      patch: 5
     currentPublishedVersion:
       major: 1
       minor: 0
@@ -86,7 +86,7 @@ MonoBehaviour:
       major: 2
       minor: 12
       patch: 0
-    publishingSites: 2
+    publishingSites: -1
     nexusMods:
       fileGroupId: 2083597
       gameScopedModId: 1373
@@ -117,7 +117,7 @@ MonoBehaviour:
       major: 1
       minor: 2
       patch: 0
-    publishingSites: 2
+    publishingSites: -1
     nexusMods:
       fileGroupId: 2435107
       gameScopedModId: 2807
@@ -148,7 +148,7 @@ MonoBehaviour:
       major: 1
       minor: 1
       patch: 0
-    publishingSites: 2
+    publishingSites: -1
     nexusMods:
       fileGroupId: 2434717
       gameScopedModId: 2795

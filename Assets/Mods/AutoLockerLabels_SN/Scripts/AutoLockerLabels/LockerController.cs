@@ -14,6 +14,7 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
         private Constructable constructable;
         private ColoredLabel coloredLabel;
         private Toggle automaticToggle;
+        private Button colorSelectorButton;
         private uGUI_InputField labelInput;
         private ItemsContainer itemsContainer;
         private bool isAutomatic;
@@ -50,10 +51,19 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
             labelInput = coloredLabel.signInput.inputField;
             itemsContainer = storageContainer.container;
             savesCustomLabel = CraftData.GetTechType(storageContainer.gameObject) == TechType.Locker;
+
+            if (savesCustomLabel)
+            {
+                Transform colorSelectorTransform = coloredLabel.signInput.transform.Find("ColorSelector");
+                colorSelectorButton = colorSelectorTransform
+                    ? colorSelectorTransform.GetComponent<Button>()
+                    : null;
+            }
            
             lockerId = prefabIdentifier.Id;
             isAutomatic = AutoLockerLabelsPlugin.SaveData.IsAutomatic(lockerId);
             UpdateLabelEditability();
+            ApplySavedCustomLabelColor();
 
             // For a SmallStorage locker, shift the ColorSelector to the left
             if (techType == TechType.SmallStorage)
@@ -73,6 +83,11 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
             if (savesCustomLabel)
             {
                 labelInput.onEndEdit.AddListener(OnCustomLabelEdited);
+
+                if (colorSelectorButton)
+                {
+                    colorSelectorButton.onClick.AddListener(OnCustomLabelColorChanged);
+                }
             }
             
             itemsContainer.onAddItem += OnContentsChanged;
@@ -124,6 +139,11 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
             if (savesCustomLabel && labelInput)
             {
                 labelInput.onEndEdit.RemoveListener(OnCustomLabelEdited);
+            }
+
+            if (colorSelectorButton)
+            {
+                colorSelectorButton.onClick.RemoveListener(OnCustomLabelColorChanged);
             }
             
             if (itemsContainer is null)
@@ -180,6 +200,13 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
                 AutoLockerLabelsPlugin.SaveData.SetCustomLabel(lockerId, label);
             }
         }
+
+        private void OnCustomLabelColorChanged()
+        {
+            AutoLockerLabelsPlugin.SaveData.SetCustomLabelColor(
+                lockerId,
+                coloredLabel.signInput.colorIndex);
+        }
         
         private void EnableAutomatic()
         {
@@ -225,6 +252,15 @@ namespace DaftAppleGames.AutoLockerLabels_SN.AutoLockerLabels
             if (savesCustomLabel && AutoLockerLabelsPlugin.SaveData.TryGetCustomLabel(lockerId, out string customLabel))
             {
                 coloredLabel.signInput.text = customLabel;
+            }
+        }
+
+        private void ApplySavedCustomLabelColor()
+        {
+            if (savesCustomLabel &&
+                AutoLockerLabelsPlugin.SaveData.TryGetCustomLabelColor(lockerId, out int colorIndex))
+            {
+                coloredLabel.signInput.colorIndex = colorIndex;
             }
         }
 

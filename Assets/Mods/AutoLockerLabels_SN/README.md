@@ -10,7 +10,9 @@ This mod automatically generates locker labels based on the items stored within.
 
 ![](./media/LabelExample.png)
 
-To ensure you get the most out of this functionality, the mod also adds a customisable label to the larger, freestanding locker, with equivalent UI controls, including the colour selector from the small locker. Auto labelling is available on:
+To ensure you get the most out of this functionality, the mod also adds a customisable label to the larger, freestanding locker, with equivalent UI controls, including the colour selector from the small locker.
+
+Auto labelling is available on:
 
 - Large freestanding lockers.
 - Wall lockers.

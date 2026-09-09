@@ -54,7 +54,7 @@ MonoBehaviour:
     currentPublishedVersion:
       major: 1
       minor: 0
-      patch: 4
+      patch: 5
     publishingSites: 3
     nexusMods:
       fileGroupId: 7895037

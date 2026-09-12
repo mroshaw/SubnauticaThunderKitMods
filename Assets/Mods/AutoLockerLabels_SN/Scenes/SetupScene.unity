@@ -455,9 +455,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 114043919389829319, guid: 5e192190e6576964fad34e21cb525d19,
         type: 3}
+      propertyPath: m_fontAsset
+      value: 
+      objectReference: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee,
+        type: 2}
+    - target: {fileID: 114043919389829319, guid: 5e192190e6576964fad34e21cb525d19,
+        type: 3}
       propertyPath: m_isRichText
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114043919389829319, guid: 5e192190e6576964fad34e21cb525d19,
+        type: 3}
+      propertyPath: m_sharedMaterial
+      value: 
+      objectReference: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
     - target: {fileID: 224094320201520353, guid: 5e192190e6576964fad34e21cb525d19,
         type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -470,18 +481,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 224801075752484240, guid: 5e192190e6576964fad34e21cb525d19,
         type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -0
+      propertyPath: m_SizeDelta.x
+      value: 351.0001
+      objectReference: {fileID: 0}
+    - target: {fileID: 224801075752484240, guid: 5e192190e6576964fad34e21cb525d19,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 153.49997
       objectReference: {fileID: 0}
     - target: {fileID: 224801075752484240, guid: 5e192190e6576964fad34e21cb525d19,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 18.6
+      value: 23.500053
       objectReference: {fileID: 0}
     - target: {fileID: 224801075752484240, guid: 5e192190e6576964fad34e21cb525d19,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0
+      value: -23.249983
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5e192190e6576964fad34e21cb525d19, type: 3}
@@ -5242,6 +5258,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: AutoToggleSmallStorage
+      objectReference: {fileID: 0}
+    - target: {fileID: 3991767097651807096, guid: f65a6c454c98a3444bcd00ed3cd15b01,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f65a6c454c98a3444bcd00ed3cd15b01, type: 3}

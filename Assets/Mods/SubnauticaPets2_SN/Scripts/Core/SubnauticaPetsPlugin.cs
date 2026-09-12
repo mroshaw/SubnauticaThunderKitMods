@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 using BepInEx;
@@ -18,7 +18,7 @@ namespace DaftAppleGames.SubnauticaPets
     {
         private const string MyGuid = "com.daftapplegames.subnauticapets2";
         private const string PluginName = "SubnauticaPets2";
-        internal const string VersionString = "2.12.0";
+        internal const string VersionString = "2.12.1";
 
         private const string AssetBundleName = "subnauticapets2assetbundle";
         
@@ -66,7 +66,9 @@ namespace DaftAppleGames.SubnauticaPets
             {
                 ModDebugLog.LogDebug("Started Saving Data...");
                 SaveData data = e.Instance as SaveData;
-                data.PetDetailsHashSet = PetSaver.GetPetListAsHashSet();
+                HashSet<PetSaver.PetDetails> petDetails = PetSaver.GetPetListAsHashSet();
+                data.PetDetailsHashSet = petDetails;
+                LoadedPetDetailsHashSet = petDetails;
                 ModDebugLog.LogDebug("Started Saving Data... Done.");
             };
             // Load the HashSet

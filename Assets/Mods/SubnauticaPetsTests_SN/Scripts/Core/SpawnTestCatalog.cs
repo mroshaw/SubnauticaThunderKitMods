@@ -26,10 +26,6 @@ namespace DaftAppleGames.SubnauticaPetsTests
 
         private static void AddDnaTests(List<SpawnTestCase> testCases)
         {
-            AddDnaCluster(testCases, "CatDna[0]", "CatPetDna", -49.88f, -28.49f, -403.04f, 2);
-            AddDnaCluster(testCases, "CatDna[1]", "CatPetDna", -168.27f, -41.07f, -234.29f, 3);
-            AddDnaCluster(testCases, "CatDna[2]", "CatPetDna", -1628.70f, -356.51f, 77.22f, 4);
-
             AddDnaCluster(testCases, "AlienRobotDna[0]", "AlienRobotPetDna", 292.63f, -103.24f, 414.90f, 2);
             AddDnaCluster(testCases, "AlienRobotDna[1]", "AlienRobotPetDna", -381.88f, -122.79f, 623.95f, 3);
             AddDnaCluster(testCases, "AlienRobotDna[2]", "AlienRobotPetDna", -503.13f, -96.74f, -56.38f, 4);

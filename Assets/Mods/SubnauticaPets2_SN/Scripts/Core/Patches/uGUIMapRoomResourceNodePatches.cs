@@ -20,8 +20,7 @@ namespace DaftAppleGames.SubnauticaPets.Patches
         public static void SetTechType_Postfix(uGUI_MapRoomResourceNode __instance, TechType techType)
         {
             if (techType != PetDnaPrefabs.AlienRobotDnaPrefab.Info.TechType && techType != PetDnaPrefabs.CaveCrawlerDnaPrefab.Info.TechType &&
-                techType != PetDnaPrefabs.BloodCrawlerDnaPrefab.Info.TechType && techType != PetDnaPrefabs.CrabSquidDnaPrefab.Info.TechType &&
-                techType != PetDnaPrefabs.CatDnaPrefab.Info.TechType)
+                techType != PetDnaPrefabs.BloodCrawlerDnaPrefab.Info.TechType && techType != PetDnaPrefabs.CrabSquidDnaPrefab.Info.TechType)
 
             {
                 return;

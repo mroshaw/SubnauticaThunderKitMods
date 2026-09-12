@@ -22,11 +22,6 @@ namespace DaftAppleGames.SubnauticaPets.Pets
 
         // Fixed DNA clusters are placed beside the existing SN fragment locations. The center
         // is offset from the fragment pivot so the samples do not obstruct scanning the fragment.
-        private static readonly SpawnLocation[] CatFixedSpawns = CreateFixedSpawnClusters(
-            Cluster(-49.88f, -28.49f, -403.04f, 2),
-            Cluster(-168.27f, -41.07f, -234.29f, 3),
-            Cluster(-1628.70f, -356.51f, 77.22f, 4));
-
         private static readonly SpawnLocation[] AlienRobotFixedSpawns = CreateFixedSpawnClusters(
             Cluster(292.63f, -103.24f, 414.90f, 2),
             Cluster(-381.88f, -122.79f, 623.95f, 3),
@@ -59,7 +54,6 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             MaterialUtils.ApplySNShaders(dnaModelPrefab);
 
             // Register DNA spawn prefabs
-            CatDnaPrefab.Register(dnaModelPrefab);
             AlienRobotDnaPrefab.Register(dnaModelPrefab);
             BloodCrawlerDnaPrefab.Register(dnaModelPrefab);
             CaveCrawlerDnaPrefab.Register(dnaModelPrefab);
@@ -68,36 +62,6 @@ namespace DaftAppleGames.SubnauticaPets.Pets
             ConfigureDataBank();
         }
 
-        /// <summary>
-        /// Cat DNA Prefab
-        /// </summary>
-        internal static class CatDnaPrefab
-        {
-            internal static PrefabInfo Info;
-            private const string TextureAssetName = "CatDnaStrandTexture.png";
-            private const string ClassId = "CatPetDna";
-            private const int FindCount = 1;
-            private const float FindProbability = 0.08f;
-
-            /// <summary>
-            /// Register Cat DNA
-            /// </summary>
-            internal static void Register(GameObject dnaModelGameObject)
-            {
-                Info = RegisterDnaPrefab(ClassId, null, null, TextureAssetName, Color.grey,
-                    new LootDistributionData.BiomeData[]
-                    {
-                        new LootDistributionData.BiomeData { biome = BiomeType.InactiveLavaZone_Corridor_Floor, count = FindCount, probability = FindProbability},
-                        new LootDistributionData.BiomeData { biome = BiomeType.InactiveLavaZone_Corridor_Floor_Far, count = FindCount, probability = FindProbability},
-                        new LootDistributionData.BiomeData { biome = BiomeType.InactiveLavaZone_LavaPit_Floor, count = FindCount, probability = FindProbability},
-                        new LootDistributionData.BiomeData { biome = BiomeType.JellyshroomCaves_CaveFloor, count = FindCount, probability = FindProbability},
-                        new LootDistributionData.BiomeData { biome = BiomeType.UnderwaterIslands_TechSite, count = FindCount, probability = FindProbability},
-                        new LootDistributionData.BiomeData { biome = BiomeType.UnderwaterIslands_TechSite_Scatter, count = FindCount, probability = FindProbability},
-                        new LootDistributionData.BiomeData { biome = BiomeType.UnderwaterIslands_ValleyFloor, count = FindCount, probability = FindProbability},
-                        new LootDistributionData.BiomeData { biome = BiomeType.CrashZone_Sand, count = FindCount, probability = FindProbability},
-                    }, dnaModelGameObject);
-            }
-        }
         /// <summary>
         /// Alien Robot DNA
         /// </summary>
@@ -124,13 +88,18 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                     new LootDistributionData.BiomeData { biome = BiomeType.Dunes_TechSite, count = FindCount, probability = FindProbability},
                     new LootDistributionData.BiomeData { biome = BiomeType.Dunes_TechSite_Scatter, count = FindCount, probability = FindProbability},
                     new LootDistributionData.BiomeData { biome = BiomeType.GrandReef_TechSite_Barrier, count = FindCount, probability = FindProbability},
+                    new LootDistributionData.BiomeData { biome = BiomeType.GrandReef_TechSite_Scattered, count = FindCount, probability = FindProbability},
                     new LootDistributionData.BiomeData { biome = BiomeType.GrassyPlateaus_TechSite, count = FindCount, probability = FindProbability},
+                    new LootDistributionData.BiomeData { biome = BiomeType.GrassyPlateaus_TechSite_Scattered, count = FindCount, probability = FindProbability},
                     new LootDistributionData.BiomeData { biome = BiomeType.Kelp_CaveFloor, count = FindCount, probability = FindProbability},
                     new LootDistributionData.BiomeData { biome = BiomeType.Kelp_TechSite, count = FindCount, probability = FindProbability},
                     new LootDistributionData.BiomeData { biome = BiomeType.KooshZone_CaveFloor, count = FindCount, probability = FindProbability},
+                    new LootDistributionData.BiomeData { biome = BiomeType.KooshZone_TechSite_Scatter, count = FindCount, probability = FindProbability},
                     new LootDistributionData.BiomeData { biome = BiomeType.LostRiverCorridor_LakeFloor, count = FindCount, probability = FindProbability},
                     new LootDistributionData.BiomeData { biome = BiomeType.LostRiverJunction_LakeFloor, count = FindCount, probability = FindProbability},
+                    new LootDistributionData.BiomeData { biome = BiomeType.Mountains_TechSite_Scatter, count = FindCount, probability = FindProbability},
                     new LootDistributionData.BiomeData { biome = BiomeType.SafeShallows_TechSite_Scattered, count = FindCount, probability = FindProbability},
+                    new LootDistributionData.BiomeData { biome = BiomeType.SparseReef_Techsite_Scatter, count = FindCount, probability = FindProbability},
                     new LootDistributionData.BiomeData { biome = BiomeType.CrashZone_Rock, count = FindCount, probability = FindProbability},
                     }, dnaModelGameObject);
             }
@@ -156,18 +125,23 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                 Info = RegisterDnaPrefab(ClassId, null, null, TextureAssetName, Color.red,
                     new LootDistributionData.BiomeData[] {
                         new LootDistributionData.BiomeData { biome = BiomeType.BloodKelp_TrenchFloor, count = FindCount, probability = FindProbability},
+                        new LootDistributionData.BiomeData { biome = BiomeType.BloodKelp_CaveFloor, count = FindCount, probability = FindProbability},
                         new LootDistributionData.BiomeData { biome = BiomeType.BonesField_LakePit_Floor, count = FindCount, probability = FindProbability},
                         new LootDistributionData.BiomeData { biome = BiomeType.BonesField_Lake_Floor, count = FindCount, probability = FindProbability},
                         new LootDistributionData.BiomeData { biome = BiomeType.Canyon_Lake_Floor, count = FindCount, probability = FindProbability},
+                        new LootDistributionData.BiomeData { biome = BiomeType.Dunes_CaveFloor, count = FindCount, probability = FindProbability},
+                        new LootDistributionData.BiomeData { biome = BiomeType.GrandReef_CaveFloor, count = FindCount, probability = FindProbability},
                         new LootDistributionData.BiomeData { biome = BiomeType.GrandReef_TechSite_Scattered, count = FindCount, probability = FindProbability},
                         new LootDistributionData.BiomeData { biome = BiomeType.GrandReef_TechSite_Scattered_Crate_Obsolete, count = FindCount, probability = FindProbability},
                         new LootDistributionData.BiomeData { biome = BiomeType.KooshZone_TechSite, count = FindCount, probability = FindProbability},
+                        new LootDistributionData.BiomeData { biome = BiomeType.LostRiverCorridor_LakeFloor, count = FindCount, probability = FindProbability},
                         new LootDistributionData.BiomeData { biome = BiomeType.Mountains_CaveFloor, count = FindCount, probability = FindProbability},
                         new LootDistributionData.BiomeData { biome = BiomeType.Mountains_IslandCaveFloor, count = FindCount, probability = FindProbability},
                         new LootDistributionData.BiomeData { biome = BiomeType.Mountains_TechSite, count = FindCount, probability = FindProbability},
                         new LootDistributionData.BiomeData { biome = BiomeType.MushroomForest_CaveFloor, count = FindCount, probability = FindProbability},
                         new LootDistributionData.BiomeData { biome = BiomeType.MushroomForest_GiantTreeInteriorFloor, count = FindCount, probability = FindProbability},
                         new LootDistributionData.BiomeData { biome = BiomeType.SafeShallows_TechSite_Scattered_Crate_Obsolete, count = FindCount, probability = FindProbability},
+                        new LootDistributionData.BiomeData { biome = BiomeType.SkeletonCave_Lake_Floor, count = FindCount, probability = FindProbability},
                         new LootDistributionData.BiomeData { biome = BiomeType.CrashZone_TrenchSand, count = FindCount, probability = FindProbability},
                     }, dnaModelGameObject);
             }
@@ -185,12 +159,15 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                 Info = RegisterDnaPrefab(ClassId, null, null, TextureAssetName, Color.cyan,
                     new LootDistributionData.BiomeData[] {
                         new LootDistributionData.BiomeData { biome = BiomeType.Dunes_CaveFloor, count = FindCount, probability = FindProbability},
+                        new LootDistributionData.BiomeData { biome = BiomeType.BloodKelp_CaveFloor, count = FindCount, probability = FindProbability},
                         new LootDistributionData.BiomeData { biome = BiomeType.GhostTree_LakePit_Floor, count = FindCount, probability = FindProbability},
                         new LootDistributionData.BiomeData { biome = BiomeType.GhostTree_Lake_Floor, count = FindCount, probability = FindProbability},
                         new LootDistributionData.BiomeData { biome = BiomeType.GrandReef_CaveFloor, count = FindCount, probability = FindProbability},
                         new LootDistributionData.BiomeData { biome = BiomeType.GrassyPlateaus_CaveFloor, count = FindCount, probability = FindProbability},
                         new LootDistributionData.BiomeData { biome = BiomeType.GrassyPlateaus_TechSite_Scattered, count = FindCount, probability = FindProbability},
                         new LootDistributionData.BiomeData { biome = BiomeType.Kelp_TechSite_Scattered, count = FindCount, probability = FindProbability},
+                        new LootDistributionData.BiomeData { biome = BiomeType.KooshZone_CaveFloor, count = FindCount, probability = FindProbability},
+                        new LootDistributionData.BiomeData { biome = BiomeType.Mountains_IslandCaveFloor, count = FindCount, probability = FindProbability},
                         new LootDistributionData.BiomeData { biome = BiomeType.MushroomForest_TechSite, count = FindCount, probability = FindProbability},
                         new LootDistributionData.BiomeData { biome = BiomeType.PrisonAquarium_CaveFloor, count = FindCount, probability = FindProbability},
                         new LootDistributionData.BiomeData { biome = BiomeType.SafeShallows_CaveFloor, count = FindCount, probability = FindProbability},
@@ -198,6 +175,8 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                         new LootDistributionData.BiomeData { biome = BiomeType.SeaTreaderPath_CaveFloor, count = FindCount, probability = FindProbability},
                         new LootDistributionData.BiomeData { biome = BiomeType.SeaTreaderPath_TechSite_Scatter, count = FindCount, probability = FindProbability},
                         new LootDistributionData.BiomeData { biome = BiomeType.SkeletonCave_Lake_Floor, count = FindCount, probability = FindProbability},
+                        new LootDistributionData.BiomeData { biome = BiomeType.UnderwaterIslands_IslandCaveFloor, count = FindCount, probability = FindProbability},
+                        new LootDistributionData.BiomeData { biome = BiomeType.CrashZone_Rock, count = FindCount, probability = FindProbability},
                         new LootDistributionData.BiomeData { biome = BiomeType.CrashZone_TrenchRock, count = FindCount, probability = FindProbability},
                     }, dnaModelGameObject);
             }
@@ -226,8 +205,14 @@ namespace DaftAppleGames.SubnauticaPets.Pets
                     new LootDistributionData.BiomeData { biome = BiomeType.InactiveLavaZone_CastleTunnel_Floor, count = FindCount, probability = FindProbability},
                     new LootDistributionData.BiomeData { biome = BiomeType.InactiveLavaZone_Chamber_Floor, count = FindCount, probability = FindProbability},
                     new LootDistributionData.BiomeData { biome = BiomeType.InactiveLavaZone_Chamber_Floor_Far, count = FindCount, probability = FindProbability},
+                    new LootDistributionData.BiomeData { biome = BiomeType.BloodKelp_CaveFloor, count = FindCount, probability = FindProbability},
+                    new LootDistributionData.BiomeData { biome = BiomeType.BonesField_Lake_Floor, count = FindCount, probability = FindProbability},
+                    new LootDistributionData.BiomeData { biome = BiomeType.GrandReef_CaveFloor, count = FindCount, probability = FindProbability},
+                    new LootDistributionData.BiomeData { biome = BiomeType.GrandReef_TechSite_Scattered, count = FindCount, probability = FindProbability},
                     new LootDistributionData.BiomeData { biome = BiomeType.KooshZone_TechSite_Scatter, count = FindCount, probability = FindProbability},
                     new LootDistributionData.BiomeData { biome = BiomeType.Mountains_TechSite_Scatter, count = FindCount, probability = FindProbability},
+                    new LootDistributionData.BiomeData { biome = BiomeType.LostRiverCorridor_LakeFloor, count = FindCount, probability = FindProbability},
+                    new LootDistributionData.BiomeData { biome = BiomeType.LostRiverJunction_LakeFloor, count = FindCount, probability = FindProbability},
                     new LootDistributionData.BiomeData { biome = BiomeType.SeaTreaderPath_TechSite, count = FindCount, probability = FindProbability},
                     new LootDistributionData.BiomeData { biome = BiomeType.SparseReef_CaveFloor, count = FindCount, probability = FindProbability},
                     new LootDistributionData.BiomeData { biome = BiomeType.SparseReef_DeepFloor, count = FindCount, probability = FindProbability},
@@ -299,11 +284,6 @@ namespace DaftAppleGames.SubnauticaPets.Pets
 
         private static SpawnLocation[] GetFixedSpawns(string classId)
         {
-            if (classId == "CatPetDna")
-            {
-                return CatFixedSpawns;
-            }
-
             if (classId == "AlienRobotPetDna")
             {
                 return AlienRobotFixedSpawns;
@@ -388,7 +368,6 @@ namespace DaftAppleGames.SubnauticaPets.Pets
         private static void ConfigureDataBank()
         {
             PetPrefabConfigUtils.ConfigureDatabankEntry(EncKey, EncPath, DatabankMainImageAssetName, DatabankPopupImageAssetName);
-            Nautilus.Handlers.StoryGoalHandler.RegisterItemGoal(EncKey, Story.GoalType.Encyclopedia, CatDnaPrefab.Info.TechType);
             Nautilus.Handlers.StoryGoalHandler.RegisterItemGoal(EncKey, Story.GoalType.Encyclopedia, AlienRobotDnaPrefab.Info.TechType);
             Nautilus.Handlers.StoryGoalHandler.RegisterItemGoal(EncKey, Story.GoalType.Encyclopedia, BloodCrawlerDnaPrefab.Info.TechType);
             Nautilus.Handlers.StoryGoalHandler.RegisterItemGoal(EncKey, Story.GoalType.Encyclopedia, CaveCrawlerDnaPrefab.Info.TechType);

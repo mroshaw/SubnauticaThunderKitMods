@@ -10,6 +10,7 @@ namespace DaftAppleGames.SubnauticaPetsTests
     {
         private const int ExpectedSpawnCount = 1;
         private const float ProbabilityTolerance = 0.0001f;
+        private const string RemovedCatDnaClassId = "CatPetDna";
 
         internal string Run()
         {
@@ -17,6 +18,12 @@ namespace DaftAppleGames.SubnauticaPetsTests
             LootDistributionData distribution = LootDistributionData.Load(LootDistributionData.dataPath);
             if (distribution == null || distribution.srcDistribution == null)
                 return LogAndReturn("BIOME FAIL; the live loot distribution could not be loaded");
+
+            LootDistributionData.SrcData removedCatDnaData;
+            if (distribution.GetPrefabData(RemovedCatDnaClassId, out removedCatDnaData) && removedCatDnaData != null)
+            {
+                return LogAndReturn($"BIOME FAIL; removed class {RemovedCatDnaClassId} remains registered");
+            }
 
             Dictionary<string, int> loadedInstances = CountLoadedInstances();
             int passed = 0;

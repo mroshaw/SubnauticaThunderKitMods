@@ -81,11 +81,11 @@ MonoBehaviour:
     version:
       major: 2
       minor: 12
-      patch: 0
+      patch: 1
     currentPublishedVersion:
       major: 2
       minor: 12
-      patch: 0
+      patch: 1
     publishingSites: -1
     nexusMods:
       fileGroupId: 2083597
@@ -112,7 +112,7 @@ MonoBehaviour:
     version:
       major: 1
       minor: 2
-      patch: 0
+      patch: 1
     currentPublishedVersion:
       major: 1
       minor: 2

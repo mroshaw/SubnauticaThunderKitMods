@@ -8,11 +8,10 @@ namespace DaftAppleGames.SubnauticaPetsTests
         {
             return new List<BiomeSpawnExpectation>
             {
-                new BiomeSpawnExpectation("CatPetDna", 8),
-                new BiomeSpawnExpectation("AlienRobotPetDna", 16),
-                new BiomeSpawnExpectation("BloodCrawlerPetDna", 14),
-                new BiomeSpawnExpectation("CaveCrawlerPetDna", 15),
-                new BiomeSpawnExpectation("CrabSquidPetDna", 15)
+                new BiomeSpawnExpectation("AlienRobotPetDna", 21),
+                new BiomeSpawnExpectation("BloodCrawlerPetDna", 19),
+                new BiomeSpawnExpectation("CaveCrawlerPetDna", 20),
+                new BiomeSpawnExpectation("CrabSquidPetDna", 20)
             };
         }
     }

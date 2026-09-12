@@ -65,7 +65,6 @@ This new version of the Pets mod has been created in a way to make the experienc
 - BloodCrawlerPetDna
 - CaveCrawlerPetDna
 - CrabSquidPetDna
-- CatPetDna
 
 ## **Help and Feedback**
 

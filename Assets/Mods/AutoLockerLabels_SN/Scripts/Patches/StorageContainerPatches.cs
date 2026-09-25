@@ -7,7 +7,8 @@ using Object = UnityEngine.Object;
 
 namespace DaftAppleGames.AutoLockerLabels_SN.Patches
 {
-    [HarmonyPatch(typeof(StorageContainer))] internal static class StorageContainerPatches
+    [HarmonyPatch(typeof(StorageContainer))]
+    internal static class StorageContainerPatches
     {
         private const string FreestandingLockerLabelPrefabName = "FreestandingLockerLabel.prefab";
         private const string WallLockerTogglePrefabName = "AutoToggleSmallLocker";

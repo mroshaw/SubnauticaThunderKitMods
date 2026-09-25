@@ -1,14 +1,16 @@
+using System.Collections.Generic;
 using BepInEx;
 using HarmonyLib;
 using DaftAppleGames.ModTools;
 using Nautilus.Handlers;
 
-namespace DaftAppleGames.TameStalkers_SN
+namespace DaftAppleGames.TameCreatures_SN
 {
-    [BepInPlugin(MyGuid, PluginName, VersionString)] public class TameStalkersPlugin : BaseUnityPlugin
+    [BepInPlugin(MyGuid, PluginName, VersionString)]
+    public class TameCreaturesPlugin : BaseUnityPlugin
     {
-        private const string MyGuid = "com.mroshaw.tamestalkers";
-        private const string PluginName = "TameStalkers SN";
+        private const string MyGuid = "com.mroshaw.tamecreaturessn";
+        private const string PluginName = "Tame Creatures SN";
         internal const string VersionString = "1.0.0";
         
         private static readonly Harmony Harmony = new Harmony(MyGuid);
@@ -21,8 +23,6 @@ namespace DaftAppleGames.TameStalkers_SN
         internal static readonly ModConfigFile ConfigFile;
         internal static ModLog ModDebugLog = new ModLog(null, true);
 #endif
-
-        
         private void Awake()
         {
             // Initialise Logger

@@ -1,0 +1,45 @@
+{
+  "$schema": "https://openmods.net/manifest.schema.json",
+  "schemaVersion": 2,
+
+  "slug": "tame-creatures-sn",
+  "name": "Tame Creatures SN",
+  "description" : "Tired of being harassed by pesky Stalkers? Warpers driving you crazy? Too scared to face a Leviathan? Then this is the mod for you!",
+  "supportedGameId": "subnautica",
+
+  "releaseAssets": ["TameCreatures_SN*.zip"],
+  "primaryAsset": "TameCreatures_SN*.zip",
+
+  "readme": "README.md",
+
+  "thumbnail": "thumbnail.png",
+  
+  "links": [
+    { "label": "Discord", "icon": "chat", "url": "https://discord.gg/BJtGSdnRm" },
+    { "label": "Website", "url": "https://github.com/mroshaw/SubnauticaThunderKitMods" }
+  ],
+
+  "media": [
+    { "type": "image", "url": "TameStalker.png", "label": "A tame Stalker!" },
+    { "type": "image", "url": "TameCreaturesModOptions.png", "label": "Mod options" }
+  ],
+
+  "faq": [
+    { "question": "How do I install?", "answer": "Use the OpenMods Manager or extract the zip into your game folder." }
+  ],
+
+  "dependencies": {
+    "1.0.0": [
+      { "modId": 30, "release": "1.0.0-pre.50" },
+      { "modId": 31, "release": "5.4.23.5" }
+    ]
+  },
+
+  "install": {
+    "path": "BepInEx/plugins",
+    "custom-path": {
+      "src/plugin.dll": "BepInEx/plugins/",
+      "config/":       "BepInEx/config/"
+    }
+  }
+}

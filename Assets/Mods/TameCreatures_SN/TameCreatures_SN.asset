@@ -14,9 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StagingPaths: []
   Author: Daft Apple Games
-  Name: TameStalkers_SN
-  Description: Adds a custom action to stalkers, making them tame, friendly and fun
-    to be around
+  Name: TamePredators_SN
+  Description: Optionally turn off predator agression towards the player
   Version: 1.0.0
   Dependencies: []
 --- !u!114 &11400000
@@ -29,7 +28,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e563561e08b6a3642a487177f5cfbb37, type: 3}
-  m_Name: TameStalkers_SN
+  m_Name: TameCreatures_SN
   m_EditorClassIdentifier: 
   Data:
   - {fileID: -121899452589423327}

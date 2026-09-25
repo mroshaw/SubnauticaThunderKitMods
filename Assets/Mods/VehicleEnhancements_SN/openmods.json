@@ -1,0 +1,48 @@
+{
+  "$schema": "https://openmods.net/manifest.schema.json",
+  "schemaVersion": 2,
+
+  "slug": "vehicle-enhancements-sn",
+  "name": "Vehicle Enhancements SN",
+  "description" : "Adds loads of great new features to the base game vehicles in Subnautica!",
+  "supportedGameId": "subnautica",
+
+  "releaseAssets": ["VehicleEnhancements_SN*.zip"],
+  "primaryAsset": "VehicleEnhancements_SN*.zip",
+
+  "readme": "README.md",
+
+  "thumbnail": "thumbnail.png",
+
+  "links": [
+    { "label": "Discord", "icon": "chat", "url": "https://discord.gg/BJtGSdnRm" },
+    { "label": "Website", "url": "https://github.com/mroshaw/SubnauticaThunderKitMods" }
+  ],
+
+  "media": [
+    { "type": "image", "url": "CyclopsUi.png", "label": "Enhanced Cyclops HUD." },
+    { "type": "image", "url": "PrawnSuitUi.png", "label": "Enhanced Prawn Suit HUD." },
+    { "type": "image", "url": "SeaMothUi.png", "label": "Enhanced Sea Moth HUD." },
+    { "type": "image", "url": "VehicleEnhancementOptions.png", "label": "Mod options." },
+    { "type":  "video", "url": "https://youtu.be/pvUavsuUq68"}
+  ],
+
+  "faq": [
+    { "question": "How do I install?", "answer": "Use the OpenMods Manager or extract the zip into your game folder." }
+  ],
+
+  "dependencies": {
+    "1.0.0": [
+      { "modId": 30, "release": "1.0.0-pre.50" },
+      { "modId": 31, "release": "5.4.23.5" }
+    ]
+  },
+
+  "install": {
+    "path": "BepInEx/plugins",
+    "custom-path": {
+      "src/plugin.dll": "BepInEx/plugins/",
+      "config/": "BepInEx/config/"
+    }
+  }
+}

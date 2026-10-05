@@ -1,4 +1,5 @@
-﻿using DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes;
+﻿using DaftAppleGames.ModTools.Extensions;
+using DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes;
 using HarmonyLib;
 
 namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.Patches
@@ -14,29 +15,7 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.Patches
         [HarmonyPrefix]
         public static void AwakePrefix(Flare __instance)
         {
-            SaveMyEyesFromFlares.Register(__instance);
+            SaveMyEyesFlareController flareController = __instance.EnsureComponent<SaveMyEyesFlareController>();
         }
-
-        [HarmonyPatch("UpdateLight")]
-        [HarmonyPrefix]
-        public static void UpdateLightPrefix(Flare __instance)
-        {
-            SaveMyEyesFromFlares.PrepareCurrentFlareIntensity(__instance);
-        }
-
-        [HarmonyPatch("UpdateLight")]
-        [HarmonyPostfix]
-        public static void UpdateLightPostfix(Flare __instance)
-        {
-            SaveMyEyesFromFlares.ConfigureCurrentFlareIntensity(__instance);
-        }
-        
-        [HarmonyPatch(nameof(Flare.OnDestroy))]
-        [HarmonyPrefix]
-        public static void OnDestroyPrefix(Flare __instance)
-        {
-            SaveMyEyesFromFlares.Unregister(__instance);
-        }
-
     }
 }

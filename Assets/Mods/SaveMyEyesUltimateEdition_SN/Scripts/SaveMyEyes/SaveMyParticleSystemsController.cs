@@ -5,13 +5,16 @@ using static DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyesUltimateEditi
 namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
 {
     /// <summary>
-    /// Maintains configurable properties for contributed particle, trail and line effects
+    /// MonoBehaviour class to manage particle, trail and line effects
     /// </summary>
-    public static class SaveMyEyesFromParticleFx
+    internal class SaveMyParticleSystemsController : MonoBehaviour
     {
-        private static readonly Dictionary<ParticleSystem, ParticleEffectState> ParticleSystems = new Dictionary<ParticleSystem, ParticleEffectState>();
-        private static readonly Dictionary<TrailRenderer, TrailEffectState> Trails = new Dictionary<TrailRenderer, TrailEffectState>();
-        private static readonly Dictionary<LineRenderer, LineEffectState> Lines = new Dictionary<LineRenderer, LineEffectState>();
+        private Dictionary<ParticleSystem, ParticleEffectState> _particleSystems;
+        private Dictionary<TrailRenderer, TrailEffectState> _trails;
+        private Dictionary<LineRenderer, LineEffectState> _lines;
+        private bool _effectActive;
+
+        internal bool EffectActive => _effectActive;
 
         private sealed class ParticleEffectState
         {
@@ -86,119 +89,97 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
             }
         }
 
-        /// <summary>
-        /// Stores a contributed particle system and its initial visual properties
-        /// </summary>
-        internal static void Register(ParticleSystem particleSystem, bool effectActive)
+        private void Awake()
         {
-            if (!particleSystem)
-            {
-                return;
-            }
-
-            ParticleEffectState state;
-            if (!ParticleSystems.TryGetValue(particleSystem, out state))
-            {
-                state = new ParticleEffectState(particleSystem, effectActive);
-                ParticleSystems.Add(particleSystem, state);
-            }
-            else
-            {
-                state.EffectActive = effectActive;
-            }
-
-            ConfigureParticleIntensity(particleSystem, state, ConfigFile.ParticleFXIntensity);
-            ConfigureParticleSize(particleSystem, state, ConfigFile.ParticleFXSize);
-            ConfigureParticleSpeed(particleSystem, state, ConfigFile.ParticleFXSpeed);
-            ConfigureParticleBrightness(particleSystem, state, ConfigFile.ParticleFXBrightness);
-            ConfigureEmissionState(particleSystem, state, ConfigFile.ParticleFXIntensity);
+            FindParticleSystems();
+            FindTrails();
+            FindLines();
         }
 
-        /// <summary>
-        /// Records whether the game currently wants a contributed particle effect active
-        /// </summary>
-        internal static void ConfigureFromGameState(ParticleSystem particleSystem, bool effectActive)
+        private void OnEnable()
         {
-            ParticleEffectState state;
-            if (!particleSystem || !ParticleSystems.TryGetValue(particleSystem, out state))
-            {
-                return;
-            }
-
-            state.EffectActive = effectActive;
-            ConfigureEmissionState(particleSystem, state, ConfigFile.ParticleFXIntensity);
+            ConfigFile.ParticleSettingsChanged += ApplyChanges;
+            ApplyChanges(ConfigFile.ParticleDensity, ConfigFile.ParticleSize, ConfigFile.ParticleSpeed,
+                ConfigFile.ParticleBrightness);
         }
 
-        /// <summary>
-        /// Removes a particle system from the registry
-        /// </summary>
-        internal static void Unregister(ParticleSystem particleSystem)
+        private void OnDisable()
         {
-            if (!ReferenceEquals(particleSystem, null))
+            ConfigFile.ParticleSettingsChanged -= ApplyChanges;
+        }
+
+        private void FindParticleSystems()
+        {
+            _particleSystems = new Dictionary<ParticleSystem, ParticleEffectState>();
+            ParticleSystem[] particleSystems = GetComponentsInChildren<ParticleSystem>(true);
+            foreach (ParticleSystem particleSystem in particleSystems)
             {
-                ParticleSystems.Remove(particleSystem);
+                ParticleSystem.EmissionModule emission = particleSystem.emission;
+                if (emission.enabled)
+                {
+                    _effectActive = true;
+                }
+                _particleSystems.Add(particleSystem, new ParticleEffectState(particleSystem, emission.enabled));
             }
         }
 
-        /// <summary>
-        /// Stores a contributed trail and its initial visual properties
-        /// </summary>
-        internal static void Register(TrailRenderer trail)
+        private void FindTrails()
         {
-            if (!trail)
+            _trails = new Dictionary<TrailRenderer, TrailEffectState>();
+            TrailRenderer[] trails = GetComponentsInChildren<TrailRenderer>(true);
+            foreach (TrailRenderer trail in trails)
             {
-                return;
-            }
-
-            TrailEffectState state;
-            if (!Trails.TryGetValue(trail, out state))
-            {
-                state = new TrailEffectState(trail);
-                Trails.Add(trail, state);
-            }
-
-            ConfigureTrail(trail, state, ConfigFile.ParticleFXIntensity);
-        }
-
-        /// <summary>
-        /// Removes a trail from the registry
-        /// </summary>
-        internal static void Unregister(TrailRenderer trail)
-        {
-            if (!ReferenceEquals(trail, null))
-            {
-                Trails.Remove(trail);
+                _trails.Add(trail, new TrailEffectState(trail));
             }
         }
 
-        /// <summary>
-        /// Stores a contributed line and its initial visual properties
-        /// </summary>
-        internal static void Register(LineRenderer line)
+        private void FindLines()
         {
-            if (!line)
+            _lines = new Dictionary<LineRenderer, LineEffectState>();
+            LineRenderer[] lines = GetComponentsInChildren<LineRenderer>(true);
+            foreach (LineRenderer line in lines)
             {
-                return;
+                _lines.Add(line, new LineEffectState(line));
             }
-
-            LineEffectState state;
-            if (!Lines.TryGetValue(line, out state))
-            {
-                state = new LineEffectState(line);
-                Lines.Add(line, state);
-            }
-
-            ConfigureLine(line, state, ConfigFile.ParticleFXIntensity);
         }
 
-        /// <summary>
-        /// Removes a line from the registry
-        /// </summary>
-        internal static void Unregister(LineRenderer line)
+        internal void SetEffectActive(bool effectActive)
         {
-            if (!ReferenceEquals(line, null))
+            _effectActive = effectActive;
+            foreach (KeyValuePair<ParticleSystem, ParticleEffectState> particleSystemState in _particleSystems)
             {
-                Lines.Remove(line);
+                particleSystemState.Value.EffectActive = effectActive;
+                ConfigureEmissionState(particleSystemState.Key, particleSystemState.Value, ConfigFile.ParticleDensity);
+            }
+        }
+
+        internal void ApplyEmissionState()
+        {
+            foreach (KeyValuePair<ParticleSystem, ParticleEffectState> particleSystemState in _particleSystems)
+            {
+                ConfigureEmissionState(particleSystemState.Key, particleSystemState.Value, ConfigFile.ParticleDensity);
+            }
+        }
+
+        private void ApplyChanges(float densityModifier, float sizeModifier, float speedModifier,
+            float brightnessModifier)
+        {
+            foreach (KeyValuePair<ParticleSystem, ParticleEffectState> particleSystemState in _particleSystems)
+            {
+                ConfigureParticleIntensity(particleSystemState.Key, particleSystemState.Value, densityModifier);
+                ConfigureParticleSize(particleSystemState.Key, particleSystemState.Value, sizeModifier);
+                ConfigureParticleSpeed(particleSystemState.Key, particleSystemState.Value, speedModifier);
+                ConfigureParticleBrightness(particleSystemState.Key, particleSystemState.Value, brightnessModifier);
+            }
+
+            foreach (KeyValuePair<TrailRenderer, TrailEffectState> trailState in _trails)
+            {
+                ConfigureTrail(trailState.Key, trailState.Value, densityModifier);
+            }
+
+            foreach (KeyValuePair<LineRenderer, LineEffectState> lineState in _lines)
+            {
+                ConfigureLine(lineState.Key, lineState.Value, densityModifier);
             }
         }
 
@@ -359,6 +340,11 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
 
         private static void ScaleExistingParticleSizes(ParticleSystem particleSystem, bool uses3DStartSize, float previousModifier, float newModifier)
         {
+            if (previousModifier == newModifier)
+            {
+                return;
+            }
+
             if (particleSystem.particleCount == 0)
             {
                 return;
@@ -390,6 +376,11 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
 
         private static void ScaleExistingParticleSpeeds(ParticleSystem particleSystem, float previousModifier, float newModifier)
         {
+            if (previousModifier == newModifier)
+            {
+                return;
+            }
+
             if (particleSystem.particleCount == 0)
             {
                 return;
@@ -414,6 +405,11 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
 
         private static void ScaleExistingParticleBrightness(ParticleSystem particleSystem, float previousModifier, float newModifier)
         {
+            if (previousModifier == newModifier)
+            {
+                return;
+            }
+
             if (particleSystem.particleCount == 0)
             {
                 return;
@@ -493,70 +489,5 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
             line.widthMultiplier = state.InitialWidthMultiplier * intensityModifier;
         }
 
-        /// <summary>
-        /// Applies the configured intensity to all contributed particle systems
-        /// </summary>
-        public static void ConfigureAllParticleSystems(float intensityModifier)
-        {
-            foreach (KeyValuePair<ParticleSystem, ParticleEffectState> particleSystemState in ParticleSystems)
-            {
-                ConfigureParticleIntensity(particleSystemState.Key, particleSystemState.Value, intensityModifier);
-            }
-        }
-
-        /// <summary>
-        /// Applies the configured size to all contributed particle systems
-        /// </summary>
-        public static void ConfigureAllParticleSizes(float sizeModifier)
-        {
-            foreach (KeyValuePair<ParticleSystem, ParticleEffectState> particleSystemState in ParticleSystems)
-            {
-                ConfigureParticleSize(particleSystemState.Key, particleSystemState.Value, sizeModifier);
-            }
-        }
-
-        /// <summary>
-        /// Applies the configured speed to all contributed particle systems
-        /// </summary>
-        public static void ConfigureAllParticleSpeeds(float speedModifier)
-        {
-            foreach (KeyValuePair<ParticleSystem, ParticleEffectState> particleSystemState in ParticleSystems)
-            {
-                ConfigureParticleSpeed(particleSystemState.Key, particleSystemState.Value, speedModifier);
-            }
-        }
-
-        /// <summary>
-        /// Applies the configured brightness to all contributed particle systems
-        /// </summary>
-        public static void ConfigureAllParticleBrightness(float brightnessModifier)
-        {
-            foreach (KeyValuePair<ParticleSystem, ParticleEffectState> particleSystemState in ParticleSystems)
-            {
-                ConfigureParticleBrightness(particleSystemState.Key, particleSystemState.Value, brightnessModifier);
-            }
-        }
-
-        /// <summary>
-        /// Applies the configured intensity to all contributed trails
-        /// </summary>
-        public static void ConfigureAllTrails(float intensityModifier)
-        {
-            foreach (KeyValuePair<TrailRenderer, TrailEffectState> trailState in Trails)
-            {
-                ConfigureTrail(trailState.Key, trailState.Value, intensityModifier);
-            }
-        }
-
-        /// <summary>
-        /// Applies the configured intensity to all contributed lines
-        /// </summary>
-        public static void ConfigureAllLines(float intensityModifier)
-        {
-            foreach (KeyValuePair<LineRenderer, LineEffectState> lineState in Lines)
-            {
-                ConfigureLine(lineState.Key, lineState.Value, intensityModifier);
-            }
-        }
     }
 }

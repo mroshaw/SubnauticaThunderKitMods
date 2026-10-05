@@ -6,6 +6,41 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.Patches
 {
     internal static class ExosuitDrillArmPatches
     {
+        [HarmonyPatch(typeof(ExosuitDrillArm), nameof(ExosuitDrillArm.OnHit))]
+        [HarmonyPrefix]
+        private static void OnHitPrefix(ExosuitDrillArm __instance,
+            out SaveMyParticleSystemsController __state)
+        {
+            __state = null;
+            if (SaveMyEyesUltimateEditionPlugin.ConfigFile.ParticleDensity > 0.0f)
+            {
+                return;
+            }
+
+            VFXController.VFXEmitter emitter = __instance.fxControl.emitters[0];
+            if (emitter.instanceGO)
+            {
+                SaveMyParticleSystemsController particleController =
+                    emitter.instanceGO.GetComponent<SaveMyParticleSystemsController>();
+                if (particleController && particleController.EffectActive)
+                {
+                    ParticleSystem.EmissionModule emission = emitter.fxPS.emission;
+                    emission.enabled = true;
+                    __state = particleController;
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(ExosuitDrillArm), nameof(ExosuitDrillArm.OnHit))]
+        [HarmonyPostfix]
+        private static void OnHitPostfix(SaveMyParticleSystemsController __state)
+        {
+            if (__state)
+            {
+                __state.ApplyEmissionState();
+            }
+        }
+
         [HarmonyPatch(typeof(VFXSurfaceTypeManager), nameof(VFXSurfaceTypeManager.Play),
             typeof(VFXSurfaceTypes), typeof(VFXEventTypes), typeof(Vector3), typeof(Quaternion), typeof(Transform))]
         [HarmonyPostfix]
@@ -16,29 +51,24 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.Patches
                 return;
             }
 
-            ParticleEffectContribution contribution =
-                __result.gameObject.AddComponent<ParticleEffectContribution>();
-            contribution.Initialize(true, false, true);
+            __result.gameObject.AddComponent<SaveMyEyesLightController>();
+            __result.gameObject.AddComponent<SaveMyParticleSystemsController>();
         }
 
-        [HarmonyPatch(typeof(VFXController), "Start")]
+        [HarmonyPatch(typeof(VFXController), "SpawnFX")]
         [HarmonyPostfix]
-        private static void StartPostfix(VFXController __instance)
+        private static void SpawnFXPostfix(VFXController __instance, int i)
         {
             if (!__instance.GetComponent<ExosuitDrillArm>())
             {
                 return;
             }
 
-            foreach (VFXController.VFXEmitter emitter in __instance.emitters)
-            {
-                if (emitter != null && emitter.instanceGO)
-                {
-                    ParticleEffectContribution contribution =
-                        emitter.instanceGO.AddComponent<ParticleEffectContribution>();
-                    contribution.Initialize(false, false, true);
-                }
-            }
+            GameObject effectRoot = __instance.emitters[i].instanceGO;
+            effectRoot.AddComponent<SaveMyEyesLightController>();
+            SaveMyParticleSystemsController particleController =
+                effectRoot.AddComponent<SaveMyParticleSystemsController>();
+            particleController.SetEffectActive(false);
         }
 
         [HarmonyPatch(typeof(VFXController), nameof(VFXController.Play), typeof(int))]
@@ -59,11 +89,11 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.Patches
         [HarmonyPostfix]
         private static void LateTimeParticlesStopPostfix(VFXLateTimeParticles __instance)
         {
-            ParticleEffectContribution contribution =
-                __instance.GetComponent<ParticleEffectContribution>();
-            if (contribution)
+            SaveMyParticleSystemsController particleController =
+                __instance.GetComponent<SaveMyParticleSystemsController>();
+            if (particleController)
             {
-                contribution.SetEffectActive(false);
+                particleController.SetEffectActive(false);
             }
         }
 
@@ -79,20 +109,19 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.Patches
 
         private static void ConfigureEmitter(VFXController controller, int emitterIndex, bool effectActive)
         {
-            if (!controller || !controller.GetComponent<ExosuitDrillArm>() || controller.emitters is null ||
-                emitterIndex < 0 || emitterIndex >= controller.emitters.Length)
+            if (!controller.GetComponent<ExosuitDrillArm>())
             {
                 return;
             }
 
             VFXController.VFXEmitter emitter = controller.emitters[emitterIndex];
-            if (emitter != null && emitter.instanceGO)
+            if (emitter.instanceGO)
             {
-                ParticleEffectContribution contribution =
-                    emitter.instanceGO.GetComponent<ParticleEffectContribution>();
-                if (contribution)
+                SaveMyParticleSystemsController particleController =
+                    emitter.instanceGO.GetComponent<SaveMyParticleSystemsController>();
+                if (particleController)
                 {
-                    contribution.SetEffectActive(effectActive);
+                    particleController.SetEffectActive(effectActive);
                 }
             }
         }

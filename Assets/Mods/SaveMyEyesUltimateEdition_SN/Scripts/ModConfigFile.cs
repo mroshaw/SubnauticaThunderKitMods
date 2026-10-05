@@ -1,4 +1,5 @@
-﻿using DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes;
+﻿using System;
+using DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes;
 using Nautilus.Json;
 using Nautilus.Options;
 using Nautilus.Options.Attributes;
@@ -12,6 +13,14 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN
     [Menu("Save My Eyes: Ultimate Edition")]
     public class ModConfigFile : ConfigFile
     {
+        // Internal change Actions to which our new components can subscribe for "real time" notification of
+        // config changes
+        internal event Action<float> ToolLightSettingsChanged;
+        internal event Action<float> FlareSettingsChanged;
+        internal event Action<float> MaterialSettingsChanged;
+        internal event Action<float, float, float, float> ParticleSettingsChanged;
+        internal event Action<bool> WaterFiltrationBeamSettingsChanged;
+        
         [Slider("Light Intensity", Tooltip="Adjusts the intensity of lights for supported effects such as the Laser Cutter. Set to 0 to disable contributed lights.", 
             Step = 0.1f, Format = "{0:F1}", Min = 0.0f, Max = 1.0f, DefaultValue = 0.5f), OnChange(nameof(OnToolLightIntensityChanged))]
         public float ToolLightIntensity = 0.5f;
@@ -25,20 +34,20 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN
         public float FlareIntensity = 0.5f;
         
         [Slider("Particle Emission Density", Tooltip="Adjust the number and density of particle, trail and line effects such as Laser Cutter effects and laser-cut door sparks. Set to 0 to disable them.", 
-             Step = 0.1f, Format = "{0:F1}", Min = 0.0f, Max = 1.0f, DefaultValue = 0.5f), OnChange(nameof(OnParticleFxIntensityChanged))]
-        public float  ParticleFXIntensity = 0.5f;
+             Step = 0.1f, Format = "{0:F1}", Min = 0.0f, Max = 1.0f, DefaultValue = 0.5f), OnChange(nameof(OnParticleDensityChanged))]
+        public float  ParticleDensity = 0.5f;
 
         [Slider("Particle Size", Tooltip="Adjust the initial size of particles in supported effects.",
-             Step = 0.1f, Format = "{0:F1}", Min = 0.0f, Max = 1.0f, DefaultValue = 0.5f), OnChange(nameof(OnParticleFxSizeChanged))]
-        public float ParticleFXSize = 0.5f;
+             Step = 0.1f, Format = "{0:F1}", Min = 0.0f, Max = 1.0f, DefaultValue = 0.5f), OnChange(nameof(OnParticleSizeChanged))]
+        public float ParticleSize = 0.5f;
 
         [Slider("Particle Speed", Tooltip="Adjust the initial movement speed of particles in supported effects.",
-             Step = 0.1f, Format = "{0:F1}", Min = 0.0f, Max = 1.0f, DefaultValue = 0.5f), OnChange(nameof(OnParticleFxSpeedChanged))]
-        public float ParticleFXSpeed = 0.5f;
+             Step = 0.1f, Format = "{0:F1}", Min = 0.0f, Max = 1.0f, DefaultValue = 0.5f), OnChange(nameof(OnParticleSpeedChanged))]
+        public float ParticleSpeed = 0.5f;
 
         [Slider("Particle Brightness", Tooltip="Adjust the colour and opacity brightness of particles in supported effects.",
-             Step = 0.1f, Format = "{0:F1}", Min = 0.0f, Max = 1.0f, DefaultValue = 0.5f), OnChange(nameof(OnParticleFxBrightnessChanged))]
-        public float ParticleFXBrightness = 0.5f;
+             Step = 0.1f, Format = "{0:F1}", Min = 0.0f, Max = 1.0f, DefaultValue = 0.5f), OnChange(nameof(OnParticleBrightnessChanged))]
+        public float ParticleBrightness = 0.5f;
         
         [Toggle("Disable Water Filtration Beams", Tooltip="Toggle the water filtration system beams on or off."), OnChange(nameof(OnWaterFiltrationBeamToggleChanged))]
         public bool DisableWaterFiltrationBeams = true;
@@ -54,44 +63,42 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN
         /// </summary>
         private void OnFlareIntensityChanged(SliderChangedEventArgs eventArgs)
         {
-            SaveMyEyesFromFlares.ConfigureAllFlares(intensityModifier: eventArgs.Value);
+            FlareSettingsChanged?.Invoke(eventArgs.Value);
         }
 
         private void OnToolLightIntensityChanged(SliderChangedEventArgs eventArgs)
         {
-            SaveMyEyesFromToolLights.ConfigureAllToolLights(intensityMultiplier: eventArgs.Value);
+            ToolLightSettingsChanged?.Invoke(eventArgs.Value);
         }
 
         private void OnMaterialEmissionIntensityChanged(SliderChangedEventArgs eventArgs)
         {
-            SaveMyEyesFromEmitterMaterials.ConfigureAllEmitterMaterials(intensityMultiplier: eventArgs.Value);
+            MaterialSettingsChanged?.Invoke(eventArgs.Value);
         }
         
-        private void OnParticleFxIntensityChanged(SliderChangedEventArgs eventArgs)
+        private void OnParticleDensityChanged(SliderChangedEventArgs eventArgs)
         {
-            SaveMyEyesFromParticleFx.ConfigureAllParticleSystems(intensityModifier: eventArgs.Value);
-            SaveMyEyesFromParticleFx.ConfigureAllTrails(intensityModifier: eventArgs.Value);
-            SaveMyEyesFromParticleFx.ConfigureAllLines(intensityModifier: eventArgs.Value);
+            ParticleSettingsChanged?.Invoke(eventArgs.Value, ParticleSize, ParticleSpeed, ParticleBrightness);
         }
 
-        private void OnParticleFxSizeChanged(SliderChangedEventArgs eventArgs)
+        private void OnParticleSizeChanged(SliderChangedEventArgs eventArgs)
         {
-            SaveMyEyesFromParticleFx.ConfigureAllParticleSizes(sizeModifier: eventArgs.Value);
+            ParticleSettingsChanged?.Invoke(ParticleDensity, eventArgs.Value, ParticleSpeed, ParticleBrightness);
         }
 
-        private void OnParticleFxSpeedChanged(SliderChangedEventArgs eventArgs)
+        private void OnParticleSpeedChanged(SliderChangedEventArgs eventArgs)
         {
-            SaveMyEyesFromParticleFx.ConfigureAllParticleSpeeds(speedModifier: eventArgs.Value);
+            ParticleSettingsChanged?.Invoke(ParticleDensity, ParticleSize, eventArgs.Value, ParticleBrightness);
         }
 
-        private void OnParticleFxBrightnessChanged(SliderChangedEventArgs eventArgs)
+        private void OnParticleBrightnessChanged(SliderChangedEventArgs eventArgs)
         {
-            SaveMyEyesFromParticleFx.ConfigureAllParticleBrightness(brightnessModifier: eventArgs.Value);
+            ParticleSettingsChanged?.Invoke(ParticleDensity, ParticleSize, ParticleSpeed, eventArgs.Value);
         }
 
         private void OnWaterFiltrationBeamToggleChanged(ToggleChangedEventArgs eventArgs)
         {
-            SaveMyEyesFromWaterFiltrationBeams.ConfigureAllFiltrationMachines(disableBeams: eventArgs.Value);
+            WaterFiltrationBeamSettingsChanged?.Invoke(eventArgs.Value);
         }
         
         /// <summary>

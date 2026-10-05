@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3f0529f52c491ab498a0476c7e3be5bb, type: 3}
-  m_Name: StageAssembliesFixed
+  m_Name: StageAssembliesExt
   m_EditorClassIdentifier: 
   Active: 1
   stageDebugDatabases: 0
@@ -31,12 +31,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Data:
   - {fileID: -5202041662821876658}
+  - {fileID: 4071545297751830446}
   - {fileID: 114520525572577756}
   - {fileID: 4156783945345151082}
   - {fileID: 7963844026012339470}
   - {fileID: 7782552347644210410}
   QuickAccess: 1
-  manifest: {fileID: 11400000, guid: 88684e864d224d74294af197b09cb8e8, type: 2}
+  manifest: {fileID: 11400000, guid: cb7c8c5f6acea5f47b76b13d3815ec7f, type: 2}
 --- !u!114 &114520525572577756
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -68,6 +69,24 @@ MonoBehaviour:
   m_Name: StageThunderstoreManifest
   m_EditorClassIdentifier: 
   Active: 1
+--- !u!114 &4071545297751830446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75b5dc7a735cb0c43a6bcf7f2e9151e2, type: 3}
+  m_Name: MergeAssemblies
+  m_EditorClassIdentifier: 
+  Active: 1
+  executablePath: ilrepack
+  stagingPath: <ManifestPluginStaging>
+  primaryAssembly: SaveMyEyesUltimateEdition.dll
+  dependencies:
+  - DaftAppleModTools_SN.Core.dll
 --- !u!114 &4156783945345151082
 MonoBehaviour:
   m_ObjectHideFlags: 0

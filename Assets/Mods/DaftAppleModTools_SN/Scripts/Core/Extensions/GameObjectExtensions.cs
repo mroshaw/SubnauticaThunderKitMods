@@ -8,6 +8,31 @@
     public static class GameObjectExtensions
     {
         /// <summary>
+        /// Wraps up Get and Add to either return a component if it exists, otherwise create and return a new instance
+        /// </summary>
+        private static Component EnsureComponent(this GameObject gameObject, System.Type componentType)
+        {
+            Component component = gameObject.GetComponent(componentType);
+            if (component)
+            {
+                return component;
+            }
+
+            component = gameObject.AddComponent(componentType);
+            return component;
+        }
+
+        public static T EnsureComponent<T>(this GameObject gameObject) where T : Component
+        {
+            return EnsureComponent(gameObject, typeof(T)) as T;
+        }
+
+        public static T EnsureComponent<T>(this Component existingComponent) where T : Component
+        {
+            return EnsureComponent(existingComponent.gameObject, typeof(T)) as T;
+        }
+        
+        /// <summary>
         /// Destroys all child components of a given type
         /// </summary>
         public static void DestroyComponentsInChildren<T>(this GameObject gameObject)

@@ -176,12 +176,12 @@ MonoBehaviour:
       minor: 0
       patch: 0
     currentPublishedVersion:
-      major: 0
+      major: 1
       minor: 0
       patch: 0
-    publishingSites: -1
+    publishingSites: 2
     nexusMods:
-      fileGroupId: 
+      fileGroupId: 8096199
       gameScopedModId: 4194
       gameDomain: subnautica
       displayName: VehicleEnhancements_SN

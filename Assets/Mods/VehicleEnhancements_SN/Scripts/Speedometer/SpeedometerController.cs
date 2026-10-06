@@ -22,6 +22,10 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Speedometer
         [SerializeField] private Vector2 prawnSuitOffset = new Vector2(0.0f, 20.0f);
 
         [SerializeField] private Vector2 cyclopsOffset;
+
+        [SerializeField] private Vector3 cyclopsLocalPosition = new Vector3(-50.0f, 0.0f, 0.0f);
+
+        [SerializeField] private Vector3 cyclopsLocalScale = new Vector3(1.3f, 1.3f, 1.3f);
         
         [SerializeField] private float minimumNeedleAngle = 180.0f;
 
@@ -44,6 +48,10 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Speedometer
         private int lastDisplayedSpeedTenths = int.MinValue;
         private int lastDisplayedVerticalSpeedTenths = int.MinValue;
         private EnhancedVehicle vehicle = EnhancedVehicle.Seamoth;
+
+        internal Vector3 CyclopsLocalPosition => cyclopsLocalPosition;
+
+        internal Vector3 CyclopsLocalScale => cyclopsLocalScale;
 
         internal void Configure(EnhancedVehicle selectedVehicle)
         {

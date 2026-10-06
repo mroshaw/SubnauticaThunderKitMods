@@ -33,19 +33,9 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Patches
             {
                 AddEnhancedIndicators(exosuitHud.root.transform, EnhancedVehicle.PrawnSuit);
             }
-
-            if (__instance.hud)
-            {
-                Transform cyclopsHudRoot = __instance.hud.transform;
-                GameObject cyclopsIndicators = AddEnhancedIndicators(cyclopsHudRoot, EnhancedVehicle.Cyclops);
-                if (cyclopsIndicators)
-                {
-                    cyclopsHudRoot.gameObject.AddComponent<CyclopsHudVisibility>().Configure(cyclopsIndicators);
-                }
-            }
         }
 
-        private static GameObject AddEnhancedIndicators(Transform hudRoot, EnhancedVehicle vehicle)
+        internal static GameObject AddEnhancedIndicators(Transform hudRoot, EnhancedVehicle vehicle)
         {
             if (hudRoot.Find(EnhancedIndicatorsPrefabName))
             {

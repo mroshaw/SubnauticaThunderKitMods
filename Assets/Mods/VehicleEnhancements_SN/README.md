@@ -7,7 +7,7 @@ This mod adds some super-cool enhancements to the standard vehicles in Subnautic
 ### Available in all vehicles
 
 - A **speedometer** in the in-game HUD UI showing forward speed in meters per second.
-- A Vertical Speed Indicator (VSI) showing the rate of ascent or descent in meters per second.
+- A **Vertical Speed Indicator (VSI)** showing the rate of ascent or descent in meters per second.
 - A **Horizontal Situation Indicator (HSI)** showing the pitch and roll of the vehicle in degrees.
 - A **configurable reversing sound** so that ocean inhabitants can get out of the way as you're backing up.
 - A **time-of-day indicator** showing the passage of day into night, alongside a digital clock showing the current game time.
@@ -20,8 +20,6 @@ Let me know by creating a post and I'll do my best to add them!
 ## User Guide
 
 The mod works entirely based on the settings in mod options, there's no "in-game" controls or changes to worry about.
-
-A note on "Build inside": if you build objects that consume power, such as a battery charger, inside the Seatruck, that object will consume power from the Seatruck. If you subsequently toggle off the "Build inside" option, objects that you've built will remain where they are, but will no longer consume power from the Seatruck.
 
 ## Options
 

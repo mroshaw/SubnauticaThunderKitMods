@@ -20,12 +20,20 @@ namespace DaftAppleGames.VehicleEnhancements_SN.TimeAndWeather
         [SerializeField, Required] private Sprite rainyWeatherSprite;
         [SerializeField, Required] private Sprite lightningStormWeatherSprite;
 
+        [SerializeField] private Vector3 cyclopsLocalPosition = new Vector3(-85.0f, -385.0f, 0.0f);
+
+        [SerializeField] private Vector3 cyclopsLocalScale = Vector3.one;
+
         private RectTransform previousMoon;
         private RectTransform nextMoon;
         private int lastDisplayedMinute = -1;
         private float nextWeatherUpdateTime;
         private WeatherManager weatherManager;
         private EnhancedVehicle vehicle = EnhancedVehicle.Seamoth;
+
+        internal Vector3 CyclopsLocalPosition => cyclopsLocalPosition;
+
+        internal Vector3 CyclopsLocalScale => cyclopsLocalScale;
 
         internal void Configure(EnhancedVehicle selectedVehicle)
         {
@@ -113,11 +121,11 @@ namespace DaftAppleGames.VehicleEnhancements_SN.TimeAndWeather
             Sprite sprite = sunnyWeatherSprite;
             if (weatherManager)
             {
-                if (weatherManager._outputLightningScalar >= 0.25f)
+                if (weatherManager._outputLightningScalar > 0.0f)
                 {
                     sprite = lightningStormWeatherSprite;
                 }
-                else if (weatherManager._outputRainScalar >= 0.1f)
+                else if (weatherManager._outputRainScalar > 0.0f)
                 {
                     sprite = rainyWeatherSprite;
                 }

@@ -43,7 +43,12 @@ namespace DaftAppleGames.VehicleEnhancements_SN
                         return false;
                     }
 
-                    vehicleTransform = cyclops.transform;
+                    vehicleTransform = cyclops.subAxis;
+                    if (!vehicleTransform)
+                    {
+                        return false;
+                    }
+
                     rigidbody = cyclops.rb;
                     break;
 

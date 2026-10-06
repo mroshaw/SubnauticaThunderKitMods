@@ -4,26 +4,27 @@ namespace DaftAppleGames.VehicleEnhancements_SN
 {
     internal class CyclopsHudVisibility : MonoBehaviour
     {
-        private GameObject indicators;
+        private GameObject controllerHost;
+        private SubRoot cyclops;
 
-        internal void Configure(GameObject enhancedIndicators)
+        internal void Configure(GameObject enhancedControllerHost, SubRoot cyclopsSubRoot)
         {
-            indicators = enhancedIndicators;
+            controllerHost = enhancedControllerHost;
+            cyclops = cyclopsSubRoot;
         }
 
         private void Update()
         {
-            if (!indicators)
+            if (!controllerHost)
             {
                 return;
             }
 
             Player player = Player.main;
-            SubRoot sub = player ? player.currentSub : null;
-            bool visible = sub && sub.isCyclops && player.isPiloting && !player.GetVehicle();
-            if (indicators.activeSelf != visible)
+            bool shouldRunControllers = player && player.currentSub == cyclops;
+            if (controllerHost.activeSelf != shouldRunControllers)
             {
-                indicators.SetActive(visible);
+                controllerHost.SetActive(shouldRunControllers);
             }
         }
     }

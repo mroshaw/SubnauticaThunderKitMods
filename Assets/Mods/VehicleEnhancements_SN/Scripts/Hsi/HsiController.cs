@@ -15,6 +15,10 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Hsi
 
         [SerializeField, Required] private TextMeshProUGUI rollText;
 
+        [SerializeField] private Vector3 cyclopsLocalPosition = new Vector3(200.0f, 110.0f, 0.0f);
+
+        [SerializeField] private Vector3 cyclopsLocalScale = new Vector3(0.5f, 0.5f, 0.5f);
+
         [SerializeField, MinValue(0.1f)] private float pitchUnitsPerDegree = 2.6f;
 
         [SerializeField, MinValue(0.0f)] private float smoothTime = 0.12f;
@@ -27,6 +31,10 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Hsi
         private int lastDisplayedPitchDegrees = int.MinValue;
         private int lastDisplayedRollDegrees = int.MinValue;
         private EnhancedVehicle vehicle = EnhancedVehicle.Seamoth;
+
+        internal Vector3 CyclopsLocalPosition => cyclopsLocalPosition;
+
+        internal Vector3 CyclopsLocalScale => cyclopsLocalScale;
 
         internal void Configure(EnhancedVehicle selectedVehicle)
         {

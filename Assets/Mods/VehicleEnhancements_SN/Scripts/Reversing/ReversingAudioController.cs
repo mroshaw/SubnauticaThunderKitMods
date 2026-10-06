@@ -75,7 +75,14 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Reversing
                 return;
             }
 
-            PositionEmittersAtVehicle(vehicleTransform);
+            if (vehicle == EnhancedVehicle.Cyclops)
+            {
+                ReturnEmittersToHud();
+            }
+            else
+            {
+                PositionEmittersAtVehicle(vehicleTransform);
+            }
             UpdateVoiceSelection();
 
             bool isReversing = Vector3.Dot(velocity, vehicleTransform.forward) < -reversingSpeedThreshold;

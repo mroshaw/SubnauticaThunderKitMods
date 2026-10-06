@@ -21,6 +21,7 @@
 
   "media": [
     { "type": "image", "url": "CyclopsUi.png", "label": "Enhanced Cyclops HUD." },
+    { "type": "image", "url": "CyclopsUi2.png", "label": "Enhanced Cyclops HUD." },
     { "type": "image", "url": "PrawnSuitUi.png", "label": "Enhanced Prawn Suit HUD." },
     { "type": "image", "url": "SeaMothUi.png", "label": "Enhanced Sea Moth HUD." },
     { "type": "image", "url": "VehicleEnhancementOptions.png", "label": "Mod options." },

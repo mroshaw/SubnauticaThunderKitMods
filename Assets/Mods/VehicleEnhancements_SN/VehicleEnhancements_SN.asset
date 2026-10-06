@@ -40,6 +40,23 @@ MonoBehaviour:
   definitions:
   - {fileID: 5897886265953266890, guid: cbea491c5dd04adfbc2eb014d029976b, type: 3}
   - {fileID: 5897886265953266890, guid: a8101a7f788ddab4d835833e6de817ac, type: 3}
+--- !u!114 &-241497562465655799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c173e57f2f954b18a2bb4fbce4713ec2, type: 3}
+  m_Name: AssemblyMergeSettings
+  m_EditorClassIdentifier: 
+  StagingPaths: []
+  primaryAssembly: {fileID: 5897886265953266890, guid: cbea491c5dd04adfbc2eb014d029976b,
+    type: 3}
+  dependencies:
+  - {fileID: 5897886265953266890, guid: a8101a7f788ddab4d835833e6de817ac, type: 3}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -56,6 +73,7 @@ MonoBehaviour:
   - {fileID: 1669160000753936738}
   - {fileID: -7429185305120216054}
   - {fileID: -7509154652948282372}
+  - {fileID: -241497562465655799}
   identity: {fileID: 1669160000753936738}
   QuickAccess: 1
 --- !u!114 &1669160000753936738

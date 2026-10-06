@@ -1010,7 +1010,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4713639018825503368}
-  - component: {fileID: 940793052189087457}
   - component: {fileID: 8431817431158972041}
   - component: {fileID: 6219988445626901703}
   - component: {fileID: 3372825952849277632}
@@ -1045,19 +1044,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &940793052189087457
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4713639018825503371}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 1413667307, guid: b35933d85230a204b91c2454a36698f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fontSetMode: 2
 --- !u!114 &8431817431158972041
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1076,8 +1062,10 @@ MonoBehaviour:
   verticalNeedle: {fileID: 8670672121634274167}
   verticalSpeedText: {fileID: 2407745977858173684}
   seamothOffset: {x: 0, y: 0}
-  prawnSuitOffset: {x: 0, y: 20}
+  prawnSuitOffset: {x: 0, y: 25}
   cyclopsOffset: {x: 0, y: 0}
+  cyclopsLocalPosition: {x: -50, y: 0, z: 0}
+  cyclopsLocalScale: {x: 1.3, y: 1.3, z: 1.3}
   minimumNeedleAngle: 180
   maximumNeedleAngle: -80
   maximumDisplayedSpeed: 20
@@ -1119,6 +1107,8 @@ MonoBehaviour:
   rollHinge: {fileID: 9168511102293746434}
   pitchText: {fileID: 6936627615403471975}
   rollText: {fileID: 5550304788245442938}
+  cyclopsLocalPosition: {x: 200, y: 110, z: 0}
+  cyclopsLocalScale: {x: 0.5, y: 0.5, z: 0.5}
   pitchUnitsPerDegree: 2.6
   smoothTime: 0.12
 --- !u!114 &8818688959980339929
@@ -1145,6 +1135,8 @@ MonoBehaviour:
   rainyWeatherSprite: {fileID: 21300000, guid: 04af614d1c42e7241b3a6b77011a7f73, type: 3}
   lightningStormWeatherSprite: {fileID: 21300000, guid: 70e5c2a7b3334e646a34c31377a838c0,
     type: 3}
+  cyclopsLocalPosition: {x: -85, y: -385, z: 0}
+  cyclopsLocalScale: {x: 1, y: 1, z: 1}
 --- !u!1 &4743132722026177057
 GameObject:
   m_ObjectHideFlags: 0
@@ -2024,6 +2016,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4604279929346698646}
+  - component: {fileID: 940793052189087457}
   m_Layer: 5
   m_Name: Speedometer
   m_TagString: Untagged
@@ -2053,6 +2046,19 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 110}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &940793052189087457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7759051693240293448}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1413667307, guid: b35933d85230a204b91c2454a36698f8, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  fontSetMode: 2
 --- !u!1 &7829126937079006615
 GameObject:
   m_ObjectHideFlags: 0
@@ -2198,6 +2204,7 @@ GameObject:
   - component: {fileID: 6743847711908698284}
   - component: {fileID: 4713639018970594709}
   - component: {fileID: 4713639018970594708}
+  - component: {fileID: 940793052189087458}
   m_Layer: 5
   m_Name: Time And Weather
   m_TagString: Untagged
@@ -2227,6 +2234,19 @@ RectTransform:
   m_AnchoredPosition: {x: -250, y: 78.7}
   m_SizeDelta: {x: 320, y: 120}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &940793052189087458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7839551863179794180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1413667307, guid: b35933d85230a204b91c2454a36698f8, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  fontSetMode: 2
 --- !u!114 &6743847711908698284
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2739,6 +2759,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9168511102673116118}
+  - component: {fileID: 940793052189087459}
   m_Layer: 5
   m_Name: Horizontal Situation Indicator
   m_TagString: Untagged
@@ -2769,3 +2790,16 @@ RectTransform:
   m_AnchoredPosition: {x: -290, y: 110}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &940793052189087459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9168511102673116119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1413667307, guid: b35933d85230a204b91c2454a36698f8, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  fontSetMode: 2

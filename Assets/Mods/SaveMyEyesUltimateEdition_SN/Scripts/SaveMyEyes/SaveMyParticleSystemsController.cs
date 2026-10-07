@@ -9,17 +9,21 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
     /// </summary>
     internal class SaveMyParticleSystemsController : MonoBehaviour
     {
+        [SerializeField] private EffectUseCase useCase;
+        [SerializeField] private bool includeChildren = true;
+
         private Dictionary<ParticleSystem, ParticleEffectState> _particleSystems;
         private Dictionary<TrailRenderer, TrailEffectState> _trails;
         private Dictionary<LineRenderer, LineEffectState> _lines;
         private bool _effectActive;
 
         internal bool EffectActive => _effectActive;
+        internal EffectUseCase UseCase => useCase;
 
         private sealed class ParticleEffectState
         {
             internal readonly bool InitialEmissionEnabled;
-            internal readonly float InitialRateOverTimeMultiplier;
+            internal float GameRateOverTimeMultiplier;
             internal readonly float InitialRateOverDistanceMultiplier;
             internal readonly float InitialStartSizeMultiplier;
             internal readonly float InitialStartSizeXMultiplier;
@@ -42,7 +46,7 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
                 ParticleSystem.LightsModule lights = particleSystem.lights;
 
                 InitialEmissionEnabled = emission.enabled;
-                InitialRateOverTimeMultiplier = emission.rateOverTimeMultiplier;
+                GameRateOverTimeMultiplier = emission.rateOverTimeMultiplier;
                 InitialRateOverDistanceMultiplier = emission.rateOverDistanceMultiplier;
                 InitialStartSizeMultiplier = main.startSizeMultiplier;
                 InitialStartSizeXMultiplier = main.startSizeXMultiplier;
@@ -98,20 +102,57 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
 
         private void OnEnable()
         {
-            ConfigFile.ParticleSettingsChanged += ApplyChanges;
-            ApplyChanges(ConfigFile.ParticleDensity, ConfigFile.ParticleSize, ConfigFile.ParticleSpeed,
-                ConfigFile.ParticleBrightness);
+            ConfigFile.SettingsChanged += OnSettingsChanged;
+            if (useCase != EffectUseCase.None)
+            {
+                ApplyCurrentSettings();
+            }
         }
 
         private void OnDisable()
         {
-            ConfigFile.ParticleSettingsChanged -= ApplyChanges;
+            ConfigFile.SettingsChanged -= OnSettingsChanged;
+        }
+
+        internal void Initialize(EffectUseCase useCase, bool includeChildren = true)
+        {
+            // Some fire particles share a hierarchy with separately managed sparks.
+            if (this.includeChildren != includeChildren)
+            {
+                this.includeChildren = includeChildren;
+                FindParticleSystems();
+                FindTrails();
+                FindLines();
+            }
+            this.useCase = useCase;
+            if (isActiveAndEnabled)
+            {
+                ApplyCurrentSettings();
+            }
+        }
+
+        private void OnSettingsChanged(EffectUseCase useCase)
+        {
+            if (this.useCase == useCase)
+            {
+                ApplyCurrentSettings();
+            }
+        }
+
+        private void ApplyCurrentSettings()
+        {
+            ParticleSettings settings = ConfigFile.GetParticleSettings(useCase);
+            ModDebugLog.LogDebug($"ParticleController.Apply: Applying {useCase} settings to {gameObject.name}");
+            ApplyChanges(settings.Density, settings.Size, settings.Speed, settings.Brightness);
         }
 
         private void FindParticleSystems()
         {
             _particleSystems = new Dictionary<ParticleSystem, ParticleEffectState>();
-            ParticleSystem[] particleSystems = GetComponentsInChildren<ParticleSystem>(true);
+            _effectActive = false;
+            ParticleSystem[] particleSystems = includeChildren
+                ? GetComponentsInChildren<ParticleSystem>(true)
+                : GetComponents<ParticleSystem>();
             foreach (ParticleSystem particleSystem in particleSystems)
             {
                 ParticleSystem.EmissionModule emission = particleSystem.emission;
@@ -126,7 +167,9 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
         private void FindTrails()
         {
             _trails = new Dictionary<TrailRenderer, TrailEffectState>();
-            TrailRenderer[] trails = GetComponentsInChildren<TrailRenderer>(true);
+            TrailRenderer[] trails = includeChildren
+                ? GetComponentsInChildren<TrailRenderer>(true)
+                : GetComponents<TrailRenderer>();
             foreach (TrailRenderer trail in trails)
             {
                 _trails.Add(trail, new TrailEffectState(trail));
@@ -136,7 +179,9 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
         private void FindLines()
         {
             _lines = new Dictionary<LineRenderer, LineEffectState>();
-            LineRenderer[] lines = GetComponentsInChildren<LineRenderer>(true);
+            LineRenderer[] lines = includeChildren
+                ? GetComponentsInChildren<LineRenderer>(true)
+                : GetComponents<LineRenderer>();
             foreach (LineRenderer line in lines)
             {
                 _lines.Add(line, new LineEffectState(line));
@@ -146,19 +191,28 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
         internal void SetEffectActive(bool effectActive)
         {
             _effectActive = effectActive;
+            float density = ConfigFile.GetParticleSettings(useCase).Density;
             foreach (KeyValuePair<ParticleSystem, ParticleEffectState> particleSystemState in _particleSystems)
             {
                 particleSystemState.Value.EffectActive = effectActive;
-                ConfigureEmissionState(particleSystemState.Key, particleSystemState.Value, ConfigFile.ParticleDensity);
+                ConfigureEmissionState(particleSystemState.Key, particleSystemState.Value, density);
             }
         }
 
         internal void ApplyEmissionState()
         {
+            float density = ConfigFile.GetParticleSettings(useCase).Density;
             foreach (KeyValuePair<ParticleSystem, ParticleEffectState> particleSystemState in _particleSystems)
             {
-                ConfigureEmissionState(particleSystemState.Key, particleSystemState.Value, ConfigFile.ParticleDensity);
+                ConfigureEmissionState(particleSystemState.Key, particleSystemState.Value, density);
             }
+        }
+
+        internal void CaptureAndApplyEmissionRate(ParticleSystem particleSystem)
+        {
+            ParticleEffectState state = _particleSystems[particleSystem];
+            state.GameRateOverTimeMultiplier = particleSystem.emission.rateOverTimeMultiplier;
+            ConfigureParticleIntensity(particleSystem, state, ConfigFile.GetParticleSettings(useCase).Density);
         }
 
         private void ApplyChanges(float densityModifier, float sizeModifier, float speedModifier,
@@ -191,7 +245,7 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
             }
 
             ParticleSystem.EmissionModule emission = particleSystem.emission;
-            emission.rateOverTimeMultiplier = state.InitialRateOverTimeMultiplier * intensityModifier;
+            emission.rateOverTimeMultiplier = state.GameRateOverTimeMultiplier * intensityModifier;
             emission.rateOverDistanceMultiplier = state.InitialRateOverDistanceMultiplier * intensityModifier;
 
             ConfigureEmissionState(particleSystem, state, intensityModifier);
@@ -340,7 +394,7 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
 
         private static void ScaleExistingParticleSizes(ParticleSystem particleSystem, bool uses3DStartSize, float previousModifier, float newModifier)
         {
-            if (previousModifier == newModifier)
+            if (Mathf.Approximately(previousModifier, newModifier))
             {
                 return;
             }
@@ -376,7 +430,7 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
 
         private static void ScaleExistingParticleSpeeds(ParticleSystem particleSystem, float previousModifier, float newModifier)
         {
-            if (previousModifier == newModifier)
+            if (Mathf.Approximately(previousModifier, newModifier))
             {
                 return;
             }
@@ -405,7 +459,7 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
 
         private static void ScaleExistingParticleBrightness(ParticleSystem particleSystem, float previousModifier, float newModifier)
         {
-            if (previousModifier == newModifier)
+            if (Mathf.Approximately(previousModifier, newModifier))
             {
                 return;
             }

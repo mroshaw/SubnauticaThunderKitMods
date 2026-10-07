@@ -21,9 +21,9 @@ MonoBehaviour:
       minor: 0
       patch: 2
     currentPublishedVersion:
-      major: 0
+      major: 1
       minor: 0
-      patch: 0
+      patch: 2
     publishingSites: 3
     nexusMods:
       fileGroupId: 7879512
@@ -50,11 +50,11 @@ MonoBehaviour:
     version:
       major: 1
       minor: 0
-      patch: 5
+      patch: 6
     currentPublishedVersion:
       major: 1
       minor: 0
-      patch: 5
+      patch: 6
     publishingSites: 3
     nexusMods:
       fileGroupId: 7895037
@@ -81,11 +81,11 @@ MonoBehaviour:
     version:
       major: 2
       minor: 12
-      patch: 1
+      patch: 2
     currentPublishedVersion:
       major: 2
       minor: 12
-      patch: 1
+      patch: 2
     publishingSites: -1
     nexusMods:
       fileGroupId: 2083597
@@ -116,7 +116,7 @@ MonoBehaviour:
     currentPublishedVersion:
       major: 1
       minor: 2
-      patch: 0
+      patch: 1
     publishingSites: -1
     nexusMods:
       fileGroupId: 2435107
@@ -143,7 +143,7 @@ MonoBehaviour:
     version:
       major: 1
       minor: 1
-      patch: 0
+      patch: 1
     currentPublishedVersion:
       major: 1
       minor: 1

@@ -9,6 +9,8 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
     /// </summary>
     internal class SaveMyEyesLightController : MonoBehaviour
     {
+        [SerializeField] private EffectUseCase useCase;
+
         // Struct to hold initial values so that modifier can be applied consistently
         private readonly struct LightSettings
         {
@@ -25,18 +27,58 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
 
         private void Awake()
         {
-            FindLights();
+            // Initialize may already have captured an inactive object's lights.
+            if (_lights == null)
+            {
+                FindLights();
+            }
         }
 
         private void OnEnable()
         {
-            ConfigFile.ToolLightSettingsChanged += ApplyChanges;
-            ApplyChanges(ConfigFile.ToolLightIntensity);
+            ConfigFile.SettingsChanged += OnSettingsChanged;
+            if (useCase != EffectUseCase.None)
+            {
+                ApplyChanges(ConfigFile.GetLightIntensity(useCase));
+            }
         }
         
         private void OnDisable()
         {
-            ConfigFile.ToolLightSettingsChanged -= ApplyChanges;
+            ConfigFile.SettingsChanged -= OnSettingsChanged;
+        }
+
+        internal void Initialize(EffectUseCase useCase)
+        {
+            // An inactive light may not have run Awake when its controller is attached.
+            if (_lights == null)
+            {
+                FindLights();
+            }
+            this.useCase = useCase;
+            if (isActiveAndEnabled)
+            {
+                ApplyChanges(ConfigFile.GetLightIntensity(this.useCase));
+            }
+        }
+
+        internal void PrepareCurrentIntensity(Light light)
+        {
+            light.intensity = _lights[light].Intensity;
+        }
+
+        internal void CaptureAndApplyCurrentIntensity(Light light)
+        {
+            _lights[light] = new LightSettings(light.intensity);
+            light.intensity *= ConfigFile.GetLightIntensity(useCase);
+        }
+
+        private void OnSettingsChanged(EffectUseCase useCase)
+        {
+            if (this.useCase == useCase)
+            {
+                ApplyChanges(ConfigFile.GetLightIntensity(this.useCase));
+            }
         }
 
         private void FindLights()
@@ -58,7 +100,7 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
             }
             
             ModDebugLog.LogDebug(
-                $"LightController.Apply: Applying intensity multiplier: {intensityMultiplier} to {gameObject.name}");
+                $"LightController.Apply: Applying {useCase} intensity multiplier: {intensityMultiplier} to {gameObject.name}");
             
             foreach (KeyValuePair<Light, LightSettings> managedLight in _lights)
             {

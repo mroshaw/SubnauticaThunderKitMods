@@ -19,7 +19,7 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
 
         private void OnEnable()
         {
-            ConfigFile.FlareSettingsChanged += ApplyChanges;
+            ConfigFile.SettingsChanged += OnSettingsChanged;
             if (_hasGameIntensity)
             {
                 ApplyChanges(ConfigFile.FlareIntensity);
@@ -28,9 +28,21 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
 
         private void OnDisable()
         {
-            ConfigFile.FlareSettingsChanged -= ApplyChanges;
+            ConfigFile.SettingsChanged -= OnSettingsChanged;
         }
 
+        private void OnSettingsChanged(EffectUseCase useCase)
+        {
+            if (useCase == EffectUseCase.Flare)
+            {
+                ApplyChanges(ConfigFile.FlareIntensity);
+            }
+        }
+
+        /// <summary>
+        /// This is called in the FlarePatches.Update patch, so we can apply our mulitpliers
+        /// as the game modifies the flares in real-time
+        /// </summary>
         internal void PrepareCurrentIntensity()
         {
             if (_hasGameIntensity)

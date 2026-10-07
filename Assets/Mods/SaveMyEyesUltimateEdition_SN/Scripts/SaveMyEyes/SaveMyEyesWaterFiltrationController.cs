@@ -19,13 +19,21 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
 
         private void OnEnable()
         {
-            ConfigFile.WaterFiltrationBeamSettingsChanged += ApplyChanges;
+            ConfigFile.SettingsChanged += OnSettingsChanged;
             ApplyChanges(ConfigFile.DisableWaterFiltrationBeams);
         }
 
         private void OnDisable()
         {
-            ConfigFile.WaterFiltrationBeamSettingsChanged -= ApplyChanges;
+            ConfigFile.SettingsChanged -= OnSettingsChanged;
+        }
+
+        private void OnSettingsChanged(EffectUseCase useCase)
+        {
+            if (useCase == EffectUseCase.WaterFiltration)
+            {
+                ApplyChanges(ConfigFile.DisableWaterFiltrationBeams);
+            }
         }
 
         private void FindBeamState()

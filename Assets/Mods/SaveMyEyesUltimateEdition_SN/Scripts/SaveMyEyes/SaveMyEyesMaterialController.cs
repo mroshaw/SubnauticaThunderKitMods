@@ -9,6 +9,8 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
     /// </summary>
     internal class SaveMyEyesMaterialController : MonoBehaviour
     {
+        [SerializeField] private EffectUseCase useCase;
+
         // Struct to hold initial values so that modifier can be applied consistently
         private readonly struct MaterialSettings
         {
@@ -32,13 +34,33 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
 
         private void OnEnable()
         {
-            ConfigFile.MaterialSettingsChanged += ApplyChanges;
-            ApplyChanges(ConfigFile.MaterialEmissionIntensity);
+            ConfigFile.SettingsChanged += OnSettingsChanged;
+            if (useCase != EffectUseCase.None)
+            {
+                ApplyChanges(ConfigFile.GetMaterialEmissionIntensity(useCase));
+            }
         }
         
         private void OnDisable()
         {
-            ConfigFile.MaterialSettingsChanged -= ApplyChanges;
+            ConfigFile.SettingsChanged -= OnSettingsChanged;
+        }
+
+        internal void Initialize(EffectUseCase useCase)
+        {
+            this.useCase = useCase;
+            if (isActiveAndEnabled)
+            {
+                ApplyChanges(ConfigFile.GetMaterialEmissionIntensity(this.useCase));
+            }
+        }
+
+        private void OnSettingsChanged(EffectUseCase useCase)
+        {
+            if (this.useCase == useCase)
+            {
+                ApplyChanges(ConfigFile.GetMaterialEmissionIntensity(this.useCase));
+            }
         }
         
         private void FindEmitterMaterials()
@@ -76,7 +98,7 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
             }
             
             ModDebugLog.LogDebug(
-                $"MaterialController.Apply: Applying intensity multiplier: {intensityMultiplier} to {gameObject.name}");
+                $"MaterialController.Apply: Applying {useCase} intensity multiplier: {intensityMultiplier} to {gameObject.name}");
             foreach (KeyValuePair<Material, MaterialSettings> emitterMaterial in _emitterMaterials)
             {
                 if (!emitterMaterial.Key)

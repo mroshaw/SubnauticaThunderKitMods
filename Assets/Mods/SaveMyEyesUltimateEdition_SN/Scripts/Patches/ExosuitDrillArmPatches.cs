@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.Patches
 {
+    [HarmonyPatch]
     internal static class ExosuitDrillArmPatches
     {
         [HarmonyPatch(typeof(ExosuitDrillArm), nameof(ExosuitDrillArm.OnHit))]
@@ -12,7 +13,7 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.Patches
             out SaveMyParticleSystemsController __state)
         {
             __state = null;
-            if (SaveMyEyesUltimateEditionPlugin.ConfigFile.ParticleDensity > 0.0f)
+            if (SaveMyEyesUltimateEditionPlugin.ConfigFile.PrawnDrillParticleDensity > 0.0f)
             {
                 return;
             }
@@ -51,11 +52,11 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.Patches
                 return;
             }
 
-            __result.gameObject.AddComponent<SaveMyEyesLightController>();
-            __result.gameObject.AddComponent<SaveMyParticleSystemsController>();
+            __result.gameObject.AddComponent<SaveMyEyesLightController>().Initialize(EffectUseCase.PrawnDrill);
+            __result.gameObject.AddComponent<SaveMyParticleSystemsController>().Initialize(EffectUseCase.PrawnDrill);
         }
 
-        [HarmonyPatch(typeof(VFXController), "SpawnFX")]
+        [HarmonyPatch(typeof(VFXController), nameof(VFXController.SpawnFX))]
         [HarmonyPostfix]
         private static void SpawnFXPostfix(VFXController __instance, int i)
         {
@@ -65,9 +66,10 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.Patches
             }
 
             GameObject effectRoot = __instance.emitters[i].instanceGO;
-            effectRoot.AddComponent<SaveMyEyesLightController>();
+            effectRoot.AddComponent<SaveMyEyesLightController>().Initialize(EffectUseCase.PrawnDrill);
             SaveMyParticleSystemsController particleController =
                 effectRoot.AddComponent<SaveMyParticleSystemsController>();
+            particleController.Initialize(EffectUseCase.PrawnDrill);
             particleController.SetEffectActive(false);
         }
 
@@ -97,7 +99,7 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.Patches
             }
         }
 
-        [HarmonyPatch(typeof(ExosuitDrillArm), "StopEffects")]
+        [HarmonyPatch(typeof(ExosuitDrillArm), nameof(ExosuitDrillArm.StopEffects))]
         [HarmonyPostfix]
         private static void StopEffectsPostfix(ExosuitDrillArm __instance)
         {

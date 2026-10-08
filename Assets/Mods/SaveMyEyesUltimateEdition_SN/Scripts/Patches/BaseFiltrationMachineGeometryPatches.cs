@@ -16,7 +16,7 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.Patches
             __instance.gameObject.EnsureComponent<SaveMyEyesWaterFiltrationController>();
         }
 
-        [HarmonyPatch("UpdateVisuals")]
+        [HarmonyPatch(nameof(BaseFiltrationMachineGeometry.UpdateVisuals))]
         [HarmonyPostfix]
         public static void UpdateVisualsPostfix(BaseFiltrationMachineGeometry __instance)
         {

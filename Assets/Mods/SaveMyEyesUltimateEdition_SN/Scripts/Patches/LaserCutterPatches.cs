@@ -4,6 +4,7 @@ using static DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyesUltimateEditi
 
 namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.Patches
 {
+    [HarmonyPatch]
     internal static class LaserCutterPatches
     {
         [HarmonyPatch(typeof(PlayerTool), nameof(PlayerTool.Awake))]
@@ -13,11 +14,11 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.Patches
             LaserCutter laserCutter = __instance as LaserCutter;
             if (laserCutter && laserCutter.fxLight)
             {
-                laserCutter.fxLight.gameObject.AddComponent<SaveMyEyesLightController>();
+                laserCutter.fxLight.gameObject.AddComponent<SaveMyEyesLightController>().Initialize(EffectUseCase.LaserCutter);
             }
         }
 
-        [HarmonyPatch(typeof(LaserCutter), "StartLaserCuttingFX")]
+        [HarmonyPatch(typeof(LaserCutter), nameof(LaserCutter.StartLaserCuttingFX))]
         [HarmonyPostfix]
         public static void StartLaserCuttingFXPostfix(LaserCutter __instance)
         {
@@ -25,31 +26,31 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.Patches
             ConfigureActiveLight(__instance);
         }
 
-        [HarmonyPatch(typeof(VFXController), "SpawnFX")]
+        [HarmonyPatch(typeof(VFXController), nameof(VFXController.SpawnFX))]
         [HarmonyPostfix]
         public static void SpawnFXPostfix(VFXController __instance, int i)
         {
             if (__instance.GetComponent<LaserCutter>())
             {
-                __instance.emitters[i].instanceGO.AddComponent<SaveMyParticleSystemsController>();
+                __instance.emitters[i].instanceGO.AddComponent<SaveMyParticleSystemsController>().Initialize(EffectUseCase.LaserCutter);
             }
         }
 
-        [HarmonyPatch(typeof(LaserCutter), "StopLaserCuttingFX")]
+        [HarmonyPatch(typeof(LaserCutter), nameof(LaserCutter.StopLaserCuttingFX))]
         [HarmonyPostfix]
         public static void StopLaserCuttingFXPostfix(LaserCutter __instance)
         {
             SetParticleEffectsActive(__instance, false);
         }
 
-        [HarmonyPatch(typeof(LaserCutter), "RandomizeIntensity")]
+        [HarmonyPatch(typeof(LaserCutter), nameof(LaserCutter.RandomizeIntensity))]
         [HarmonyPostfix]
         public static void RandomizeIntensityPostfix(LaserCutter __instance)
         {
-            __instance.lightIntensity *= ConfigFile.ToolLightIntensity;
+            __instance.lightIntensity *= ConfigFile.LaserCutterLightIntensity;
         }
 
-        [HarmonyPatch(typeof(LaserCutter), "Update")]
+        [HarmonyPatch(typeof(LaserCutter), nameof(LaserCutter.Update))]
         [HarmonyPostfix]
         public static void UpdatePostfix(LaserCutter __instance)
         {
@@ -79,7 +80,7 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.Patches
                 return;
             }
 
-            bool enableLight = MiscSettings.flashes && ConfigFile.ToolLightIntensity > 0.0f;
+            bool enableLight = MiscSettings.flashes && ConfigFile.LaserCutterLightIntensity > 0.0f;
             laserCutter.fxLight.enabled = enableLight;
             if (!enableLight)
             {

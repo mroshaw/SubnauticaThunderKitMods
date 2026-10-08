@@ -15,21 +15,22 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.Patches
             if (!particleController)
             {
                 particleController = __instance.laserCutFX.AddComponent<SaveMyParticleSystemsController>();
+                particleController.Initialize(EffectUseCase.LaserCutter);
             }
             particleController.SetEffectActive(false);
 
             if (!__instance.laserCutStreak.GetComponent<SaveMyParticleSystemsController>())
             {
-                __instance.laserCutStreak.AddComponent<SaveMyParticleSystemsController>();
+                __instance.laserCutStreak.AddComponent<SaveMyParticleSystemsController>().Initialize(EffectUseCase.LaserCutter);
             }
 
             if (!__instance.cutObject.GetComponent<SaveMyEyesMaterialController>())
             {
-                __instance.cutObject.AddComponent<SaveMyEyesMaterialController>();
+                __instance.cutObject.AddComponent<SaveMyEyesMaterialController>().Initialize(EffectUseCase.LaserCutter);
             }
         }
 
-        [HarmonyPatch("Update")]
+        [HarmonyPatch(nameof(LaserCutObject.Update))]
         [HarmonyPostfix]
         public static void UpdatePostfix(LaserCutObject __instance)
         {

@@ -7,8 +7,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Sirenix.OdinInspector;
 using ThunderKit.Core.Attributes;
+using ThunderKit.Core.Manifests.Datums;
 using ThunderKit.Core.Paths;
 using UnityEditor.Compilation;
+using UnityEditorInternal;
 using UnityEngine;
 using Assembly = System.Reflection.Assembly;
 
@@ -17,7 +19,7 @@ namespace ThunderKit.Core.Pipelines.Jobs
     /// <summary>
     /// Embeds selected staged dependencies in a mod assembly using the ILRepack dotnet tool.
     /// </summary>
-    [PipelineSupport(typeof(Pipeline)), ManifestProcessor]
+    [PipelineSupport(typeof(Pipeline)), ManifestProcessor, RequiresManifestDatumType(typeof(AssemblyMergeSettings))]
     public class MergeAssemblies : PipelineJob
     {
         [SerializeField, Required, Tooltip("ILRepack executable name on PATH, or its full path.")]
@@ -26,32 +28,27 @@ namespace ThunderKit.Core.Pipelines.Jobs
         [SerializeField, Required, PathReferenceResolver]
         private string stagingPath = "<ManifestPluginStaging>";
 
-        [SerializeField, Required, Tooltip("Mod DLL filename, including .dll. This determines the merged assembly identity.")]
-        private string primaryAssembly = "SaveMyEyesUltimateEdition.dll";
-
-        [SerializeField, Required, Tooltip("Dependency DLL filenames to embed and remove from staging after a successful merge.")]
-        private string[] dependencies = { "DaftAppleModTools_SN.Core.dll" };
-
         /// <summary>
         /// Merges and validates the staged assemblies before replacing the mod DLL.
         /// </summary>
         public override async Task Execute(Pipeline pipeline)
         {
+            AssemblyMergeSettings settings = GetSettings(pipeline);
+            ValidateSettings(pipeline, settings);
+
+            string primaryAssembly = GetAssemblyFileName(settings.PrimaryAssembly);
             string stageDirectory = Path.GetFullPath(PathReference.ResolvePath(stagingPath, pipeline, this));
             string primaryPath = GetAssemblyPath(stageDirectory, primaryAssembly);
             HashSet<string> inputPaths = new HashSet<string>(StringComparer.OrdinalIgnoreCase) { primaryPath };
             List<string> dependencyPaths = new List<string>();
-            if (dependencies == null || dependencies.Length == 0)
-            {
-                throw new InvalidOperationException("MergeAssemblies requires at least one dependency.");
-            }
 
-            foreach (string dependency in dependencies)
+            foreach (AssemblyDefinitionAsset dependency in settings.Dependencies)
             {
-                string dependencyPath = GetAssemblyPath(stageDirectory, dependency);
+                string dependencyAssembly = GetAssemblyFileName(dependency);
+                string dependencyPath = GetAssemblyPath(stageDirectory, dependencyAssembly);
                 if (!inputPaths.Add(dependencyPath))
                 {
-                    throw new InvalidOperationException($"Duplicate merge input: {dependency}");
+                    throw new InvalidOperationException($"Duplicate merge input: {dependencyAssembly}");
                 }
                 dependencyPaths.Add(dependencyPath);
             }
@@ -109,6 +106,96 @@ namespace ThunderKit.Core.Pipelines.Jobs
                 }
                 Directory.Delete(mergeDirectory);
             }
+        }
+
+        private static AssemblyMergeSettings GetSettings(Pipeline pipeline)
+        {
+            AssemblyMergeSettings settings = null;
+            foreach (ComposableElement datum in pipeline.Manifest.Data)
+            {
+                AssemblyMergeSettings candidate = datum as AssemblyMergeSettings;
+                if (candidate is null)
+                {
+                    continue;
+                }
+                if (settings != null)
+                {
+                    throw new InvalidOperationException("A manifest can contain only one AssemblyMergeSettings datum.");
+                }
+                settings = candidate;
+            }
+            if (settings is null)
+            {
+                throw new InvalidOperationException("MergeAssemblies requires AssemblyMergeSettings on the current manifest.");
+            }
+            return settings;
+        }
+
+        private static void ValidateSettings(Pipeline pipeline, AssemblyMergeSettings settings)
+        {
+            if (!settings.PrimaryAssembly)
+            {
+                throw new InvalidOperationException("AssemblyMergeSettings requires a primary assembly definition.");
+            }
+            if (settings.Dependencies == null || settings.Dependencies.Length == 0)
+            {
+                throw new InvalidOperationException("AssemblyMergeSettings requires at least one dependency.");
+            }
+
+            HashSet<AssemblyDefinitionAsset> stagedDefinitions = new HashSet<AssemblyDefinitionAsset>();
+            foreach (ComposableElement datum in pipeline.Manifest.Data)
+            {
+                AssemblyDefinitions definitions = datum as AssemblyDefinitions;
+                if (definitions == null || definitions.definitions == null)
+                {
+                    continue;
+                }
+                foreach (AssemblyDefinitionAsset definition in definitions.definitions)
+                {
+                    if (definition)
+                    {
+                        stagedDefinitions.Add(definition);
+                    }
+                }
+            }
+
+            ValidateStagedDefinition(stagedDefinitions, settings.PrimaryAssembly, "primary");
+            HashSet<AssemblyDefinitionAsset> mergeInputs = new HashSet<AssemblyDefinitionAsset>
+            {
+                settings.PrimaryAssembly
+            };
+            foreach (AssemblyDefinitionAsset dependency in settings.Dependencies)
+            {
+                if (!dependency)
+                {
+                    throw new InvalidOperationException("AssemblyMergeSettings contains an unassigned dependency.");
+                }
+                ValidateStagedDefinition(stagedDefinitions, dependency, "dependency");
+                if (!mergeInputs.Add(dependency))
+                {
+                    throw new InvalidOperationException($"Duplicate merge input: {GetAssemblyFileName(dependency)}");
+                }
+            }
+        }
+
+        private static void ValidateStagedDefinition(HashSet<AssemblyDefinitionAsset> stagedDefinitions,
+            AssemblyDefinitionAsset definition, string role)
+        {
+            if (!stagedDefinitions.Contains(definition))
+            {
+                throw new InvalidOperationException(
+                    $"The {role} assembly {GetAssemblyFileName(definition)} is not included in the manifest's AssemblyDefinitions.");
+            }
+        }
+
+        private static string GetAssemblyFileName(AssemblyDefinitionAsset definition)
+        {
+            AssemblyDefinitionData data = JsonUtility.FromJson<AssemblyDefinitionData>(definition.text);
+            if (data == null || string.IsNullOrWhiteSpace(data.name))
+            {
+                throw new InvalidOperationException($"Assembly definition {definition.name} has no assembly name.");
+            }
+            return data.name + ".dll";
         }
 
         private static string GetAssemblyPath(string directory, string fileName)
@@ -200,6 +287,12 @@ namespace ThunderKit.Core.Pipelines.Jobs
         {
             File.Delete(Path.ChangeExtension(assemblyPath, ".pdb"));
             File.Delete(assemblyPath + ".mdb");
+        }
+
+        [Serializable]
+        private sealed class AssemblyDefinitionData
+        {
+            public string name;
         }
     }
 }

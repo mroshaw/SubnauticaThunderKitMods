@@ -28,6 +28,23 @@ MonoBehaviour:
     - {fileID: 8300000, guid: da3f28a57f190a042a75a493f2bad770, type: 3}
     - {fileID: 7615665508983313005, guid: 9eb54980c1d97414ab50e3f4671b8bae, type: 3}
     - {fileID: 2800000, guid: 1d1eef732bc14c447af35845b63c8408, type: 3}
+--- !u!114 &-152615523481942381
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c173e57f2f954b18a2bb4fbce4713ec2, type: 3}
+  m_Name: AssemblyMergeSettings
+  m_EditorClassIdentifier: 
+  StagingPaths: []
+  primaryAssembly: {fileID: 5897886265953266890, guid: 224286437dfc28847b133efcbb5059cc,
+    type: 3}
+  dependencies:
+  - {fileID: 5897886265953266890, guid: a8101a7f788ddab4d835833e6de817ac, type: 3}
 --- !u!114 &-121899452589423327
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62,6 +79,7 @@ MonoBehaviour:
   - {fileID: -121899452589423327}
   - {fileID: 8876472120765660631}
   - {fileID: -6872063687626615479}
+  - {fileID: -152615523481942381}
   identity: {fileID: -121899452589423327}
   QuickAccess: 1
 --- !u!114 &8876472120765660631

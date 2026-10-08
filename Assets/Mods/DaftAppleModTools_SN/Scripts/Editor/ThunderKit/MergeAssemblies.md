@@ -1,17 +1,15 @@
 # MergeAssemblies pipeline job
 
-Add **MergeAssemblies** immediately after **StageAssemblies** (or **StageAssembliesExt**) in a ThunderKit build pipeline, before deployment or ZIP packaging. This is an opt-in job: the existing shared build pipelines have not been changed.
+Add **MergeAssemblies** immediately after **StageAssemblies** (or **StageAssembliesExt**) in a ThunderKit build pipeline, before deployment or ZIP packaging. A manifest opts in by including an **AssemblyMergeSettings** datum.
 
-For Save My Eyes, configure:
+Configure the merge on each mod's manifest by adding an **AssemblyMergeSettings** datum. For Save My Eyes, configure:
 
-| Field | Value |
+| Manifest field | Value |
 | --- | --- |
-| Executable Path | `ilrepack`, or `C:/Users/mrosh/.dotnet/tools/ilrepack.exe` |
-| Staging Path | `<ManifestPluginStaging>` |
-| Primary Assembly | `SaveMyEyesUltimateEdition.dll` |
-| Dependencies | `DaftAppleModTools_SN.Core.dll` |
+| Primary Assembly | `SaveMyEyesUltimateEdition_SN.asmdef` |
+| Dependencies | `DaftAppleModTools_SN.Core.asmdef` |
 
-The primary filename is the assembly name from the mod's `.asmdef`, which can differ from the manifest or mod folder name. For other mods, change this field to their compiled DLL filename. Each dependency must be a DLL filename in the same staging directory.
+The shared pipeline retains the ILRepack executable and staging path settings. The assembly filenames are derived from the selected `.asmdef` assets, so they do not depend on the manifest or mod folder name. Manifests without **AssemblyMergeSettings** skip the merge job.
 
 Install the external tool with `dotnet tool install -g dotnet-ilrepack`. If Unity was already running when the tool was installed, use the full executable path or restart Unity so that it sees the updated PATH.
 
@@ -23,6 +21,6 @@ Output is written to a unique temporary directory within staging. Before replace
 
 Only opt in for helper types that should be private to the mod. Static state is copied independently into each merged mod. Unity asset bundles that refer to ModTools MonoBehaviours or ScriptableObjects by their original assembly name need separate handling; this job does not rewrite serialized asset references. Likewise, types exchanged with other mods must retain a shared assembly identity.
 
-The job processes the current manifest context. If a pipeline builds several manifests, run it once in each relevant manifest context and provide that mod's primary assembly filename.
+The job processes the current manifest context. If a pipeline builds several manifests, ThunderKit runs it once for each manifest that contains **AssemblyMergeSettings**.
 
 Packaging contains one mod DLL after merging. Existing deployment jobs may copy over an old installation without removing its old ModTools DLL; inspect that installation separately. This job only removes dependencies from staging.

@@ -33,8 +33,26 @@ MonoBehaviour:
   Data:
   - {fileID: -121899452589423327}
   - {fileID: 8876472120765660631}
+  - {fileID: 6114782796745646896}
   identity: {fileID: -121899452589423327}
   QuickAccess: 1
+--- !u!114 &6114782796745646896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c173e57f2f954b18a2bb4fbce4713ec2, type: 3}
+  m_Name: AssemblyMergeSettings
+  m_EditorClassIdentifier: 
+  StagingPaths: []
+  primaryAssembly: {fileID: 5897886265953266890, guid: 339ceb2779cd1d84d91b8297d29e5476,
+    type: 3}
+  dependencies:
+  - {fileID: 5897886265953266890, guid: a8101a7f788ddab4d835833e6de817ac, type: 3}
 --- !u!114 &8876472120765660631
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -1,4 +1,4 @@
-﻿using BepInEx;
+using BepInEx;
 using DaftAppleGames.ModTools;
 using HarmonyLib;
 using Nautilus.Handlers;

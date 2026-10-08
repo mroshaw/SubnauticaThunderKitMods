@@ -21,12 +21,12 @@ The project contains multiple "mods" for the original Subnautica game. The proje
 3. **Prefer the smallest coherent change** that solves the requirement.
 4. **Preserve existing behaviour** unless a behaviour change is explicitly requested.
 5. **Inspect existing code and patterns** before designing a solution.
-6. Do not speculate about APIs when the implementation or decompiled game source can be inspected instead.
-7. **Component-based design.** Favour small, single-purpose `MonoBehaviour`s and plain C# classes composed together over large monolithic scripts. Each component should have one clear reason to change.
-8. **Separation of concerns.** Presentation, input, game logic, and data should be decoupled. Prefer interfaces and events/delegates over direct cross-referencing between unrelated systems.
-9. **Performance-first, GC-aware.** Minimise per-frame allocations. Avoid LINQ and closures in hot paths (`Update`, `FixedUpdate`, physics callbacks). Cache component references, reuse collections, prefer `struct` for small value types, and pool objects (bricks, balls, particles, power-ups) rather than instantiating/destroying at runtime.
-10. **Elegant, not clever.** Prefer clear, idiomatic solutions over dense or overly abstract ones. If a simpler approach achieves the same result with equal performance, use it.
-11. **Documentation with restraint.** Use XML doc comments (`///`) on public APIs, especially non-obvious ones. Avoid comments that merely restate the code. Comment *why*, not *what*, when the *why* isn't obvious.
+6. **Do not speculate about APIs** when the implementation or decompiled game source can be inspected instead.
+7. **Favour component-based design.** Favour small, single-purpose `MonoBehaviour`s and plain C# classes composed together over large monolithic scripts. Each component should have one clear reason to change.
+8. **Ensure separation of concerns.** Presentation, input, game logic, and data should be decoupled. Prefer interfaces and events/delegates over direct cross-referencing between unrelated systems.
+9. **Be performance-first, GC-aware.** Minimise per-frame allocations. Avoid LINQ and closures in hot paths (`Update`, `FixedUpdate`, physics callbacks). Cache component references, reuse collections, prefer `struct` for small value types, and pool objects (bricks, balls, particles, power-ups) rather than instantiating/destroying at runtime.
+10. **Be elegant, not clever.** Prefer clear, idiomatic solutions over dense or overly abstract ones. If a simpler approach achieves the same result with equal performance, use it.
+11. **Document with restraint.** Use XML doc comments (`///`) on public APIs, especially non-obvious ones. Avoid comments that merely restate the code. Comment *why*, not *what*, when the *why* isn't obvious.
 
 ## Design
 
@@ -88,6 +88,7 @@ Code reviews should prioritise
 
 ## Unity-Specific Conventions
 
+- **Prefer prefab and serialized component attribute changes** over patching code.
 - **Lifecycle methods:** keep `Awake`, `OnEnable`, `Start`, `Update`, `OnDisable`, `OnDestroy` lean. Delegate real work to dedicated methods.
 - **Caching:** cache `Transform`, `Camera`, and other frequently accessed components in `Awake`/`Start` rather than repeated `GetComponent` calls.
 - **Events:** use C# events/`UnityEvent` (sparingly, prefer C# events for perf-sensitive internal code, `UnityEvent` only where inspector wiring adds real value) to decouple systems rather than direct references between managers and gameplay objects.

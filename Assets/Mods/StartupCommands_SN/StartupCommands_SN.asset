@@ -1,5 +1,22 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8830077625067757062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c173e57f2f954b18a2bb4fbce4713ec2, type: 3}
+  m_Name: AssemblyMergeSettings
+  m_EditorClassIdentifier: 
+  StagingPaths: []
+  primaryAssembly: {fileID: 5897886265953266890, guid: e56775fa29453c148ab57893d76a8b44,
+    type: 3}
+  dependencies:
+  - {fileID: 5897886265953266890, guid: a8101a7f788ddab4d835833e6de817ac, type: 3}
 --- !u!114 &-212750318014058512
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -52,6 +69,7 @@ MonoBehaviour:
   - {fileID: -121899452589423327}
   - {fileID: 8876472120765660631}
   - {fileID: -212750318014058512}
+  - {fileID: -8830077625067757062}
   identity: {fileID: -121899452589423327}
   QuickAccess: 1
 --- !u!114 &8876472120765660631

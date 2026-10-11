@@ -20,7 +20,7 @@
   ],
 
   "media": [
-    { "type": "image", "url": "TameStalker.png", "label": "A tame Stalker!" },
+    { "type": "image", "url": "TameCreaturesScreenshot.png", "label": "Let's all just get along!" },
     { "type": "image", "url": "TameCreaturesModOptions.png", "label": "Mod options" }
   ],
 
@@ -36,10 +36,6 @@
   },
 
   "install": {
-    "path": "BepInEx/plugins",
-    "custom-path": {
-      "src/plugin.dll": "BepInEx/plugins/",
-      "config/":       "BepInEx/config/"
-    }
+    "path": "BepInEx/plugins"
   }
 }

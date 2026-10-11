@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StagingPaths: []
   Author: Daft Apple Games
-  Name: TamePredators_SN
+  Name: TameCreatures_SN
   Description: Optionally turn off predator agression towards the player
   Version: 1.0.0
   Dependencies: []

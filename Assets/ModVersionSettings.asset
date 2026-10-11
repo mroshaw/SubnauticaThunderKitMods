@@ -23,7 +23,7 @@ MonoBehaviour:
     currentPublishedVersion:
       major: 1
       minor: 1
-      patch: 0
+      patch: 1
     publishingSites: -1
     nexusMods:
       fileGroupId: 2434717
@@ -114,9 +114,9 @@ MonoBehaviour:
       minor: 5
       patch: 2
     currentPublishedVersion:
-      major: 0
-      minor: 0
-      patch: 0
+      major: 1
+      minor: 5
+      patch: 2
     publishingSites: -1
     nexusMods:
       fileGroupId: 1997344
@@ -143,11 +143,11 @@ MonoBehaviour:
     version:
       major: 1
       minor: 6
-      patch: 2
+      patch: 3
     currentPublishedVersion:
-      major: 0
-      minor: 0
-      patch: 0
+      major: 1
+      minor: 6
+      patch: 3
     publishingSites: -1
     nexusMods:
       fileGroupId: 2428891
@@ -158,9 +158,9 @@ MonoBehaviour:
       fileCategory: main
       archiveExistingVersion: 1
       updateModVersion: 1
-      primaryModManagerDownload: 0
+      primaryModManagerDownload: 1
       allowModManagerDownload: 1
-      showRequirementsPopup: 0
+      showRequirementsPopup: 1
     gitHub:
       tagNameTemplate: '{archiveName}-v{version}'
       releaseTitleTemplate: '{displayName} v{version}'
@@ -204,12 +204,12 @@ MonoBehaviour:
     manifest: {fileID: 11400000, guid: 51a2d345f7443ae4ea8d59e652c21d05, type: 2}
     version:
       major: 1
-      minor: 1
-      patch: 1
+      minor: 2
+      patch: 2
     currentPublishedVersion:
       major: 1
-      minor: 1
-      patch: 1
+      minor: 2
+      patch: 2
     publishingSites: -1
     nexusMods:
       fileGroupId: 2435107
@@ -236,17 +236,17 @@ MonoBehaviour:
     version:
       major: 2
       minor: 12
-      patch: 2
+      patch: 3
     currentPublishedVersion:
       major: 2
       minor: 12
-      patch: 2
+      patch: 3
     publishingSites: -1
     nexusMods:
       fileGroupId: 2083597
       gameScopedModId: 1373
       gameDomain: subnautica
-      displayName: AutoLockerLabels SN
+      displayName: SubnauticaPets2_SN
       description: Main mod file
       fileCategory: main
       archiveExistingVersion: 1
@@ -269,22 +269,22 @@ MonoBehaviour:
       minor: 0
       patch: 0
     currentPublishedVersion:
-      major: 0
+      major: 1
       minor: 0
       patch: 0
     publishingSites: -1
     nexusMods:
-      fileGroupId: 
+      fileGroupId: 8131314
       gameScopedModId: 4218
       gameDomain: subnautica
       displayName: TameCreatures_SN
-      description: 
+      description: Main mod file
       fileCategory: main
       archiveExistingVersion: 1
       updateModVersion: 1
-      primaryModManagerDownload: 0
+      primaryModManagerDownload: 1
       allowModManagerDownload: 1
-      showRequirementsPopup: 0
+      showRequirementsPopup: 1
     gitHub:
       tagNameTemplate: '{archiveName}-v{version}'
       releaseTitleTemplate: '{displayName} v{version}'
@@ -297,7 +297,7 @@ MonoBehaviour:
     manifest: {fileID: 11400000, guid: 2a7aa74265774cb88aaf0b8dd200a64b, type: 2}
     version:
       major: 1
-      minor: 0
+      minor: 1
       patch: 0
     currentPublishedVersion:
       major: 1

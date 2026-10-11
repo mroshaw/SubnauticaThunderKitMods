@@ -73,32 +73,6 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.Patches
             particleController.SetEffectActive(false);
         }
 
-        [HarmonyPatch(typeof(VFXController), nameof(VFXController.Play), typeof(int))]
-        [HarmonyPostfix]
-        private static void PlayPostfix(VFXController __instance, int i)
-        {
-            ConfigureEmitter(__instance, i, true);
-        }
-
-        [HarmonyPatch(typeof(VFXController), nameof(VFXController.Stop), typeof(int))]
-        [HarmonyPostfix]
-        private static void StopPostfix(VFXController __instance, int i)
-        {
-            ConfigureEmitter(__instance, i, false);
-        }
-
-        [HarmonyPatch(typeof(VFXLateTimeParticles), nameof(VFXLateTimeParticles.Stop))]
-        [HarmonyPostfix]
-        private static void LateTimeParticlesStopPostfix(VFXLateTimeParticles __instance)
-        {
-            SaveMyParticleSystemsController particleController =
-                __instance.GetComponent<SaveMyParticleSystemsController>();
-            if (particleController)
-            {
-                particleController.SetEffectActive(false);
-            }
-        }
-
         [HarmonyPatch(typeof(ExosuitDrillArm), nameof(ExosuitDrillArm.StopEffects))]
         [HarmonyPostfix]
         private static void StopEffectsPostfix(ExosuitDrillArm __instance)

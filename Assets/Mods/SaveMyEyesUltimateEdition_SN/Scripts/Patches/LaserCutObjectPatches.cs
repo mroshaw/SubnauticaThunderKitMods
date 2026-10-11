@@ -8,7 +8,7 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.Patches
     {
         [HarmonyPatch(nameof(LaserCutObject.OnEnable))]
         [HarmonyPostfix]
-        public static void OnEnablePostfix(LaserCutObject __instance)
+        private static void OnEnablePostfix(LaserCutObject __instance)
         {
             SaveMyParticleSystemsController particleController =
                 __instance.laserCutFX.GetComponent<SaveMyParticleSystemsController>();
@@ -24,6 +24,12 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.Patches
                 __instance.laserCutStreak.AddComponent<SaveMyParticleSystemsController>().Initialize(EffectUseCase.LaserCutter);
             }
 
+            // Configure the inactive completion hierarchy before its play-on-awake flash.
+            if (!__instance.cutObject.GetComponent<SaveMyParticleSystemsController>())
+            {
+                __instance.cutObject.AddComponent<SaveMyParticleSystemsController>().Initialize(EffectUseCase.LaserCutter);
+            }
+
             if (!__instance.cutObject.GetComponent<SaveMyEyesMaterialController>())
             {
                 __instance.cutObject.AddComponent<SaveMyEyesMaterialController>().Initialize(EffectUseCase.LaserCutter);
@@ -32,7 +38,7 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.Patches
 
         [HarmonyPatch(nameof(LaserCutObject.Update))]
         [HarmonyPostfix]
-        public static void UpdatePostfix(LaserCutObject __instance)
+        private static void UpdatePostfix(LaserCutObject __instance)
         {
             bool effectActive = __instance.cutting && !__instance.isCutOpen && MiscSettings.flashes;
             SaveMyParticleSystemsController particleController =

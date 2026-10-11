@@ -4,23 +4,23 @@ using static DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyesUltimateEditi
 namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
 {
     /// <summary>
-    /// MonoBehaviour class to manage flare light intensity
+    /// Applies the selected flare light mode and intensity multiplier.
     /// </summary>
     internal class SaveMyEyesFlareController : MonoBehaviour
     {
-        private Flare _flare;
-        private float _lastGameIntensity;
-        private bool _hasGameIntensity;
+        private Flare flare;
+        private float lastGameIntensity;
+        private bool hasGameIntensity;
 
         private void Awake()
         {
-            _flare = GetComponent<Flare>();
+            flare = GetComponent<Flare>();
         }
 
         private void OnEnable()
         {
             ConfigFile.SettingsChanged += OnSettingsChanged;
-            if (_hasGameIntensity)
+            if (hasGameIntensity)
             {
                 ApplyChanges(ConfigFile.FlareIntensity);
             }
@@ -39,39 +39,47 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
             }
         }
 
-        /// <summary>
-        /// This is called in the FlarePatches.Update patch, so we can apply our mulitpliers
-        /// as the game modifies the flares in real-time
-        /// </summary>
+        // Vanilla smoothing must receive its own unscaled intensity on the next update.
         internal void PrepareCurrentIntensity()
         {
-            if (_hasGameIntensity)
+            if (hasGameIntensity)
             {
-                _flare.light.intensity = _lastGameIntensity;
+                flare.light.intensity = lastGameIntensity;
             }
         }
 
         internal void CaptureAndApplyCurrentIntensity()
         {
-            _lastGameIntensity = _flare.light.intensity;
-            _hasGameIntensity = true;
+            lastGameIntensity = flare.light.intensity;
+            hasGameIntensity = true;
             ApplyChanges(ConfigFile.FlareIntensity);
+        }
+
+        internal static float GetSmoothIntensity(float energyLeft)
+        {
+            // The shipped prefab starts with 1800 energy; preserve the reference envelope.
+            if (energyLeft > 1790.0f)
+            {
+                return Mathf.Lerp(0.2f, 2.0f, (1800.0f - energyLeft) / 10.0f);
+            }
+            return energyLeft < 1000.0f ? Mathf.Lerp(1.0f, 2.0f, energyLeft / 1000.0f) : 2.0f;
         }
 
         private void ApplyChanges(float intensityMultiplier)
         {
-            if (!_hasGameIntensity)
+            if (!hasGameIntensity)
             {
                 return;
             }
 
-            if (_flare.flareActiveState)
+            if (flare.flareActiveState)
             {
-                _flare.light.intensity = _lastGameIntensity * intensityMultiplier;
+                float intensity = ConfigFile.RemoveFlareFlicker ? GetSmoothIntensity(flare.energyLeft) : lastGameIntensity;
+                flare.light.intensity = intensity * intensityMultiplier;
             }
             else
             {
-                _flare.light.intensity = 0.0f;
+                flare.light.intensity = 0.0f;
             }
         }
     }

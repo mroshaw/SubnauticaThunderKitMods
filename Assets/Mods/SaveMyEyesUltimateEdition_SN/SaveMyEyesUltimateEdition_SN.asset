@@ -49,6 +49,6 @@ MonoBehaviour:
   StagingPaths: []
   Author: Daft Apple Games
   Name: SaveMyEyesUltimateEdition_SN
-  Description: Accessibility features for players with sight impairment
+  Description: Adjust selected lights, flicker, particles and beams for photosensitivity and light sensitivity
   Version: 1.0.0
   Dependencies: []

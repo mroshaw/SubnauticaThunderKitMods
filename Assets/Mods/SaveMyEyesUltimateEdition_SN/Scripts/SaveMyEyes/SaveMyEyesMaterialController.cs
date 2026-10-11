@@ -1,17 +1,16 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 using static DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyesUltimateEditionPlugin;
 
 namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
 {
     /// <summary>
-    /// MonoBehaviour class to manage emitter material effect intensities
+    /// Scales supported material glow from captured baseline values.
     /// </summary>
     internal class SaveMyEyesMaterialController : MonoBehaviour
     {
-        [SerializeField] private EffectUseCase useCase;
+        private EffectUseCase useCase;
 
-        // Struct to hold initial values so that modifier can be applied consistently
         private readonly struct MaterialSettings
         {
             internal readonly float GlowStrength;
@@ -24,8 +23,7 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
             }
         }
         
-        // List of materials to manage
-        private Dictionary<Material, MaterialSettings> _emitterMaterials;
+        private Dictionary<Material, MaterialSettings> emitterMaterials;
         
         private void Awake()
         {
@@ -65,9 +63,8 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
         
         private void FindEmitterMaterials()
         {
-            _emitterMaterials = new Dictionary<Material, MaterialSettings>();
+            emitterMaterials = new Dictionary<Material, MaterialSettings>();
 
-            // Iterate over all materials in all renderers
             Renderer[] allRenderers = GetComponentsInChildren<Renderer>(true);
             foreach (Renderer foundRenderer in allRenderers)
             {
@@ -84,22 +81,21 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
                     float glowStrength = hasGlowStrength ? material.GetFloat(ShaderPropertyID._GlowStrength) : 0f;
                     float glowStrengthNight = hasGlowStrengthNight ? material.GetFloat(ShaderPropertyID._GlowStrengthNight) : 0f;
                     
-                    _emitterMaterials[material] = new MaterialSettings(glowStrength, glowStrengthNight);
+                    emitterMaterials[material] = new MaterialSettings(glowStrength, glowStrengthNight);
                 }
             }
         }
 
         private void ApplyChanges(float intensityMultiplier)
         {
-            // Material list is not yet initialised
-            if (_emitterMaterials == null)
+            if (emitterMaterials is null)
             {
                 return;
             }
             
             ModDebugLog.LogDebug(
                 $"MaterialController.Apply: Applying {useCase} intensity multiplier: {intensityMultiplier} to {gameObject.name}");
-            foreach (KeyValuePair<Material, MaterialSettings> emitterMaterial in _emitterMaterials)
+            foreach (KeyValuePair<Material, MaterialSettings> emitterMaterial in emitterMaterials)
             {
                 if (!emitterMaterial.Key)
                 {

@@ -1,34 +1,22 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 using static DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyesUltimateEditionPlugin;
 
 namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
 {
     /// <summary>
-    /// MonoBehaviour class to manage Tool effect intensities
+    /// Scales supported lights from their captured game intensity.
     /// </summary>
     internal class SaveMyEyesLightController : MonoBehaviour
     {
-        [SerializeField] private EffectUseCase useCase;
+        private EffectUseCase useCase;
 
-        // Struct to hold initial values so that modifier can be applied consistently
-        private readonly struct LightSettings
-        {
-            internal readonly float Intensity;
-
-            internal LightSettings(float intensity)
-            {
-                Intensity = intensity;
-            }
-        }
-        
-        // List of lights to manage
-        private Dictionary<Light, LightSettings> _lights;
+        private Dictionary<Light, float> lights;
 
         private void Awake()
         {
             // Initialize may already have captured an inactive object's lights.
-            if (_lights == null)
+            if (lights is null)
             {
                 FindLights();
             }
@@ -51,7 +39,7 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
         internal void Initialize(EffectUseCase useCase)
         {
             // An inactive light may not have run Awake when its controller is attached.
-            if (_lights == null)
+            if (lights is null)
             {
                 FindLights();
             }
@@ -64,12 +52,12 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
 
         internal void PrepareCurrentIntensity(Light light)
         {
-            light.intensity = _lights[light].Intensity;
+            light.intensity = lights[light];
         }
 
         internal void CaptureAndApplyCurrentIntensity(Light light)
         {
-            _lights[light] = new LightSettings(light.intensity);
+            lights[light] = light.intensity;
             light.intensity *= ConfigFile.GetLightIntensity(useCase);
         }
 
@@ -83,18 +71,17 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
 
         private void FindLights()
         {
-            _lights = new Dictionary<Light, LightSettings>();
+            lights = new Dictionary<Light, float>();
             Light[] allLights = GetComponentsInChildren<Light>(true);
             foreach (Light foundLight in allLights)
             {
-                _lights.Add(foundLight, new LightSettings(foundLight.intensity));
+                lights.Add(foundLight, foundLight.intensity);
             }
         }
 
         private void ApplyChanges(float intensityMultiplier)
         {
-            // List is not yet initialised
-            if (_lights == null)
+            if (lights is null)
             {
                 return;
             }
@@ -102,7 +89,7 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
             ModDebugLog.LogDebug(
                 $"LightController.Apply: Applying {useCase} intensity multiplier: {intensityMultiplier} to {gameObject.name}");
             
-            foreach (KeyValuePair<Light, LightSettings> managedLight in _lights)
+            foreach (KeyValuePair<Light, float> managedLight in lights)
             {
                 if (!managedLight.Key)
                 {
@@ -110,7 +97,7 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
                     continue;
                 }
                 
-                float newIntensity = managedLight.Value.Intensity * intensityMultiplier;
+                float newIntensity = managedLight.Value * intensityMultiplier;
                 managedLight.Key.intensity = newIntensity;
             }
         }

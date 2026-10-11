@@ -1,4 +1,4 @@
-﻿using DaftAppleGames.ModTools.Extensions;
+using DaftAppleGames.ModTools.Extensions;
 using DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes;
 using HarmonyLib;
 
@@ -15,7 +15,7 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.Patches
         /// </summary>
         [HarmonyPatch(nameof(Flare.Awake))]
         [HarmonyPrefix]
-        public static void AwakePrefix(Flare __instance)
+        private static void AwakePrefix(Flare __instance)
         {
             __instance.EnsureComponent<SaveMyEyesFlareController>();
         }
@@ -25,7 +25,7 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.Patches
         /// </summary>
         [HarmonyPatch(nameof(Flare.UpdateLight))]
         [HarmonyPrefix]
-        public static void UpdateLightPrefix(Flare __instance, out SaveMyEyesFlareController __state)
+        private static void UpdateLightPrefix(Flare __instance, out SaveMyEyesFlareController __state)
         {
             __state = __instance.GetComponent<SaveMyEyesFlareController>();
             __state.PrepareCurrentIntensity();
@@ -36,7 +36,7 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.Patches
         /// </summary>
         [HarmonyPatch(nameof(Flare.UpdateLight))]
         [HarmonyPostfix]
-        public static void UpdateLightPostfix(SaveMyEyesFlareController __state)
+        private static void UpdateLightPostfix(SaveMyEyesFlareController __state)
         {
             __state.CaptureAndApplyCurrentIntensity();
         }

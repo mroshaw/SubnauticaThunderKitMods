@@ -4,7 +4,7 @@
 
   "slug": "save-my-eyes-ultimate-edition-sn",
   "name": "Save My Eyes Ultimate Edition SN",
-  "description" : ".",
+  "description": "Adjust selected Subnautica lights, flare flicker, particles and filtration beams for photosensitivity and light sensitivity.",
   "supportedGameId": "subnautica",
 
   "releaseAssets": ["SaveMyEyesUltimateEdition_SN*.zip"],

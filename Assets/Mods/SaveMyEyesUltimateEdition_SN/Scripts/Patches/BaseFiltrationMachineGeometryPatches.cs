@@ -1,4 +1,4 @@
-﻿using DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes;
+using DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes;
 using HarmonyLib;
 
 namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.Patches
@@ -11,14 +11,14 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.Patches
     {
         [HarmonyPatch(nameof(BaseFiltrationMachineGeometry.Awake))]
         [HarmonyPostfix]
-        public static void AwakePostfix(BaseFiltrationMachineGeometry __instance)
+        private static void AwakePostfix(BaseFiltrationMachineGeometry __instance)
         {
             __instance.gameObject.EnsureComponent<SaveMyEyesWaterFiltrationController>();
         }
 
         [HarmonyPatch(nameof(BaseFiltrationMachineGeometry.UpdateVisuals))]
         [HarmonyPostfix]
-        public static void UpdateVisualsPostfix(BaseFiltrationMachineGeometry __instance)
+        private static void UpdateVisualsPostfix(BaseFiltrationMachineGeometry __instance)
         {
             SaveMyEyesWaterFiltrationController controller =
                 __instance.GetComponent<SaveMyEyesWaterFiltrationController>();

@@ -4,16 +4,16 @@ using static DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyesUltimateEditi
 namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
 {
     /// <summary>
-    /// MonoBehaviour class to manage Water Filtration beams
+    /// Suppresses filtration beams while preserving their game-controlled activity.
     /// </summary>
     internal class SaveMyEyesWaterFiltrationController : MonoBehaviour
     {
-        private BaseFiltrationMachineGeometry _filtrationMachine;
-        private bool _beamsActive;
+        private BaseFiltrationMachineGeometry filtrationMachine;
+        private bool beamsActive;
 
         private void Awake()
         {
-            _filtrationMachine = GetComponent<BaseFiltrationMachineGeometry>();
+            filtrationMachine = GetComponent<BaseFiltrationMachineGeometry>();
             FindBeamState();
         }
 
@@ -38,12 +38,12 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
 
         private void FindBeamState()
         {
-            _beamsActive = false;
-            foreach (Transform beam in _filtrationMachine.beams)
+            beamsActive = false;
+            foreach (Transform beam in filtrationMachine.beams)
             {
                 if (beam.gameObject.activeSelf)
                 {
-                    _beamsActive = true;
+                    beamsActive = true;
                     break;
                 }
             }
@@ -51,14 +51,14 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
 
         internal void SetBeamsActive(bool beamsActive)
         {
-            _beamsActive = beamsActive;
+            this.beamsActive = beamsActive;
             ApplyChanges(ConfigFile.DisableWaterFiltrationBeams);
         }
 
         private void ApplyChanges(bool disableBeams)
         {
-            bool enableBeams = _beamsActive && !disableBeams;
-            foreach (Transform beam in _filtrationMachine.beams)
+            bool enableBeams = beamsActive && !disableBeams;
+            foreach (Transform beam in filtrationMachine.beams)
             {
                 if (beam.gameObject.activeSelf != enableBeams)
                 {

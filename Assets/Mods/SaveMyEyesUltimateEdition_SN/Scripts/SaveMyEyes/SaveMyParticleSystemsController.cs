@@ -5,24 +5,28 @@ using static DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyesUltimateEditi
 namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
 {
     /// <summary>
-    /// MonoBehaviour class to manage particle, trail and line effects
+    /// Applies configured reductions to the supported particle, trail and line effects.
     /// </summary>
     internal class SaveMyParticleSystemsController : MonoBehaviour
     {
-        [SerializeField] private EffectUseCase useCase;
-        [SerializeField] private bool includeChildren = true;
+        private EffectUseCase useCase;
+        private bool includeChildren = true;
 
-        private Dictionary<ParticleSystem, ParticleEffectState> _particleSystems;
-        private Dictionary<TrailRenderer, TrailEffectState> _trails;
-        private Dictionary<LineRenderer, LineEffectState> _lines;
-        private bool _effectActive;
+        private Dictionary<ParticleSystem, ParticleEffectState> particleSystems;
+        private Dictionary<TrailRenderer, TrailEffectState> trails;
+        private Dictionary<LineRenderer, LineEffectState> lines;
+        private bool effectActive;
+        private bool lastFlashesEnabled = MiscSettings.flashes;
+        private ParticleSystem.Particle[] particleBuffer = new ParticleSystem.Particle[0];
 
-        internal bool EffectActive => _effectActive;
+        internal bool EffectActive => effectActive;
         internal EffectUseCase UseCase => useCase;
 
         private sealed class ParticleEffectState
         {
-            internal readonly bool InitialEmissionEnabled;
+            internal bool GameEmissionEnabled;
+            internal readonly ParticleSystem.Burst[] InitialBursts;
+            internal readonly ParticleSystem.Burst[] ScaledBursts;
             internal float GameRateOverTimeMultiplier;
             internal readonly float InitialRateOverDistanceMultiplier;
             internal readonly float InitialStartSizeMultiplier;
@@ -45,7 +49,10 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
                 ParticleSystem.MainModule main = particleSystem.main;
                 ParticleSystem.LightsModule lights = particleSystem.lights;
 
-                InitialEmissionEnabled = emission.enabled;
+                GameEmissionEnabled = emission.enabled;
+                InitialBursts = new ParticleSystem.Burst[emission.burstCount];
+                emission.GetBursts(InitialBursts);
+                ScaledBursts = new ParticleSystem.Burst[InitialBursts.Length];
                 GameRateOverTimeMultiplier = emission.rateOverTimeMultiplier;
                 InitialRateOverDistanceMultiplier = emission.rateOverDistanceMultiplier;
                 InitialStartSizeMultiplier = main.startSizeMultiplier;
@@ -95,9 +102,12 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
 
         private void Awake()
         {
-            FindParticleSystems();
-            FindTrails();
-            FindLines();
+            if (particleSystems is null)
+            {
+                FindParticleSystems();
+                FindTrails();
+                FindLines();
+            }
         }
 
         private void OnEnable()
@@ -116,6 +126,12 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
 
         internal void Initialize(EffectUseCase useCase, bool includeChildren = true)
         {
+            if (particleSystems is null)
+            {
+                FindParticleSystems();
+                FindTrails();
+                FindLines();
+            }
             // Some fire particles share a hierarchy with separately managed sparks.
             if (this.includeChildren != includeChildren)
             {
@@ -125,10 +141,7 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
                 FindLines();
             }
             this.useCase = useCase;
-            if (isActiveAndEnabled)
-            {
-                ApplyCurrentSettings();
-            }
+            ApplyCurrentSettings();
         }
 
         private void OnSettingsChanged(EffectUseCase useCase)
@@ -148,51 +161,51 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
 
         private void FindParticleSystems()
         {
-            _particleSystems = new Dictionary<ParticleSystem, ParticleEffectState>();
-            _effectActive = false;
-            ParticleSystem[] particleSystems = includeChildren
+            particleSystems = new Dictionary<ParticleSystem, ParticleEffectState>();
+            effectActive = false;
+            ParticleSystem[] foundParticleSystems = includeChildren
                 ? GetComponentsInChildren<ParticleSystem>(true)
                 : GetComponents<ParticleSystem>();
-            foreach (ParticleSystem particleSystem in particleSystems)
+            foreach (ParticleSystem particleSystem in foundParticleSystems)
             {
                 ParticleSystem.EmissionModule emission = particleSystem.emission;
                 if (emission.enabled)
                 {
-                    _effectActive = true;
+                    effectActive = true;
                 }
-                _particleSystems.Add(particleSystem, new ParticleEffectState(particleSystem, emission.enabled));
+                particleSystems.Add(particleSystem, new ParticleEffectState(particleSystem, emission.enabled));
             }
         }
 
         private void FindTrails()
         {
-            _trails = new Dictionary<TrailRenderer, TrailEffectState>();
-            TrailRenderer[] trails = includeChildren
+            trails = new Dictionary<TrailRenderer, TrailEffectState>();
+            TrailRenderer[] foundTrails = includeChildren
                 ? GetComponentsInChildren<TrailRenderer>(true)
                 : GetComponents<TrailRenderer>();
-            foreach (TrailRenderer trail in trails)
+            foreach (TrailRenderer trail in foundTrails)
             {
-                _trails.Add(trail, new TrailEffectState(trail));
+                trails.Add(trail, new TrailEffectState(trail));
             }
         }
 
         private void FindLines()
         {
-            _lines = new Dictionary<LineRenderer, LineEffectState>();
-            LineRenderer[] lines = includeChildren
+            lines = new Dictionary<LineRenderer, LineEffectState>();
+            LineRenderer[] foundLines = includeChildren
                 ? GetComponentsInChildren<LineRenderer>(true)
                 : GetComponents<LineRenderer>();
-            foreach (LineRenderer line in lines)
+            foreach (LineRenderer line in foundLines)
             {
-                _lines.Add(line, new LineEffectState(line));
+                lines.Add(line, new LineEffectState(line));
             }
         }
 
         internal void SetEffectActive(bool effectActive)
         {
-            _effectActive = effectActive;
+            this.effectActive = effectActive;
             float density = ConfigFile.GetParticleSettings(useCase).Density;
-            foreach (KeyValuePair<ParticleSystem, ParticleEffectState> particleSystemState in _particleSystems)
+            foreach (KeyValuePair<ParticleSystem, ParticleEffectState> particleSystemState in particleSystems)
             {
                 particleSystemState.Value.EffectActive = effectActive;
                 ConfigureEmissionState(particleSystemState.Key, particleSystemState.Value, density);
@@ -202,7 +215,7 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
         internal void ApplyEmissionState()
         {
             float density = ConfigFile.GetParticleSettings(useCase).Density;
-            foreach (KeyValuePair<ParticleSystem, ParticleEffectState> particleSystemState in _particleSystems)
+            foreach (KeyValuePair<ParticleSystem, ParticleEffectState> particleSystemState in particleSystems)
             {
                 ConfigureEmissionState(particleSystemState.Key, particleSystemState.Value, density);
             }
@@ -210,34 +223,38 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
 
         internal void CaptureAndApplyEmissionRate(ParticleSystem particleSystem)
         {
-            ParticleEffectState state = _particleSystems[particleSystem];
+            ParticleEffectState state = particleSystems[particleSystem];
             state.GameRateOverTimeMultiplier = particleSystem.emission.rateOverTimeMultiplier;
-            ConfigureParticleIntensity(particleSystem, state, ConfigFile.GetParticleSettings(useCase).Density);
+            float density = ConfigFile.GetParticleSettings(useCase).Density;
+            ParticleSystem.EmissionModule emission = particleSystem.emission;
+            emission.rateOverTimeMultiplier = state.GameRateOverTimeMultiplier * density;
+            ConfigureEmissionState(particleSystem, state, density);
         }
 
         private void ApplyChanges(float densityModifier, float sizeModifier, float speedModifier,
             float brightnessModifier)
         {
-            foreach (KeyValuePair<ParticleSystem, ParticleEffectState> particleSystemState in _particleSystems)
+            foreach (KeyValuePair<ParticleSystem, ParticleEffectState> particleSystemState in particleSystems)
             {
+                AdjustExistingParticles(particleSystemState.Key, particleSystemState.Value, sizeModifier, speedModifier, brightnessModifier);
                 ConfigureParticleIntensity(particleSystemState.Key, particleSystemState.Value, densityModifier);
                 ConfigureParticleSize(particleSystemState.Key, particleSystemState.Value, sizeModifier);
                 ConfigureParticleSpeed(particleSystemState.Key, particleSystemState.Value, speedModifier);
                 ConfigureParticleBrightness(particleSystemState.Key, particleSystemState.Value, brightnessModifier);
             }
 
-            foreach (KeyValuePair<TrailRenderer, TrailEffectState> trailState in _trails)
+            foreach (KeyValuePair<TrailRenderer, TrailEffectState> trailState in trails)
             {
                 ConfigureTrail(trailState.Key, trailState.Value, densityModifier);
             }
 
-            foreach (KeyValuePair<LineRenderer, LineEffectState> lineState in _lines)
+            foreach (KeyValuePair<LineRenderer, LineEffectState> lineState in lines)
             {
                 ConfigureLine(lineState.Key, lineState.Value, densityModifier);
             }
         }
 
-        private static void ConfigureParticleIntensity(ParticleSystem particleSystem, ParticleEffectState state, float intensityModifier)
+        private void ConfigureParticleIntensity(ParticleSystem particleSystem, ParticleEffectState state, float intensityModifier)
         {
             if (!particleSystem)
             {
@@ -248,21 +265,31 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
             emission.rateOverTimeMultiplier = state.GameRateOverTimeMultiplier * intensityModifier;
             emission.rateOverDistanceMultiplier = state.InitialRateOverDistanceMultiplier * intensityModifier;
 
+            for (int index = 0; index < state.InitialBursts.Length; index++)
+            {
+                ParticleSystem.Burst burst = state.InitialBursts[index];
+                burst.count = ScaleBurstCount(burst.count, intensityModifier);
+                state.ScaledBursts[index] = burst;
+            }
+            emission.SetBursts(state.ScaledBursts);
             ConfigureEmissionState(particleSystem, state, intensityModifier);
         }
 
-        private static void ConfigureEmissionState(ParticleSystem particleSystem, ParticleEffectState state, float intensityModifier)
+        private void ConfigureEmissionState(ParticleSystem particleSystem, ParticleEffectState state, float intensityModifier)
         {
             if (!particleSystem)
             {
                 return;
             }
 
-            bool enableEmission = state.EffectActive && state.InitialEmissionEnabled && intensityModifier > 0.0f;
+            bool enableEmission = state.EffectActive && state.GameEmissionEnabled && intensityModifier > 0.0f && ToolFlashesAllowed;
             ParticleSystem.EmissionModule emission = particleSystem.emission;
-            emission.enabled = enableEmission;
+            if (emission.enabled != enableEmission)
+            {
+                emission.enabled = enableEmission;
+            }
 
-            if (!enableEmission && intensityModifier <= 0.0f && particleSystem.particleCount > 0)
+            if (!enableEmission && (intensityModifier <= 0.0f || !ToolFlashesAllowed) && particleSystem.particleCount > 0)
             {
                 particleSystem.Clear(true);
             }
@@ -275,7 +302,6 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
                 return;
             }
 
-            ScaleExistingParticleSizes(particleSystem, state.Uses3DStartSize, state.CurrentSizeModifier, sizeModifier);
             state.CurrentSizeModifier = sizeModifier;
 
             ParticleSystem.MainModule main = particleSystem.main;
@@ -298,7 +324,6 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
                 return;
             }
 
-            ScaleExistingParticleSpeeds(particleSystem, state.CurrentSpeedModifier, speedModifier);
             state.CurrentSpeedModifier = speedModifier;
 
             ParticleSystem.MainModule main = particleSystem.main;
@@ -312,7 +337,6 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
                 return;
             }
 
-            ScaleExistingParticleBrightness(particleSystem, state.CurrentBrightnessModifier, brightnessModifier);
             state.CurrentBrightnessModifier = brightnessModifier;
 
             ParticleSystem.MainModule main = particleSystem.main;
@@ -392,110 +416,115 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.SaveMyEyes
                 initialColor.a * brightnessModifier);
         }
 
-        private static void ScaleExistingParticleSizes(ParticleSystem particleSystem, bool uses3DStartSize, float previousModifier, float newModifier)
+        internal void BeginPlayback(bool enablesAllEmissions)
         {
-            if (Mathf.Approximately(previousModifier, newModifier))
+            if (enablesAllEmissions)
             {
-                return;
-            }
-
-            if (particleSystem.particleCount == 0)
-            {
-                return;
-            }
-
-            if (previousModifier <= 0.0f)
-            {
-                particleSystem.Clear(true);
-                return;
-            }
-
-            float scale = newModifier / previousModifier;
-            ParticleSystem.Particle[] particles = GetParticles(particleSystem, out int particleCount);
-            for (int index = 0; index < particleCount; index++)
-            {
-                ParticleSystem.Particle particle = particles[index];
-                if (uses3DStartSize)
+                // VFXLateTimeParticles.Play explicitly enables every child emission.
+                foreach (ParticleEffectState state in particleSystems.Values)
                 {
-                    particle.startSize3D *= scale;
+                    state.GameEmissionEnabled = true;
                 }
-                else
+            }
+            SetEffectActive(true);
+        }
+
+        private bool ToolFlashesAllowed =>
+            (useCase != EffectUseCase.LaserCutter && useCase != EffectUseCase.RepairTool) || MiscSettings.flashes;
+
+        internal void ApplyFlashesSettingIfChanged()
+        {
+            if (lastFlashesEnabled == MiscSettings.flashes)
+            {
+                return;
+            }
+            lastFlashesEnabled = MiscSettings.flashes;
+            ApplyEmissionState();
+        }
+
+        internal static ParticleSystem.MinMaxCurve ScaleBurstCount(ParticleSystem.MinMaxCurve count, float density)
+        {
+            if (density == 1.0f)
+            {
+                return count;
+            }
+            // Round constant counts down so small positive settings cannot retain a full burst.
+            switch (count.mode)
+            {
+                case ParticleSystemCurveMode.Constant:
+                    count.constant = Mathf.Floor(count.constant * density);
+                    break;
+                case ParticleSystemCurveMode.TwoConstants:
+                    count.constantMin = Mathf.Floor(count.constantMin * density);
+                    count.constantMax = Mathf.Floor(count.constantMax * density);
+                    break;
+                default:
+                    count.curveMultiplier *= density;
+                    break;
+            }
+            return count;
+        }
+
+        private void AdjustExistingParticles(ParticleSystem particleSystem, ParticleEffectState state,
+            float size, float speed, float brightness)
+        {
+            if (!particleSystem || particleSystem.particleCount == 0)
+            {
+                return;
+            }
+            bool sizeChanged = !Mathf.Approximately(size, state.CurrentSizeModifier);
+            bool speedChanged = !Mathf.Approximately(speed, state.CurrentSpeedModifier);
+            bool brightnessChanged = !Mathf.Approximately(brightness, state.CurrentBrightnessModifier);
+            if (!sizeChanged && !speedChanged && !brightnessChanged)
+            {
+                return;
+            }
+            if (size > state.CurrentSizeModifier || speed > state.CurrentSpeedModifier || brightness > state.CurrentBrightnessModifier)
+            {
+                // Lost size/velocity and byte color precision cannot be recovered reliably.
+                // Clearing does not play or restart a stopped effect.
+                particleSystem.Clear(false);
+                return;
+            }
+            int capacity = particleSystem.particleCount;
+            if (particleBuffer.Length < capacity)
+            {
+                particleBuffer = new ParticleSystem.Particle[capacity];
+            }
+            int count = particleSystem.GetParticles(particleBuffer);
+            float sizeScale = state.CurrentSizeModifier > 0.0f ? size / state.CurrentSizeModifier : 0.0f;
+            float speedScale = state.CurrentSpeedModifier > 0.0f ? speed / state.CurrentSpeedModifier : 0.0f;
+            float brightnessScale = state.CurrentBrightnessModifier > 0.0f ? brightness / state.CurrentBrightnessModifier : 0.0f;
+            for (int index = 0; index < count; index++)
+            {
+                ParticleSystem.Particle particle = particleBuffer[index];
+                if (sizeChanged)
                 {
-                    particle.startSize *= scale;
+                    if (state.Uses3DStartSize)
+                    {
+                        particle.startSize3D *= sizeScale;
+                    }
+                    else
+                    {
+                        particle.startSize *= sizeScale;
+                    }
                 }
-                particles[index] = particle;
+                if (speedChanged)
+                {
+                    particle.velocity *= speedScale;
+                }
+                if (brightnessChanged)
+                {
+                    Color32 color = particle.startColor;
+                    color.r = ScaleColorChannel(color.r, brightnessScale);
+                    color.g = ScaleColorChannel(color.g, brightnessScale);
+                    color.b = ScaleColorChannel(color.b, brightnessScale);
+                    color.a = ScaleColorChannel(color.a, brightnessScale);
+                    particle.startColor = color;
+                }
+                particleBuffer[index] = particle;
             }
-            particleSystem.SetParticles(particles, particleCount);
-        }
-
-        private static void ScaleExistingParticleSpeeds(ParticleSystem particleSystem, float previousModifier, float newModifier)
-        {
-            if (Mathf.Approximately(previousModifier, newModifier))
-            {
-                return;
-            }
-
-            if (particleSystem.particleCount == 0)
-            {
-                return;
-            }
-
-            if (previousModifier <= 0.0f)
-            {
-                particleSystem.Clear(true);
-                return;
-            }
-
-            float scale = newModifier / previousModifier;
-            ParticleSystem.Particle[] particles = GetParticles(particleSystem, out int particleCount);
-            for (int index = 0; index < particleCount; index++)
-            {
-                ParticleSystem.Particle particle = particles[index];
-                particle.velocity *= scale;
-                particles[index] = particle;
-            }
-            particleSystem.SetParticles(particles, particleCount);
-        }
-
-        private static void ScaleExistingParticleBrightness(ParticleSystem particleSystem, float previousModifier, float newModifier)
-        {
-            if (Mathf.Approximately(previousModifier, newModifier))
-            {
-                return;
-            }
-
-            if (particleSystem.particleCount == 0)
-            {
-                return;
-            }
-
-            if (previousModifier <= 0.0f)
-            {
-                particleSystem.Clear(true);
-                return;
-            }
-
-            float scale = newModifier / previousModifier;
-            ParticleSystem.Particle[] particles = GetParticles(particleSystem, out int particleCount);
-            for (int index = 0; index < particleCount; index++)
-            {
-                ParticleSystem.Particle particle = particles[index];
-                Color32 color = particle.startColor;
-                color.r = ScaleColorChannel(color.r, scale);
-                color.g = ScaleColorChannel(color.g, scale);
-                color.b = ScaleColorChannel(color.b, scale);
-                color.a = ScaleColorChannel(color.a, scale);
-                particle.startColor = color;
-                particles[index] = particle;
-            }
-            particleSystem.SetParticles(particles, particleCount);
-        }
-
-        private static ParticleSystem.Particle[] GetParticles(ParticleSystem particleSystem, out int particleCount)
-        {
-            ParticleSystem.Particle[] particles = new ParticleSystem.Particle[particleSystem.particleCount];
-            particleCount = particleSystem.GetParticles(particles);
-            return particles;
+            particleSystem.SetParticles(particleBuffer, count);
         }
 
         private static byte ScaleColorChannel(byte channel, float scale)

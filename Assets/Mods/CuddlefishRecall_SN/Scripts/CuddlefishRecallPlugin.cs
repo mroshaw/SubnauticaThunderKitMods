@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using BepInEx;
 using BepInEx.Logging;
 using HarmonyLib;
@@ -19,7 +19,7 @@ namespace DaftAppleGames.CuddlefishRecall_SN
     {
         private const string MyGuid = "com.mroshaw.cuddlefishrecallmodsn";
         private const string PluginName = "Cuddlefish Recall Mod SN";
-        private const string VersionString = "1.5.1";
+        private const string VersionString = "1.5.2";
 
         private const string AssetBundleName = "cuddlefishrecallassetbundle";
         private const string PingIndicatorTextureName = "CuddlefishPingIcon.png";

@@ -16,7 +16,7 @@ MonoBehaviour:
   Author: Daft Apple Games
   Name: CuddlefishRecall_SN
   Description: Adds a Recall keyboard shortcut to call back the Cuddlefish
-  Version: 1.3.0
+  Version: 1.5.2
   Dependencies: []
 --- !u!114 &11400000
 MonoBehaviour:

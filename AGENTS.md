@@ -95,9 +95,10 @@ Code reviews should prioritise
 - **Physics:** use `FixedUpdate` for physics-driven movement.
 - **Folder structure**: follow the official Unity guidelines in their "[Organising your project](https://unity.com/how-to/organizing-your-project)" pages.
 - **Editor inspector**: use Odin Inspector attributes for editor inspector facing serialised class properties.
-- Follow Unity lifecycle and serialization rules.
-- Avoid allocations in Update/FixedUpdate/LateUpdate unless justified.
-- Cache component references where appropriate.
+- **Follow Unity lifecycle** and serialization rules.
+- **Avoid allocations** in Update/FixedUpdate/LateUpdate unless justified.
+- **Cache component references** where appropriate.
+- **Make full use of "publicized" game DLLs**, referencing methods and properties directly where made possible by the publicized game DLLs.
 
 ## Project Structure
 

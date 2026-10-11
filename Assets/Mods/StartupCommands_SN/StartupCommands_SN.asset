@@ -51,7 +51,7 @@ MonoBehaviour:
   Author: Daft Apple Games
   Name: StartupCommands_SN
   Description: Adds configurable startup command scripts
-  Version: 1.2.1
+  Version: 1.1.1
   Dependencies: []
 --- !u!114 &11400000
 MonoBehaviour:

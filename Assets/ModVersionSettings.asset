@@ -13,23 +13,23 @@ MonoBehaviour:
   m_Name: ModVersionSettings
   m_EditorClassIdentifier: 
   mods:
-  - name: Cuddle Cam SN
-    pluginScript: {fileID: 11500000, guid: 473db868ddeea4a4c9cb1822f639949c, type: 3}
-    manifest: {fileID: 11400000, guid: 18c34aa92e989be41b953dd54b6b22ae, type: 2}
+  - name: Aqua Eclipse SN
+    pluginScript: {fileID: 11500000, guid: 88b4bf970256dc7479f13925e5957349, type: 3}
+    manifest: {fileID: 11400000, guid: 90a058df81b33224f987de368016a76c, type: 2}
     version:
       major: 1
-      minor: 0
-      patch: 2
+      minor: 1
+      patch: 1
     currentPublishedVersion:
       major: 1
-      minor: 0
-      patch: 2
-    publishingSites: 3
+      minor: 1
+      patch: 0
+    publishingSites: -1
     nexusMods:
-      fileGroupId: 7879512
-      gameScopedModId: 4147
+      fileGroupId: 2434717
+      gameScopedModId: 2795
       gameDomain: subnautica
-      displayName: CuddleCam_SN
+      displayName: AutoLockerLabels SN
       description: Main mod file
       fileCategory: main
       archiveExistingVersion: 1
@@ -75,123 +75,92 @@ MonoBehaviour:
       draft: 0
       prerelease: 0
       generateReleaseNotes: 0
-  - name: Subnautica Pets 2 SN
-    pluginScript: {fileID: 11500000, guid: 3aec9a9d662fe0c479f6e8e3fd971655, type: 3}
-    manifest: {fileID: 11400000, guid: 1046126c490d7384799f2de26323218c, type: 2}
-    version:
-      major: 2
-      minor: 12
-      patch: 2
-    currentPublishedVersion:
-      major: 2
-      minor: 12
-      patch: 2
-    publishingSites: -1
-    nexusMods:
-      fileGroupId: 2083597
-      gameScopedModId: 1373
-      gameDomain: subnautica
-      displayName: AutoLockerLabels SN
-      description: Main mod file
-      fileCategory: main
-      archiveExistingVersion: 1
-      updateModVersion: 1
-      primaryModManagerDownload: 1
-      allowModManagerDownload: 1
-      showRequirementsPopup: 1
-    gitHub:
-      tagNameTemplate: '{archiveName}-v{version}'
-      releaseTitleTemplate: '{displayName} v{version}'
-      targetCommitish: 
-      draft: 0
-      prerelease: 0
-      generateReleaseNotes: 0
-  - name: Startup Commands SN
-    pluginScript: {fileID: 11500000, guid: 19e51162e8918e64eae39f2762d1edc9, type: 3}
-    manifest: {fileID: 11400000, guid: 51a2d345f7443ae4ea8d59e652c21d05, type: 2}
-    version:
-      major: 1
-      minor: 2
-      patch: 1
-    currentPublishedVersion:
-      major: 1
-      minor: 2
-      patch: 1
-    publishingSites: -1
-    nexusMods:
-      fileGroupId: 2435107
-      gameScopedModId: 2807
-      gameDomain: subnautica
-      displayName: AutoLockerLabels SN
-      description: Main mod file
-      fileCategory: main
-      archiveExistingVersion: 1
-      updateModVersion: 1
-      primaryModManagerDownload: 1
-      allowModManagerDownload: 1
-      showRequirementsPopup: 1
-    gitHub:
-      tagNameTemplate: '{archiveName}-v{version}'
-      releaseTitleTemplate: '{displayName} v{version}'
-      targetCommitish: 
-      draft: 0
-      prerelease: 0
-      generateReleaseNotes: 0
-  - name: Aqua Eclipse SN
-    pluginScript: {fileID: 11500000, guid: 88b4bf970256dc7479f13925e5957349, type: 3}
-    manifest: {fileID: 11400000, guid: 90a058df81b33224f987de368016a76c, type: 2}
-    version:
-      major: 1
-      minor: 1
-      patch: 1
-    currentPublishedVersion:
-      major: 1
-      minor: 1
-      patch: 0
-    publishingSites: -1
-    nexusMods:
-      fileGroupId: 2434717
-      gameScopedModId: 2795
-      gameDomain: subnautica
-      displayName: AutoLockerLabels SN
-      description: Main mod file
-      fileCategory: main
-      archiveExistingVersion: 1
-      updateModVersion: 1
-      primaryModManagerDownload: 1
-      allowModManagerDownload: 1
-      showRequirementsPopup: 1
-    gitHub:
-      tagNameTemplate: '{archiveName}-v{version}'
-      releaseTitleTemplate: '{displayName} v{version}'
-      targetCommitish: 
-      draft: 0
-      prerelease: 0
-      generateReleaseNotes: 0
-  - name: Vehicle Enhancements SN
-    pluginScript: {fileID: 11500000, guid: 1eb989db5a2597d4ebca880d8d7dad68, type: 3}
-    manifest: {fileID: 11400000, guid: 2a7aa74265774cb88aaf0b8dd200a64b, type: 2}
+  - name: Cuddle Cam SN
+    pluginScript: {fileID: 11500000, guid: 473db868ddeea4a4c9cb1822f639949c, type: 3}
+    manifest: {fileID: 11400000, guid: 18c34aa92e989be41b953dd54b6b22ae, type: 2}
     version:
       major: 1
       minor: 0
-      patch: 0
+      patch: 2
     currentPublishedVersion:
       major: 1
       minor: 0
-      patch: 0
-    publishingSites: 2
+      patch: 2
+    publishingSites: 3
     nexusMods:
-      fileGroupId: 8096199
-      gameScopedModId: 4194
+      fileGroupId: 7879512
+      gameScopedModId: 4147
       gameDomain: subnautica
-      displayName: VehicleEnhancements_SN
+      displayName: CuddleCam_SN
+      description: Main mod file
+      fileCategory: main
+      archiveExistingVersion: 1
+      updateModVersion: 1
+      primaryModManagerDownload: 1
+      allowModManagerDownload: 1
+      showRequirementsPopup: 1
+    gitHub:
+      tagNameTemplate: '{archiveName}-v{version}'
+      releaseTitleTemplate: '{displayName} v{version}'
+      targetCommitish: 
+      draft: 0
+      prerelease: 0
+      generateReleaseNotes: 0
+  - name: Cuddlefish Recall SN
+    pluginScript: {fileID: 11500000, guid: 63b730645df545d4fbcd04de7d82e021, type: 3}
+    manifest: {fileID: 11400000, guid: 613d843feae198348800e55bdbc2c415, type: 2}
+    version:
+      major: 1
+      minor: 5
+      patch: 2
+    currentPublishedVersion:
+      major: 0
+      minor: 0
+      patch: 0
+    publishingSites: -1
+    nexusMods:
+      fileGroupId: 1997344
+      gameScopedModId: 1190
+      gameDomain: subnautica
+      displayName: CuddlefishRecall_SN
+      description: Main mod file
+      fileCategory: main
+      archiveExistingVersion: 1
+      updateModVersion: 1
+      primaryModManagerDownload: 1
+      allowModManagerDownload: 1
+      showRequirementsPopup: 1
+    gitHub:
+      tagNameTemplate: '{archiveName}-v{version}'
+      releaseTitleTemplate: '{displayName} v{version}'
+      targetCommitish: 
+      draft: 0
+      prerelease: 0
+      generateReleaseNotes: 0
+  - name: More Aquariums SN
+    pluginScript: {fileID: 11500000, guid: fb5ed69f47c501b4fbb5ac7df2c07fc1, type: 3}
+    manifest: {fileID: 11400000, guid: 87fefca873535b841bb06e2482f7d0a4, type: 2}
+    version:
+      major: 1
+      minor: 6
+      patch: 2
+    currentPublishedVersion:
+      major: 0
+      minor: 0
+      patch: 0
+    publishingSites: -1
+    nexusMods:
+      fileGroupId: 2428891
+      gameScopedModId: 2695
+      gameDomain: subnautica
+      displayName: BiggerAquariums_SN
       description: 
       fileCategory: main
       archiveExistingVersion: 1
       updateModVersion: 1
-      primaryModManagerDownload: 1
+      primaryModManagerDownload: 0
       allowModManagerDownload: 1
-      showRequirementsPopup: 1
+      showRequirementsPopup: 0
     gitHub:
       tagNameTemplate: '{archiveName}-v{version}'
       releaseTitleTemplate: '{displayName} v{version}'
@@ -230,6 +199,68 @@ MonoBehaviour:
       draft: 0
       prerelease: 0
       generateReleaseNotes: 0
+  - name: Startup Commands SN
+    pluginScript: {fileID: 11500000, guid: 19e51162e8918e64eae39f2762d1edc9, type: 3}
+    manifest: {fileID: 11400000, guid: 51a2d345f7443ae4ea8d59e652c21d05, type: 2}
+    version:
+      major: 1
+      minor: 1
+      patch: 1
+    currentPublishedVersion:
+      major: 1
+      minor: 2
+      patch: 1
+    publishingSites: -1
+    nexusMods:
+      fileGroupId: 2435107
+      gameScopedModId: 2807
+      gameDomain: subnautica
+      displayName: StartupCommands_SN
+      description: Main mod file
+      fileCategory: main
+      archiveExistingVersion: 1
+      updateModVersion: 1
+      primaryModManagerDownload: 1
+      allowModManagerDownload: 1
+      showRequirementsPopup: 1
+    gitHub:
+      tagNameTemplate: '{archiveName}-v{version}'
+      releaseTitleTemplate: '{displayName} v{version}'
+      targetCommitish: 
+      draft: 0
+      prerelease: 0
+      generateReleaseNotes: 0
+  - name: Subnautica Pets 2 SN
+    pluginScript: {fileID: 11500000, guid: 3aec9a9d662fe0c479f6e8e3fd971655, type: 3}
+    manifest: {fileID: 11400000, guid: 1046126c490d7384799f2de26323218c, type: 2}
+    version:
+      major: 2
+      minor: 12
+      patch: 2
+    currentPublishedVersion:
+      major: 2
+      minor: 12
+      patch: 2
+    publishingSites: -1
+    nexusMods:
+      fileGroupId: 2083597
+      gameScopedModId: 1373
+      gameDomain: subnautica
+      displayName: AutoLockerLabels SN
+      description: Main mod file
+      fileCategory: main
+      archiveExistingVersion: 1
+      updateModVersion: 1
+      primaryModManagerDownload: 1
+      allowModManagerDownload: 1
+      showRequirementsPopup: 1
+    gitHub:
+      tagNameTemplate: '{archiveName}-v{version}'
+      releaseTitleTemplate: '{displayName} v{version}'
+      targetCommitish: 
+      draft: 0
+      prerelease: 0
+      generateReleaseNotes: 0
   - name: Tame Creatures SN
     pluginScript: {fileID: 11500000, guid: 6593b0ed1c7200e4d9c186a3ba356efa, type: 3}
     manifest: {fileID: 11400000, guid: b68049d16d1d6a04a8fca4cf75afe0f4, type: 2}
@@ -245,7 +276,7 @@ MonoBehaviour:
     nexusMods:
       fileGroupId: 
       gameScopedModId: 4218
-      gameDomain: subnauticabelowzero
+      gameDomain: subnautica
       displayName: TameCreatures_SN
       description: 
       fileCategory: main
@@ -254,6 +285,37 @@ MonoBehaviour:
       primaryModManagerDownload: 0
       allowModManagerDownload: 1
       showRequirementsPopup: 0
+    gitHub:
+      tagNameTemplate: '{archiveName}-v{version}'
+      releaseTitleTemplate: '{displayName} v{version}'
+      targetCommitish: 
+      draft: 0
+      prerelease: 0
+      generateReleaseNotes: 0
+  - name: Vehicle Enhancements SN
+    pluginScript: {fileID: 11500000, guid: 1eb989db5a2597d4ebca880d8d7dad68, type: 3}
+    manifest: {fileID: 11400000, guid: 2a7aa74265774cb88aaf0b8dd200a64b, type: 2}
+    version:
+      major: 1
+      minor: 0
+      patch: 0
+    currentPublishedVersion:
+      major: 1
+      minor: 0
+      patch: 0
+    publishingSites: 2
+    nexusMods:
+      fileGroupId: 8096199
+      gameScopedModId: 4194
+      gameDomain: subnautica
+      displayName: VehicleEnhancements_SN
+      description: 
+      fileCategory: main
+      archiveExistingVersion: 1
+      updateModVersion: 1
+      primaryModManagerDownload: 1
+      allowModManagerDownload: 1
+      showRequirementsPopup: 1
     gitHub:
       tagNameTemplate: '{archiveName}-v{version}'
       releaseTitleTemplate: '{displayName} v{version}'

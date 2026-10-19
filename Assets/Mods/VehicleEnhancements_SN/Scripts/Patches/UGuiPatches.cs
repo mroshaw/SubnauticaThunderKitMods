@@ -1,7 +1,4 @@
-using DaftAppleGames.VehicleEnhancements_SN.Hsi;
-using DaftAppleGames.VehicleEnhancements_SN.Reversing;
-using DaftAppleGames.VehicleEnhancements_SN.Speedometer;
-using DaftAppleGames.VehicleEnhancements_SN.TimeAndWeather;
+using DaftAppleGames.VehicleEnhancements_SN.Enhancements;
 using HarmonyLib;
 using UnityEngine;
 using static DaftAppleGames.VehicleEnhancements_SN.VehicleEnhancementsPlugin_SN;
@@ -11,17 +8,12 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Patches
     [HarmonyPatch(typeof(uGUI))]
     internal static class UGuiPatches
     {
-        private const string EnhancedIndicatorsPrefabName = "EnhancedIndicators";
+        internal const string EnhancedIndicatorsPrefabName = "EnhancedIndicators";
 
         [HarmonyPatch("Awake")]
         [HarmonyPostfix]
         private static void AwakePostfix(uGUI __instance)
         {
-            if (!__instance)
-            {
-                return;
-            }
-
             uGUI_SeamothHUD seamothHud = __instance.GetComponentInChildren<uGUI_SeamothHUD>(true);
             if (seamothHud && seamothHud.root)
             {

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace DaftAppleGames.VehicleEnhancements_SN
+namespace DaftAppleGames.VehicleEnhancements_SN.Enhancements
 {
     internal class VehicleHudLayout : MonoBehaviour
     {

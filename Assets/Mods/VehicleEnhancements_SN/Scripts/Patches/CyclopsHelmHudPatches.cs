@@ -1,16 +1,24 @@
-using DaftAppleGames.VehicleEnhancements_SN.Hsi;
-using DaftAppleGames.VehicleEnhancements_SN.Speedometer;
-using DaftAppleGames.VehicleEnhancements_SN.TimeAndWeather;
+using DaftAppleGames.VehicleEnhancements_SN.Enhancements;
 using HarmonyLib;
 using UnityEngine;
+using Nautilus.Utility;
+using TMPro;
+using UnityEngine.UI;
 
 namespace DaftAppleGames.VehicleEnhancements_SN.Patches
 {
-    [HarmonyPatch(typeof(CyclopsHelmHUDManager))]
-    internal static class CyclopsHelmHudPatches
+    internal enum CyclopsHudLocation
+    {
+        Left,
+        UpperCenter,
+        Right
+    }
+
+    [HarmonyPatch(typeof(CyclopsHelmHUDManager))] internal static class CyclopsHelmHudPatches
     {
         private const string RightHudCanvasName = "Canvas_RightHUD";
         private const string LeftHudCanvasName = "Canvas_LeftHUD";
+        private const string UpperCenterHudCanvasName = "Canvas_CenterHUD";
         private const string SpeedometerName = "Speedometer";
         private const string HsiName = "Horizontal Situation Indicator";
         private const string TimeAndWeatherName = "Time And Weather";
@@ -19,13 +27,21 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Patches
         [HarmonyPostfix]
         private static void StartPilotingPostfix(CyclopsHelmHUDManager __instance)
         {
-            if (!__instance || !__instance.subRoot)
+            if (!__instance.subRoot)
             {
+                return;
+            }
+
+            Transform existingIndicators = __instance.transform.Find(UGuiPatches.EnhancedIndicatorsPrefabName);
+            if (existingIndicators)
+            {
+                existingIndicators.gameObject.SetActive(true);
                 return;
             }
 
             RectTransform rightCanvas = null;
             RectTransform leftCanvas = null;
+            RectTransform upperCenterCanvas = null;
             Canvas[] canvases = __instance.GetComponentsInChildren<Canvas>(true);
             foreach (Canvas canvas in canvases)
             {
@@ -37,13 +53,10 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Patches
                 {
                     leftCanvas = canvas.transform as RectTransform;
                 }
-            }
-
-            if (!rightCanvas || !leftCanvas)
-            {
-                VehicleEnhancementsPlugin_SN.ModDebugLog.LogError(
-                    $"Could not find the Cyclops helm canvases '{RightHudCanvasName}' and '{LeftHudCanvasName}'.");
-                return;
+                else if (canvas.name == UpperCenterHudCanvasName)
+                {
+                    upperCenterCanvas = canvas.transform as RectTransform;
+                }
             }
 
             GameObject indicators = UGuiPatches.AddEnhancedIndicators(
@@ -69,33 +82,79 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Patches
                 return;
             }
 
+            RectTransform speedometerCanvas = GetHudCanvas(
+                speedometerController.CyclopsHudLocation, leftCanvas, upperCenterCanvas, rightCanvas);
+            RectTransform hsiCanvas = GetHudCanvas(
+                hsiController.CyclopsHudLocation, leftCanvas, upperCenterCanvas, rightCanvas);
+            RectTransform timeCanvas = GetHudCanvas(
+                timeController.CyclopsHudLocation, leftCanvas, upperCenterCanvas, rightCanvas);
+            if (!speedometerCanvas || !hsiCanvas || !timeCanvas)
+            {
+                VehicleEnhancementsPlugin_SN.ModDebugLog.LogError(
+                    "Could not find a selected Cyclops helm HUD canvas.");
+                Object.Destroy(indicators);
+                return;
+            }
+
             indicators.SetActive(true);
 
+            ApplyHolographicUi(indicators);
+            
             ConfigurePanel(
                 speedometer,
-                rightCanvas,
+                speedometerCanvas,
                 speedometerController.CyclopsLocalPosition,
+                speedometerController.CyclopsLocalRotation,
                 speedometerController.CyclopsLocalScale);
             ConfigurePanel(
                 hsi,
-                rightCanvas,
+                hsiCanvas,
                 hsiController.CyclopsLocalPosition,
+                hsiController.CyclopsLocalRotation,
                 hsiController.CyclopsLocalScale);
             ConfigurePanel(
                 timeAndWeather,
-                leftCanvas,
+                timeCanvas,
                 timeController.CyclopsLocalPosition,
+                timeController.CyclopsLocalRotation,
                 timeController.CyclopsLocalScale);
+        }
 
-            __instance.gameObject.AddComponent<CyclopsHudVisibility>().Configure(
-                indicators,
-                __instance.subRoot);
+        [HarmonyPatch(nameof(CyclopsHelmHUDManager.StopPiloting))]
+        [HarmonyPostfix]
+        private static void StopPilotingPostfix(CyclopsHelmHUDManager __instance)
+        {
+            Transform indicators = __instance.transform.Find(UGuiPatches.EnhancedIndicatorsPrefabName);
+            if (indicators)
+            {
+                indicators.gameObject.SetActive(false);
+            }
+        }
+
+        private static RectTransform GetHudCanvas(
+            CyclopsHudLocation location,
+            RectTransform leftCanvas,
+            RectTransform upperCenterCanvas,
+            RectTransform rightCanvas)
+        {
+            switch (location)
+            {
+                case CyclopsHudLocation.Left:
+                    return leftCanvas;
+                case CyclopsHudLocation.UpperCenter:
+                    return upperCenterCanvas;
+                case CyclopsHudLocation.Right:
+                    return rightCanvas;
+                default:
+                    return null;
+            }
         }
 
         private static void ConfigurePanel(
             RectTransform panel,
             RectTransform canvas,
             Vector3 localPosition,
+            Vector3 localRotation,
             Vector3 localScale)
         {
             panel.SetParent(canvas, false);
@@ -103,8 +162,30 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Patches
             panel.anchorMax = new Vector2(0.5f, 0.5f);
             panel.pivot = new Vector2(0.5f, 0.5f);
             panel.localPosition = localPosition;
-            panel.localRotation = Quaternion.identity;
+            panel.localRotation = Quaternion.Euler(localRotation);
             panel.localScale = localScale;
         }
+        
+        /// <summary>
+        /// Iterate over UI elements and apply the Holographic UI shader. Only relevant for Cyclops
+        /// </summary>
+        private static void ApplyHolographicUi(GameObject indicators)
+        {
+            Material holographicMaterial = MaterialUtils.HolographicUIMaterial;
+            if (holographicMaterial)
+            {
+                Graphic[] graphics = indicators.GetComponentsInChildren<Graphic>(true);
+                foreach (Graphic graphic in graphics)
+                {
+                    if (graphic is TMP_Text)
+                    {
+                        continue;
+                    }
+
+                    graphic.material = holographicMaterial;
+                }
+            }
+        }
+        
     }
 }

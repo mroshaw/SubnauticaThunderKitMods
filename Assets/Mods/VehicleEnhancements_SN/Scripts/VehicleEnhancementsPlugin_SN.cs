@@ -13,15 +13,15 @@ namespace DaftAppleGames.VehicleEnhancements_SN
     {
         private const string MyGuid = "com.mroshaw.vehicleenhancements.sn";
         private const string PluginName = "Vehicle Enhancements SN";
-        private const string VersionString = "0.1.0";
+        private const string VersionString = "1.1.0";
         private const string AssetBundleName = "enhancedvehiclesassetbundle";
 
         internal static ModAssetBundleUtils ModAssetUtils;
-        internal static FMODAsset ReversingBeepsFmodAsset;
-        internal static FMODAsset ThisVehicleIsReversingFmodAsset;
-        internal static FMODAsset ThisPrawnSuitIsReversingFmodAsset;
-        internal static FMODAsset ThisSeaMothIsReversingFmodAsset;
-        internal static FMODAsset ThisCyclopsIsReversingFmodAsset;
+        private static FMODAsset _thisVehicleIsReversingFmodAsset;
+        private static FMODAsset _thisPrawnSuitIsReversingFmodAsset;
+        private static FMODAsset _thisSeaMothIsReversingFmodAsset;
+        private static FMODAsset _thisCyclopsIsReversingFmodAsset;
+        internal static FMODAsset ReversingBeepsFmodAsset { get; private set; }
 
 #if !UNITY_EDITOR
         internal static ModConfigFile ConfigFile = OptionsPanelHandler.RegisterModOptions<ModConfigFile>();
@@ -38,10 +38,10 @@ namespace DaftAppleGames.VehicleEnhancements_SN
             ModDebugLog = new ModLog(Logger, ConfigFile.DetailedLogging);
             ModAssetUtils = new ModAssetBundleUtils(AssetBundleName, Assembly.GetExecutingAssembly(), true, ModDebugLog);
             ReversingBeepsFmodAsset = RegisterCustomSound("ReversingBeeps.wav");
-            ThisVehicleIsReversingFmodAsset = RegisterCustomSound("ThisVehicleIsReversing.wav");
-            ThisPrawnSuitIsReversingFmodAsset = RegisterCustomSound("ThisPrawnSuitIsReversing.wav");
-            ThisSeaMothIsReversingFmodAsset = RegisterCustomSound("ThisSeaMothIsReversing.wav");
-            ThisCyclopsIsReversingFmodAsset = RegisterCustomSound("ThisCyclopsIsReversing.wav");
+            _thisVehicleIsReversingFmodAsset = RegisterCustomSound("ThisVehicleIsReversing.wav");
+            _thisPrawnSuitIsReversingFmodAsset = RegisterCustomSound("ThisPrawnSuitIsReversing.wav");
+            _thisSeaMothIsReversingFmodAsset = RegisterCustomSound("ThisSeaMothIsReversing.wav");
+            _thisCyclopsIsReversingFmodAsset = RegisterCustomSound("ThisCyclopsIsReversing.wav");
             Harmony.PatchAll();
             ModDebugLog.LogInfo($"{PluginName} {VersionString} loaded.");
         }
@@ -50,10 +50,10 @@ namespace DaftAppleGames.VehicleEnhancements_SN
         {
             switch (voice)
             {
-                case ReversingVoice.ThisVehicleIsReversing: return ThisVehicleIsReversingFmodAsset;
-                case ReversingVoice.ThisPrawnSuitIsReversing: return ThisPrawnSuitIsReversingFmodAsset;
-                case ReversingVoice.ThisSeaMothIsReversing: return ThisSeaMothIsReversingFmodAsset;
-                case ReversingVoice.ThisCyclopsIsReversing: return ThisCyclopsIsReversingFmodAsset;
+                case ReversingVoice.ThisVehicleIsReversing: return _thisVehicleIsReversingFmodAsset;
+                case ReversingVoice.ThisPrawnSuitIsReversing: return _thisPrawnSuitIsReversingFmodAsset;
+                case ReversingVoice.ThisSeaMothIsReversing: return _thisSeaMothIsReversingFmodAsset;
+                case ReversingVoice.ThisCyclopsIsReversing: return _thisCyclopsIsReversingFmodAsset;
                 default: return null;
             }
         }

@@ -55,7 +55,7 @@ MonoBehaviour:
       major: 1
       minor: 0
       patch: 6
-    publishingSites: 3
+    publishingSites: -1
     nexusMods:
       fileGroupId: 7895037
       gameScopedModId: 4152
@@ -86,7 +86,7 @@ MonoBehaviour:
       major: 1
       minor: 0
       patch: 2
-    publishingSites: 3
+    publishingSites: -1
     nexusMods:
       fileGroupId: 7879512
       gameScopedModId: 4147
@@ -297,13 +297,13 @@ MonoBehaviour:
     manifest: {fileID: 11400000, guid: 2a7aa74265774cb88aaf0b8dd200a64b, type: 2}
     version:
       major: 1
-      minor: 1
+      minor: 0
       patch: 0
     currentPublishedVersion:
       major: 1
       minor: 0
       patch: 0
-    publishingSites: 2
+    publishingSites: -1
     nexusMods:
       fileGroupId: 8096199
       gameScopedModId: 4194
@@ -323,3 +323,5 @@ MonoBehaviour:
       draft: 0
       prerelease: 0
       generateReleaseNotes: 0
+  gitHubOwner: mroshaw
+  gitHubRepository: SubnauticaThunderKitMods

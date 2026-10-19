@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace DaftAppleGames.VehicleEnhancements_SN
+namespace DaftAppleGames.VehicleEnhancements_SN.Enhancements
 {
     internal enum EnhancedVehicle
     {
@@ -9,6 +9,9 @@ namespace DaftAppleGames.VehicleEnhancements_SN
         Cyclops
     }
 
+    /// <summary>
+    /// Provide a means to derive a vehicles velocity, for use by the speedometer and HSI controllers.
+    /// </summary>
     internal static class VehicleMotion
     {
         internal static bool TryGet(EnhancedVehicle vehicle, out Transform vehicleTransform, out Vector3 velocity)

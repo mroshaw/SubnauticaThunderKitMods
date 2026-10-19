@@ -1,43 +1,78 @@
+using DaftAppleGames.VehicleEnhancements_SN.Patches;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using static DaftAppleGames.VehicleEnhancements_SN.VehicleEnhancementsPlugin_SN;
 
-namespace DaftAppleGames.VehicleEnhancements_SN.TimeAndWeather
+namespace DaftAppleGames.VehicleEnhancements_SN.Enhancements
 {
     internal class TimeAndWeatherController : MonoBehaviour
     {
-        [SerializeField, Required] private GameObject timeAndWeatherRoot;
-        [SerializeField, Required] private TextMeshProUGUI timeText;
-        [SerializeField, Required] private RectTransform timeOfDayIndicator;
-        [SerializeField, Required] private Image timeImage;
-        [SerializeField, Required] private Sprite dayTimeSprite;
-        [SerializeField, Required] private Sprite nightTimeSprite;
-        [SerializeField, Required] private GameObject weatherIndicator;
-        [SerializeField, Required] private Image weatherImage;
-        [SerializeField, Required] private Sprite sunnyWeatherSprite;
-        [SerializeField, Required] private Sprite rainyWeatherSprite;
-        [SerializeField, Required] private Sprite lightningStormWeatherSprite;
+        [BoxGroup("Time and Weather UI Settings")] [SerializeField, Required] private GameObject timeAndWeatherRoot;
+        [BoxGroup("Time and Weather UI Settings")] [SerializeField, Required] private TextMeshProUGUI timeText;
+        [BoxGroup("Time and Weather UI Settings")] [SerializeField, Required] private RectTransform timeOfDayIndicator;
+        [BoxGroup("Time and Weather UI Settings")] [SerializeField, Required] private Image timeImage;
+        [BoxGroup("Time and Weather UI Settings")] [SerializeField, Required] private Image weatherImage;
+        
+        [BoxGroup("Time and Weather Settings")] [SerializeField, Required] private Sprite dayTimeSprite;
+        [BoxGroup("Time and Weather Settings")] [SerializeField, Required] private Sprite nightTimeSprite;
+        [BoxGroup("Time and Weather Settings")] [SerializeField, Required] private GameObject weatherIndicator;
+        [BoxGroup("Time and Weather Settings")] [SerializeField, Required] private Sprite sunnyWeatherSprite;
+        [BoxGroup("Time and Weather Settings")] [SerializeField, Required] private Sprite rainyWeatherSprite;
+        [BoxGroup("Time and Weather Settings")] [SerializeField, Required] private Sprite lightningStormWeatherSprite;
 
-        [SerializeField] private Vector3 cyclopsLocalPosition = new Vector3(-85.0f, -385.0f, 0.0f);
-
-        [SerializeField] private Vector3 cyclopsLocalScale = Vector3.one;
+        [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector2 seamothAnchoredPosition = new Vector2(-250.0f, 78.7f);
+        [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector3 seamothLocalScale = Vector3.one;
+        [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector2 prawnSuitAnchoredPosition = new Vector2(-250.0f, 78.7f);
+        [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector3 prawnSuitLocalScale = Vector3.one;
+        [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private CyclopsHudLocation cyclopsHudLocation = CyclopsHudLocation.Left;
+        [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector3 cyclopsLocalPosition = new Vector3(-85.0f, -385.0f, 0.0f);
+        [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector3 cyclopsLocalRotation = new Vector3(0.0f, 0.0f, 1.0f);
+        [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector3 cyclopsLocalScale = Vector3.one;
 
         private RectTransform previousMoon;
         private RectTransform nextMoon;
         private int lastDisplayedMinute = -1;
         private float nextWeatherUpdateTime;
         private WeatherManager weatherManager;
-        private EnhancedVehicle vehicle = EnhancedVehicle.Seamoth;
+        private EnhancedVehicle vehicle;
+
+        internal CyclopsHudLocation CyclopsHudLocation => cyclopsHudLocation;
 
         internal Vector3 CyclopsLocalPosition => cyclopsLocalPosition;
+
+        internal Vector3 CyclopsLocalRotation => cyclopsLocalRotation;
 
         internal Vector3 CyclopsLocalScale => cyclopsLocalScale;
 
         internal void Configure(EnhancedVehicle selectedVehicle)
         {
             vehicle = selectedVehicle;
+            if (!timeAndWeatherRoot)
+            {
+                return;
+            }
+
+            RectTransform timeAndWeatherRect = timeAndWeatherRoot.transform as RectTransform;
+            if (!timeAndWeatherRect)
+            {
+                return;
+            }
+
+            switch (vehicle)
+            {
+                case EnhancedVehicle.PrawnSuit:
+                    timeAndWeatherRect.anchoredPosition = prawnSuitAnchoredPosition;
+                    timeAndWeatherRect.localScale = prawnSuitLocalScale;
+                    break;
+                case EnhancedVehicle.Cyclops:
+                    break;
+                default:
+                    timeAndWeatherRect.anchoredPosition = seamothAnchoredPosition;
+                    timeAndWeatherRect.localScale = seamothLocalScale;
+                    break;
+            }
         }
 
         private void Awake()

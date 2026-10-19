@@ -1,3 +1,4 @@
+using DaftAppleGames.VehicleEnhancements_SN.Enhancements;
 using Nautilus.Json;
 using Nautilus.Options;
 using Nautilus.Options.Attributes;

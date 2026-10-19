@@ -6,29 +6,20 @@ using Sirenix.OdinInspector;
 using UnityEngine;
 using static DaftAppleGames.VehicleEnhancements_SN.VehicleEnhancementsPlugin_SN;
 
-namespace DaftAppleGames.VehicleEnhancements_SN.Reversing
+namespace DaftAppleGames.VehicleEnhancements_SN.Enhancements
 {
     internal class ReversingAudioController : MonoBehaviour
     {
-        [SerializeField, Required]
-        private FMOD_CustomEmitter reversingBeepsEmitter;
+        [BoxGroup("Reversing Settings")] [SerializeField, Required] private FMOD_CustomEmitter reversingBeepsEmitter;
+        [SerializeField, Required] private FMOD_CustomEmitter reversingVoiceEmitter;
+        [SerializeField, MinValue(0.0f)] private float reversingSpeedThreshold = 0.1f;
+        
+        [BoxGroup("Audio Settings")]
+        [SerializeField] private Vector3 audioSourceOffset = new Vector3(0.0f, 0.0f, -3.0f);
+        [SerializeField, MinValue(10.0f)] private float cabinLowPassCutoff = 1200.0f;
+        [SerializeField, Range(1.0f, 10.0f)] private float cabinLowPassResonance = 1.0f;
 
-        [SerializeField, Required]
-        private FMOD_CustomEmitter reversingVoiceEmitter;
-
-        [SerializeField, MinValue(0.0f)]
-        private float reversingSpeedThreshold = 0.1f;
-
-        [SerializeField]
-        private Vector3 audioSourceOffset = new Vector3(0.0f, 0.0f, -3.0f);
-
-        [SerializeField, MinValue(10.0f)]
-        private float cabinLowPassCutoff = 1200.0f;
-
-        [SerializeField, Range(1.0f, 10.0f)]
-        private float cabinLowPassResonance = 1.0f;
-
-        private EnhancedVehicle vehicle = EnhancedVehicle.Seamoth;
+        private EnhancedVehicle vehicle;
         private DSP reversingBeepsLowPass;
         private DSP reversingVoiceLowPass;
         private Channel reversingBeepsChannel;
@@ -62,8 +53,8 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Reversing
 
             ConfigureEmitter(reversingBeepsEmitter, ReversingBeepsFmodAsset);
             UpdateVoiceSelection();
-            CreateLowPassDsp(ref reversingBeepsLowPass);
-            CreateLowPassDsp(ref reversingVoiceLowPass);
+            CreateLowPassDsp(out reversingBeepsLowPass);
+            CreateLowPassDsp(out reversingVoiceLowPass);
         }
 
         private void Update()
@@ -261,7 +252,7 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Reversing
             }
         }
 
-        private void CreateLowPassDsp(ref DSP lowPass)
+        private void CreateLowPassDsp(out DSP lowPass)
         {
             RESULT result = RuntimeManager.CoreSystem.createDSPByType(DSP_TYPE.LOWPASS, out lowPass);
             if (result != RESULT.OK || !lowPass.hasHandle())

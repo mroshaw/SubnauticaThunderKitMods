@@ -364,7 +364,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
-    m_TransformParent: {fileID: 1695477980}
+    m_TransformParent: {fileID: 1289657994}
     m_Modifications:
     - target: {fileID: 2313051729336214932, guid: 8d81f9a7023ef8c47ba982600c2bca98,
         type: 3}
@@ -499,7 +499,7 @@ PrefabInstance:
     - target: {fileID: 4713639018825503368, guid: 8d81f9a7023ef8c47ba982600c2bca98,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4713639018825503368, guid: 8d81f9a7023ef8c47ba982600c2bca98,
         type: 3}
@@ -524,12 +524,12 @@ PrefabInstance:
     - target: {fileID: 4713639018825503368, guid: 8d81f9a7023ef8c47ba982600c2bca98,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 810
       objectReference: {fileID: 0}
     - target: {fileID: 4713639018825503368, guid: 8d81f9a7023ef8c47ba982600c2bca98,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -322
       objectReference: {fileID: 0}
     - target: {fileID: 4713639018825503368, guid: 8d81f9a7023ef8c47ba982600c2bca98,
         type: 3}
@@ -549,7 +549,7 @@ PrefabInstance:
     - target: {fileID: 4713639018825503371, guid: 8d81f9a7023ef8c47ba982600c2bca98,
         type: 3}
       propertyPath: m_Name
-      value: CyclopsRightIndicators
+      value: CyclopsDialIndicators
       objectReference: {fileID: 0}
     - target: {fileID: 4931461211141982883, guid: 8d81f9a7023ef8c47ba982600c2bca98,
         type: 3}
@@ -2104,7 +2104,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 4261412663
 --- !u!114 &670456350
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3641,6 +3641,7 @@ RectTransform:
   m_Children:
   - {fileID: 1577088181}
   - {fileID: 1848856043}
+  - {fileID: 261833158}
   m_Father: {fileID: 64894210}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 180, y: -34.999996, z: -180}
@@ -4781,7 +4782,6 @@ RectTransform:
   m_Children:
   - {fileID: 714379377}
   - {fileID: 1892103590}
-  - {fileID: 261833158}
   m_Father: {fileID: 64894210}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 180, y: 36.0081, z: 180}
@@ -5076,7 +5076,7 @@ PrefabInstance:
     - target: {fileID: 4713639018825503371, guid: 8d81f9a7023ef8c47ba982600c2bca98,
         type: 3}
       propertyPath: m_Name
-      value: CyclopsLeftIndicators
+      value: CyclopsWeatherIndicators
       objectReference: {fileID: 0}
     - target: {fileID: 4931461211141982883, guid: 8d81f9a7023ef8c47ba982600c2bca98,
         type: 3}
@@ -5121,6 +5121,11 @@ PrefabInstance:
     - target: {fileID: 7759051693240293448, guid: 8d81f9a7023ef8c47ba982600c2bca98,
         type: 3}
       propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8431817431158972041, guid: 8d81f9a7023ef8c47ba982600c2bca98,
+        type: 3}
+      propertyPath: cyclopsHudLocation
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8818688959980339928, guid: 8d81f9a7023ef8c47ba982600c2bca98,

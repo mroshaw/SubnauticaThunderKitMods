@@ -1,55 +1,49 @@
+using DaftAppleGames.VehicleEnhancements_SN.Patches;
 using TMPro;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using static DaftAppleGames.VehicleEnhancements_SN.VehicleEnhancementsPlugin_SN;
 
-namespace DaftAppleGames.VehicleEnhancements_SN.Speedometer
+namespace DaftAppleGames.VehicleEnhancements_SN.Enhancements
 {
     internal class SpeedometerController : MonoBehaviour
     {
-        [SerializeField, Required] private GameObject speedometerRoot;
+        [BoxGroup("Speedometer UI Settings")] [SerializeField, Required] private GameObject speedometerRoot;
+        [BoxGroup("Speedometer UI Settings")] [SerializeField, Required] private RectTransform needle;
+        [BoxGroup("Speedometer UI Settings")] [SerializeField, Required] private TextMeshProUGUI speedText;
+        [BoxGroup("Speedometer UI Settings")] [SerializeField, Required] private RectTransform verticalNeedle;
+        [BoxGroup("Speedometer UI Settings")] [SerializeField, Required] private TextMeshProUGUI verticalSpeedText;
 
-        [SerializeField, Required] private RectTransform needle;
+        [BoxGroup("Speedometer Settings")] [SerializeField] private float minimumNeedleAngle = 180.0f;
+        [BoxGroup("Speedometer Settings")] [SerializeField] private float maximumNeedleAngle = -80.0f;
+        [BoxGroup("Speedometer Settings")] [SerializeField, MinValue(0.1f)] private float maximumDisplayedSpeed = 20.0f;
+        [BoxGroup("Speedometer Settings")] [SerializeField, MinValue(0.1f)] private float maximumDisplayedVerticalSpeed = 10.0f;
+        [BoxGroup("Speedometer Settings")] [SerializeField] private float minimumVerticalNeedleAngle = 180.0f;
+        [BoxGroup("Speedometer Settings")] [SerializeField] private float maximumVerticalNeedleAngle = 0.0f;
+        [BoxGroup("Speedometer Settings")] [SerializeField, MinValue(0.0f)] private float needleSmoothTime = 0.12f;
 
-        [SerializeField, Required] private TextMeshProUGUI speedText;
-
-        [SerializeField, Required] private RectTransform verticalNeedle;
-
-        [SerializeField, Required] private TextMeshProUGUI verticalSpeedText;
-
-        [SerializeField] private Vector2 seamothOffset;
-
-        [SerializeField] private Vector2 prawnSuitOffset = new Vector2(0.0f, 20.0f);
-
-        [SerializeField] private Vector2 cyclopsOffset;
-
-        [SerializeField] private Vector3 cyclopsLocalPosition = new Vector3(-50.0f, 0.0f, 0.0f);
-
-        [SerializeField] private Vector3 cyclopsLocalScale = new Vector3(1.3f, 1.3f, 1.3f);
+        [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector2 seamothAnchoredPosition = new Vector2(0.0f, 110.0f);
+        [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector3 seamothLocalScale = Vector3.one;
+        [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector2 prawnSuitAnchoredPosition = new Vector2(0.0f, 135.0f);
+        [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector3 prawnSuitLocalScale = Vector3.one;
+        [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private CyclopsHudLocation cyclopsHudLocation = CyclopsHudLocation.Right;
+        [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector3 cyclopsLocalPosition = new Vector3(-50.0f, 0.0f, 0.0f);
+        [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector3 cyclopsLocalRotation = new Vector3(0.0f, 0.0f, 1.0f);
+        [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector3 cyclopsLocalScale = new Vector3(1.3f, 1.3f, 1.3f);
         
-        [SerializeField] private float minimumNeedleAngle = 180.0f;
-
-        [SerializeField] private float maximumNeedleAngle = -80.0f;
-
-        [SerializeField, MinValue(0.1f)] private float maximumDisplayedSpeed = 20.0f;
-
-        [SerializeField, MinValue(0.1f)] private float maximumDisplayedVerticalSpeed = 10.0f;
-
-        [SerializeField] private float minimumVerticalNeedleAngle = 180.0f;
-
-        [SerializeField] private float maximumVerticalNeedleAngle = 0.0f;
-
-        [SerializeField, MinValue(0.0f)] private float needleSmoothTime = 0.12f;
-
         private float smoothedSpeed;
         private float speedVelocity;
         private float smoothedVerticalSpeed;
         private float verticalSpeedVelocity;
         private int lastDisplayedSpeedTenths = int.MinValue;
         private int lastDisplayedVerticalSpeedTenths = int.MinValue;
-        private EnhancedVehicle vehicle = EnhancedVehicle.Seamoth;
+        private EnhancedVehicle vehicle;
+
+        internal CyclopsHudLocation CyclopsHudLocation => cyclopsHudLocation;
 
         internal Vector3 CyclopsLocalPosition => cyclopsLocalPosition;
+
+        internal Vector3 CyclopsLocalRotation => cyclopsLocalRotation;
 
         internal Vector3 CyclopsLocalScale => cyclopsLocalScale;
 
@@ -67,21 +61,19 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Speedometer
                 return;
             }
 
-            Vector2 offset;
             switch (vehicle)
             {
                 case EnhancedVehicle.PrawnSuit:
-                    offset = prawnSuitOffset;
+                    speedometerRect.anchoredPosition = prawnSuitAnchoredPosition;
+                    speedometerRect.localScale = prawnSuitLocalScale;
                     break;
                 case EnhancedVehicle.Cyclops:
-                    offset = cyclopsOffset;
                     break;
                 default:
-                    offset = seamothOffset;
+                    speedometerRect.anchoredPosition = seamothAnchoredPosition;
+                    speedometerRect.localScale = seamothLocalScale;
                     break;
             }
-
-            speedometerRect.anchoredPosition += offset;
         }
 
         private void Awake()
@@ -149,17 +141,10 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Speedometer
                 int absoluteSpeedTenths = Mathf.Abs(speedTenths);
                 int wholeSpeed = absoluteSpeedTenths / 10;
                 int decimalPart = absoluteSpeedTenths % 10;
-                if (speedTenths < 0)
-                {
-                    speedText.SetText("-{0:00}.{1:0}<color=#FFFFFF00>-</color>", wholeSpeed, decimalPart);
-                }
-                else
-                {
-                    speedText.SetText(
-                        "<color=#FFFFFF00>-</color>{0:00}.{1:0}<color=#FFFFFF00>-</color>",
-                        wholeSpeed,
-                        decimalPart);
-                }
+                speedText.SetText(
+                    speedTenths < 0
+                        ? "-{0:00}.{1:0}<color=#FFFFFF00>-</color>"
+                        : "<color=#FFFFFF00>-</color>{0:00}.{1:0}<color=#FFFFFF00>-</color>", wholeSpeed, decimalPart);
             }
 
             float normalizedSpeed = Mathf.Clamp01(needleSpeed / maximumDisplayedSpeed);

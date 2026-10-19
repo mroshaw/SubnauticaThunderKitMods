@@ -125,6 +125,9 @@ namespace DaftAppleGames.TameCreatures_SN.TameCreatures
                 case TechType.SpineEel:
                     isFriendlyToPlayer = ConfigFile.TameRiverProwlers;
                     return true;
+                case TechType.Shocker:
+                    isFriendlyToPlayer = ConfigFile.TameAmpEels;
+                    return true;
                 default:
                     isFriendlyToPlayer = false;
                     return false;

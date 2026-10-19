@@ -28,7 +28,7 @@ MonoBehaviour:
   CacheSize: 0.51
   MarkdownOpenMode: 1
   SelectedPipeline: {fileID: 11400000, guid: 89793f049bf8dad4cb972b24037457db, type: 2}
-  SelectedManifest: {fileID: 11400000, guid: 2a7aa74265774cb88aaf0b8dd200a64b, type: 2}
+  SelectedManifest: {fileID: 11400000, guid: b68049d16d1d6a04a8fca4cf75afe0f4, type: 2}
   QuickAccessPipelines:
   - {fileID: 11400000, guid: 89eed8e7c6029014489a91df2b3e3f65, type: 2}
   - {fileID: 11400000, guid: 89793f049bf8dad4cb972b24037457db, type: 2}

@@ -11,7 +11,7 @@ namespace DaftAppleGames.TameCreatures_SN
     {
         private const string MyGuid = "com.mroshaw.tamecreaturessn";
         private const string PluginName = "Tame Creatures SN";
-        internal const string VersionString = "1.0.0";
+        internal const string VersionString = "1.0.1";
         
         private static readonly Harmony Harmony = new Harmony(MyGuid);
         

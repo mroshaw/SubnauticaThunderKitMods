@@ -12,6 +12,9 @@ namespace DaftAppleGames.TameCreatures_SN
     [Menu("Tame Creatures")]
     public class ModConfigFile : ConfigFile
     {
+        [Toggle("Tame Ampeels", Tooltip = "Toggle this ON to tame Ampeels."), OnChange(nameof(OnTameBitersChanged))]
+        public bool TameAmpEels = true;
+        
         [Toggle("Tame Biters", Tooltip = "Toggle this ON to tame Biters."), OnChange(nameof(OnTameBitersChanged))]
         public bool TameBiters = true;
 

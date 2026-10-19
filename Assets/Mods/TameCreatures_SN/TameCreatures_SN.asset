@@ -16,7 +16,7 @@ MonoBehaviour:
   Author: Daft Apple Games
   Name: TameCreatures_SN
   Description: Optionally turn off predator agression towards the player
-  Version: 1.0.0
+  Version: 1.0.1
   Dependencies: []
 --- !u!114 &11400000
 MonoBehaviour:

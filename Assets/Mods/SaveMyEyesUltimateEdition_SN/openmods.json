@@ -20,9 +20,9 @@
   ],
 
   "media": [
-    { "type": "image", "url": "xxx.png", "label": "xxx" },
-    { "type": "image", "url": "xxx.png", "label": "xxx" },
-    { "type": "image", "url": "xxx.jpg", "label": "xxx" },
+    { "type": "image", "url": "AuroraSparks.png", "label": "Aurora sparks before and after" },
+    { "type": "image", "url": "ModOptions.png", "label": "Mod options (page 1)" },
+    { "type": "image", "url": "ModOptions2.png", "label": "Mod options (page 2)" },
     { "type": "image", "url": "AddTechTypesScreenshot.png", "label": "Category item customisation" }
   ],
 

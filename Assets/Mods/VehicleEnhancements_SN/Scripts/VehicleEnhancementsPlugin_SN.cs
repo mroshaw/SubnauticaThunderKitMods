@@ -24,7 +24,7 @@ namespace DaftAppleGames.VehicleEnhancements_SN
         internal static FMODAsset ReversingBeepsFmodAsset { get; private set; }
 
 #if !UNITY_EDITOR
-        internal static ModConfigFile ConfigFile = OptionsPanelHandler.RegisterModOptions<ModConfigFile>();
+        internal static readonly ModConfigFile ConfigFile = new ModConfigFile();
         internal static ModLog ModDebugLog;
 #else
         internal static readonly ModConfigFile ConfigFile = new ModConfigFile();
@@ -35,7 +35,13 @@ namespace DaftAppleGames.VehicleEnhancements_SN
 
         private void Awake()
         {
+#if !UNITY_EDITOR
+            ConfigFile.Load();
+#endif
             ModDebugLog = new ModLog(Logger, ConfigFile.DetailedLogging);
+#if !UNITY_EDITOR
+            OptionsPanelHandler.RegisterModOptions(new VehicleEnhancementsOptions(ConfigFile));
+#endif
             ModAssetUtils = new ModAssetBundleUtils(AssetBundleName, Assembly.GetExecutingAssembly(), true, ModDebugLog);
             ReversingBeepsFmodAsset = RegisterCustomSound("ReversingBeeps.wav");
             _thisVehicleIsReversingFmodAsset = RegisterCustomSound("ThisVehicleIsReversing.wav");

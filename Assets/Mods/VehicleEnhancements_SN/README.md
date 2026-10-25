@@ -12,6 +12,7 @@ This mod adds some super-cool enhancements to the standard vehicles in Subnautic
 - A **configurable reversing sound** so that ocean inhabitants can get out of the way as you're backing up.
 - A **time-of-day indicator** showing the passage of day into night, alongside a digital clock showing the current game time.
 - A **weather indicator** showing the current weather conditions outside - useful if you're diving down into the depths and want to know what the weather's like on the surface!
+- Options to **tweak the position and UI scale** of the new indicators, which works alongside the "UI Scaling" accessibility options in the game allowing you to fine tune the HUD for each vehicle.
 
 ## Want more features?
 
@@ -25,11 +26,11 @@ The mod works entirely based on the settings in mod options, there's no "in-game
 
 ### Per vehicle options
 
-You can toggle features on or off per vehicle via the Options > Mods menu:
+Open Options > Mods and expand **Vehicle Enhancements SN**. Settings are grouped beneath standard **Seamoth**, **Prawn Suit**, **Cyclops**, and **General** subheadings. Only the main mod heading collapses. Existing saved settings are retained.
 
-- **Speedometer** - toggle on to enable the speedometer and VSI enhancement.
-- **HSI** - toggle on to enable the Horizontal Situation Indicator, showing the pitch and roll of the vehicle.
-- **Time and weather** - toggle on to enable the time of day and weather indicators on the left side of the HUD.
+- **Speedometer** - toggle on to enable the speedometer and VSI enhancement. Tweak the horizontal, vertical positioning and UI scale using the sliders.
+- **HSI** - toggle on to enable the Horizontal Situation Indicator, showing the pitch and roll of the vehicle. Tweak the horizontal, vertical positioning and UI scale using the sliders.
+- **Time and weather** - toggle on to enable the time of day and weather indicators on the left side of the HUD. Tweak the horizontal, vertical positioning and UI scale using the sliders.
 - **Reversing voice** - select a spoken voice audio clip to play when the vehicle is reversing. Select "None" to disable reversing voice audio.
 - **Reversing beeps** - toggle on to enable a "beep beep beep" audio when the vehicle is reversing. Can be used in addition to the reversing voice option.
 

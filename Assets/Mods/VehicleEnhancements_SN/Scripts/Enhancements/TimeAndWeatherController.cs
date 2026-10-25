@@ -65,12 +65,14 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Enhancements
                 case EnhancedVehicle.PrawnSuit:
                     timeAndWeatherRect.anchoredPosition = prawnSuitAnchoredPosition;
                     timeAndWeatherRect.localScale = prawnSuitLocalScale;
+                    timeAndWeatherRoot.AddComponent<VehicleHudElementLayout>().Configure(vehicle, VehicleHudElementLayout.Element.TimeAndWeather);
                     break;
                 case EnhancedVehicle.Cyclops:
                     break;
                 default:
                     timeAndWeatherRect.anchoredPosition = seamothAnchoredPosition;
                     timeAndWeatherRect.localScale = seamothLocalScale;
+                    timeAndWeatherRoot.AddComponent<VehicleHudElementLayout>().Configure(vehicle, VehicleHudElementLayout.Element.TimeAndWeather);
                     break;
             }
         }

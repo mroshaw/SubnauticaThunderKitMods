@@ -60,12 +60,14 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Enhancements
                 case EnhancedVehicle.PrawnSuit:
                     inclinometerRect.anchoredPosition = prawnSuitAnchoredPosition;
                     inclinometerRect.localScale = prawnSuitLocalScale;
+                    inclinometerRoot.AddComponent<VehicleHudElementLayout>().Configure(vehicle, VehicleHudElementLayout.Element.Hsi);
                     break;
                 case EnhancedVehicle.Cyclops:
                     break;
                 default:
                     inclinometerRect.anchoredPosition = seamothAnchoredPosition;
                     inclinometerRect.localScale = seamothLocalScale;
+                    inclinometerRoot.AddComponent<VehicleHudElementLayout>().Configure(vehicle, VehicleHudElementLayout.Element.Hsi);
                     break;
             }
         }

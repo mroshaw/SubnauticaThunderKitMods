@@ -105,19 +105,22 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Patches
                 speedometerCanvas,
                 speedometerController.CyclopsLocalPosition,
                 speedometerController.CyclopsLocalRotation,
-                speedometerController.CyclopsLocalScale);
+                speedometerController.CyclopsLocalScale,
+                VehicleHudElementLayout.Element.Speedometer);
             ConfigurePanel(
                 hsi,
                 hsiCanvas,
                 hsiController.CyclopsLocalPosition,
                 hsiController.CyclopsLocalRotation,
-                hsiController.CyclopsLocalScale);
+                hsiController.CyclopsLocalScale,
+                VehicleHudElementLayout.Element.Hsi);
             ConfigurePanel(
                 timeAndWeather,
                 timeCanvas,
                 timeController.CyclopsLocalPosition,
                 timeController.CyclopsLocalRotation,
-                timeController.CyclopsLocalScale);
+                timeController.CyclopsLocalScale,
+                VehicleHudElementLayout.Element.TimeAndWeather);
         }
 
         [HarmonyPatch(nameof(CyclopsHelmHUDManager.StopPiloting))]
@@ -155,7 +158,8 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Patches
             RectTransform canvas,
             Vector3 localPosition,
             Vector3 localRotation,
-            Vector3 localScale)
+            Vector3 localScale,
+            VehicleHudElementLayout.Element element)
         {
             panel.SetParent(canvas, false);
             panel.anchorMin = new Vector2(0.5f, 0.5f);
@@ -164,6 +168,7 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Patches
             panel.localPosition = localPosition;
             panel.localRotation = Quaternion.Euler(localRotation);
             panel.localScale = localScale;
+            panel.gameObject.AddComponent<VehicleHudElementLayout>().Configure(EnhancedVehicle.Cyclops, element);
         }
         
         /// <summary>

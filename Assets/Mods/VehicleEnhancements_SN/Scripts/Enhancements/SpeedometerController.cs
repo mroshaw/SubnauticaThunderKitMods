@@ -66,12 +66,14 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Enhancements
                 case EnhancedVehicle.PrawnSuit:
                     speedometerRect.anchoredPosition = prawnSuitAnchoredPosition;
                     speedometerRect.localScale = prawnSuitLocalScale;
+                    speedometerRoot.AddComponent<VehicleHudElementLayout>().Configure(vehicle, VehicleHudElementLayout.Element.Speedometer);
                     break;
                 case EnhancedVehicle.Cyclops:
                     break;
                 default:
                     speedometerRect.anchoredPosition = seamothAnchoredPosition;
                     speedometerRect.localScale = seamothLocalScale;
+                    speedometerRoot.AddComponent<VehicleHudElementLayout>().Configure(vehicle, VehicleHudElementLayout.Element.Speedometer);
                     break;
             }
         }

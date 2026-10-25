@@ -178,7 +178,7 @@ MonoBehaviour:
     currentPublishedVersion:
       major: 0
       minor: 0
-      patch: 0
+      patch: 3
     publishingSites: -1
     nexusMods:
       fileGroupId: 8196627

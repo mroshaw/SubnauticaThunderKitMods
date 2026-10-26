@@ -11,7 +11,7 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN
     {
         private const string MyGuid = "com.mroshaw.savemyeyesultimateedesdition";
         private const string PluginName = "Save My Eyes: Ultimate Edition SN";
-        internal const string VersionString = "1.0.0";
+        internal const string VersionString = "0.0.4";
         
         private static readonly Harmony harmony = new Harmony(MyGuid);
         

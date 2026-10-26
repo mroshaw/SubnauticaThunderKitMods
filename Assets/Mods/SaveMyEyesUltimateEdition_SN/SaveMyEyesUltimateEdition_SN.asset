@@ -49,6 +49,7 @@ MonoBehaviour:
   StagingPaths: []
   Author: Daft Apple Games
   Name: SaveMyEyesUltimateEdition_SN
-  Description: Adjust selected lights, flicker, particles and beams for photosensitivity and light sensitivity
-  Version: 1.0.0
+  Description: Adjust selected lights, flicker, particles and beams for photosensitivity
+    and light sensitivity
+  Version: 0.0.4
   Dependencies: []

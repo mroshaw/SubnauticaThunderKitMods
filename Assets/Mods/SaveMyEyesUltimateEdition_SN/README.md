@@ -18,7 +18,7 @@ The options reduce selected visual effects for players with photosensitivity or 
 
 - Prawn Suit drill: targeted lights and particles during drilling and surface contact.
 
-- Aurora: selected electrical sparks, extinguishable fires and interior damage effects, with separate spark and flame controls. This is not a control for every Aurora flash or explosion.
+- Aurora: selected electrical sparks, extinguishable fires and interior damage effects, with separate spark and flame controls. The spark controls also cover the shared underwater electrical effect used in scattered wrecks. This is not a control for every Aurora flash or explosion.
 
 - Water Filtration Machine: a **Disable Beams** toggle, enabled by default. Other fabrication lights, sparks and item scanning effects are separate.
 

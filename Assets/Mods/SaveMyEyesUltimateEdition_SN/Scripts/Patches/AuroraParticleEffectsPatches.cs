@@ -29,10 +29,11 @@ namespace DaftAppleGames.SaveMyEyesUltimateEdition_SN.Patches
                     __instance.gameObject.AddComponent<SaveMyParticleSystemsController>().Initialize(EffectUseCase.AuroraSparks);
                     break;
 
-                // Aurora electrical sources also have a separate ElecLight.
+                // Aurora and scattered-wreck electrical sources also have a separate ElecLight.
                 case "00ba4df5-a2bf-433b-8e7b-bd02c69e1c60":
                 case "6e4b4259-becc-4d2c-b56a-03ccedbc4672":
                 case "3274b205-b153-41b6-9736-f3972e38f0ad":
+                case "ff8e782e-e6f3-40a6-9837-d5b6dcce92bc":
                     __instance.gameObject.AddComponent<SaveMyParticleSystemsController>().Initialize(EffectUseCase.AuroraSparks);
                     __instance.gameObject.AddComponent<SaveMyEyesLightController>().Initialize(EffectUseCase.AuroraSparks);
                     break;

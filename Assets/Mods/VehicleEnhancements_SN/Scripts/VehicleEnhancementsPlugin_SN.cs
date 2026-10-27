@@ -1,7 +1,6 @@
 using System.Reflection;
 using BepInEx;
 using DaftAppleGames.VehicleEnhancements_SN.Integration;
-using DaftAppleGames.VehicleEnhancements_SN.Enhancements;
 using DaftAppleGames.ModTools;
 using HarmonyLib;
 using Nautilus.Handlers;
@@ -44,7 +43,6 @@ namespace DaftAppleGames.VehicleEnhancements_SN
 #endif
             ModDebugLog = new ModLog(Logger, ConfigFile.DetailedLogging);
             ModAssetUtils = new ModAssetBundleUtils(AssetBundleName, Assembly.GetExecutingAssembly(), true, ModDebugLog);
-            FmodAudioDiagnostics.Initialize(Harmony);
             Harmony.PatchAll();
             ModDebugLog.LogInfo($"{PluginName} {VersionString} loaded.");
         }
@@ -64,19 +62,12 @@ namespace DaftAppleGames.VehicleEnhancements_SN
                 return;
             }
 
-            FmodAudioDiagnostics.LogState("Listener ready: before reversing sound registration");
             ReversingBeepsFmodAsset = RegisterCustomSound("ReversingBeeps.wav");
             _thisVehicleIsReversingFmodAsset = RegisterCustomSound("ThisVehicleIsReversing.wav");
             _thisPrawnSuitIsReversingFmodAsset = RegisterCustomSound("ThisPrawnSuitIsReversing.wav");
             _thisSeaMothIsReversingFmodAsset = RegisterCustomSound("ThisSeaMothIsReversing.wav");
             _thisCyclopsIsReversingFmodAsset = RegisterCustomSound("ThisCyclopsIsReversing.wav");
-            FmodAudioDiagnostics.LogState("Listener ready: after reversing sound registration");
             reversingSoundsRegistered = true;
-        }
-
-        private void OnDestroy()
-        {
-            FmodAudioDiagnostics.Stop();
         }
 
         internal static FMODAsset GetReversingVoiceAsset(ReversingVoice voice)
@@ -100,10 +91,8 @@ namespace DaftAppleGames.VehicleEnhancements_SN
                 return null;
             }
 
-            FmodAudioDiagnostics.LogState($"Before registering {clipName}");
             ModAudioUtils.RegisterSound(clipName, AudioUtils.BusPaths.PlayerSFXs, ModAssetUtils, ModDebugLog,
                 minDistance: 2.0f, maxDistance: 30.0f, loop: true);
-            FmodAudioDiagnostics.LogState($"After registering {clipName}");
             return AudioUtils.GetFmodAsset(clipName);
         }
     }

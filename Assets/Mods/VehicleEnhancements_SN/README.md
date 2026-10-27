@@ -57,8 +57,6 @@ There are also some global settings that effect all vehicles:
 
 Reversing sounds register once from a postfix on the native FMOD Studio Listener's `OnEnable`, after it registers with FMOD.
 
-For FMOD startup diagnostics, enable **Detailed Logging** before restarting the game. Entries marked `[FMOD diagnostics]` record sound-registration order, the FMOD initialization caller stack, existing system/listener state, scene transitions and low-pass DSP results. The listener-warning snapshot lets these be compared with the original FMOD warning. Diagnostics inspect existing systems without initializing audio themselves.
-
 ## Installation and Dependencies
 
 > ***IMPORTANT!** This mod uses **BepInEx** ﻿﻿and **Nautilus**﻿﻿. You **must** install the latest versions of these to use this mod!*

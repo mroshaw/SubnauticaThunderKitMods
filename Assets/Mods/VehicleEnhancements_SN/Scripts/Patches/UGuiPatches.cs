@@ -27,6 +27,38 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Patches
             }
         }
 
+        internal static bool ConfigureEnhancedIndicators(GameObject indicators, Transform hudRoot, EnhancedVehicle vehicle)
+        {
+            SpeedometerController speedometer = indicators.GetComponent<SpeedometerController>();
+            HsiController hsi = indicators.GetComponent<HsiController>();
+            TimeAndWeatherController time = indicators.GetComponent<TimeAndWeatherController>();
+            ReversingAudioController audio = indicators.GetComponent<ReversingAudioController>();
+            if (!speedometer || !hsi || !time || !audio)
+            {
+                ModDebugLog.LogError("Enhanced indicator prefab is missing a required controller.");
+                return false;
+            }
+
+            speedometer.Configure(vehicle);
+            hsi.Configure(vehicle);
+            time.Configure(vehicle);
+            audio.Configure(vehicle);
+
+            RectTransform hudContent = hudRoot.parent as RectTransform;
+            if (hudContent)
+            {
+                VehicleHudLayout layout = indicators.GetComponent<VehicleHudLayout>();
+                if (!layout)
+                {
+                    layout = indicators.AddComponent<VehicleHudLayout>();
+                }
+
+                layout.Configure(hudContent);
+            }
+
+            return true;
+        }
+
         internal static GameObject AddEnhancedIndicators(Transform hudRoot, EnhancedVehicle vehicle)
         {
             if (hudRoot.Find(EnhancedIndicatorsPrefabName))
@@ -45,26 +77,10 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Patches
             indicators.name = EnhancedIndicatorsPrefabName;
             indicators.transform.SetParent(hudRoot, false);
 
-            SpeedometerController speedometer = indicators.GetComponent<SpeedometerController>();
-            HsiController hsi = indicators.GetComponent<HsiController>();
-            TimeAndWeatherController time = indicators.GetComponent<TimeAndWeatherController>();
-            ReversingAudioController audio = indicators.GetComponent<ReversingAudioController>();
-            if (!speedometer || !hsi || !time || !audio)
+            if (!ConfigureEnhancedIndicators(indicators, hudRoot, vehicle))
             {
-                ModDebugLog.LogError("Enhanced indicator prefab is missing a required controller.");
                 Object.Destroy(indicators);
                 return null;
-            }
-
-            speedometer.Configure(vehicle);
-            hsi.Configure(vehicle);
-            time.Configure(vehicle);
-            audio.Configure(vehicle);
-
-            RectTransform hudContent = hudRoot.parent as RectTransform;
-            if (hudContent)
-            {
-                indicators.AddComponent<VehicleHudLayout>().Configure(hudContent);
             }
 
             if (vehicle != EnhancedVehicle.Cyclops)

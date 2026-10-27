@@ -22,6 +22,8 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Enhancements
         [BoxGroup("Time and Weather Settings")] [SerializeField, Required] private Sprite rainyWeatherSprite;
         [BoxGroup("Time and Weather Settings")] [SerializeField, Required] private Sprite lightningStormWeatherSprite;
 
+        [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector2 customVehicleAnchoredPosition = new Vector2(-250.0f, 78.7f);
+        [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector3 customVehicleLocalScale = Vector3.one;
         [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector2 seamothAnchoredPosition = new Vector2(-250.0f, 78.7f);
         [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector3 seamothLocalScale = Vector3.one;
         [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector2 prawnSuitAnchoredPosition = new Vector2(-250.0f, 78.7f);
@@ -65,16 +67,32 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Enhancements
                 case EnhancedVehicle.PrawnSuit:
                     timeAndWeatherRect.anchoredPosition = prawnSuitAnchoredPosition;
                     timeAndWeatherRect.localScale = prawnSuitLocalScale;
-                    timeAndWeatherRoot.AddComponent<VehicleHudElementLayout>().Configure(vehicle, VehicleHudElementLayout.Element.TimeAndWeather);
+                    ConfigureLayout(timeAndWeatherRoot, VehicleHudElementLayout.Element.TimeAndWeather);
+                    break;
+                case EnhancedVehicle.CustomVehicle:
+                    timeAndWeatherRect.anchoredPosition = customVehicleAnchoredPosition;
+                    timeAndWeatherRect.localScale = customVehicleLocalScale;
+                    ConfigureLayout(timeAndWeatherRoot, VehicleHudElementLayout.Element.TimeAndWeather);
                     break;
                 case EnhancedVehicle.Cyclops:
                     break;
                 default:
                     timeAndWeatherRect.anchoredPosition = seamothAnchoredPosition;
                     timeAndWeatherRect.localScale = seamothLocalScale;
-                    timeAndWeatherRoot.AddComponent<VehicleHudElementLayout>().Configure(vehicle, VehicleHudElementLayout.Element.TimeAndWeather);
+                    ConfigureLayout(timeAndWeatherRoot, VehicleHudElementLayout.Element.TimeAndWeather);
                     break;
             }
+        }
+
+        private void ConfigureLayout(GameObject root, VehicleHudElementLayout.Element element)
+        {
+            VehicleHudElementLayout layout = root.GetComponent<VehicleHudElementLayout>();
+            if (!layout)
+            {
+                layout = root.AddComponent<VehicleHudElementLayout>();
+            }
+
+            layout.Configure(vehicle, element);
         }
 
         private void Awake()
@@ -125,7 +143,8 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Enhancements
 
         private RectTransform CreateMoon(string objectName)
         {
-            Image moonImage = Instantiate(timeImage, timeOfDayIndicator);
+            Transform existingMoon = timeOfDayIndicator.Find(objectName);
+            Image moonImage = existingMoon ? existingMoon.GetComponent<Image>() : Instantiate(timeImage, timeOfDayIndicator);
             moonImage.name = objectName;
             moonImage.sprite = nightTimeSprite;
             moonImage.raycastTarget = false;

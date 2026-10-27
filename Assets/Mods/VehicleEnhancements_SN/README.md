@@ -14,6 +14,16 @@ This mod adds some super-cool enhancements to the standard vehicles in Subnautic
 - A **weather indicator** showing the current weather conditions outside - useful if you're diving down into the depths and want to know what the weather's like on the surface!
 - Options to **tweak the position and UI scale** of the new indicators, which works alongside the "UI Scaling" accessibility options in the game allowing you to fine tune the HUD for each vehicle.
 
+## Optional custom vehicle support
+
+VehicleFramework 2.0.7 or later enables the same instruments and reversing audio for custom vehicles through VF's common vehicle contract. The **Custom Vehicle** options group appears when integration initializes and applies to all supported custom vehicles. Enhancements appear only while actively controlling the vehicle, including VF remote control; walking inside a submarine is insufficient. Native VF HUD visibility and scaling still apply.
+
+Nexus release 2.0.8 reports BepInEx plugin version `2.0.7.301`. The minimum supported version is 2.0.7, checked through BepInEx plugin metadata, while the upstream version mismatch is being addressed.
+
+This first iteration targets monitor play. Custom enhancements remain inactive in VR; VR support and per-vehicle settings are separate future phases. VehicleFramework and ConfigurationManager are optional for this mod, and older or absent VF leaves vanilla enhancements available. Restart the game after installing or updating VF.
+
+Gameplay acceptance, including Odyssey layout/audio tuning and a second independently implemented VF vehicle, remains pending. Generic support is implemented; broad tested compatibility is not yet claimed.
+
 ## Want more features?
 
 Let me know by creating a post and I'll do my best to add them!

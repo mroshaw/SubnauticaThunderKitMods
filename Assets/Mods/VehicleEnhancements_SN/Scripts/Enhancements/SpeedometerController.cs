@@ -22,6 +22,8 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Enhancements
         [BoxGroup("Speedometer Settings")] [SerializeField] private float maximumVerticalNeedleAngle = 0.0f;
         [BoxGroup("Speedometer Settings")] [SerializeField, MinValue(0.0f)] private float needleSmoothTime = 0.12f;
 
+        [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector2 customVehicleAnchoredPosition = new Vector2(0.0f, 110.0f);
+        [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector3 customVehicleLocalScale = Vector3.one;
         [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector2 seamothAnchoredPosition = new Vector2(0.0f, 110.0f);
         [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector3 seamothLocalScale = Vector3.one;
         [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector2 prawnSuitAnchoredPosition = new Vector2(0.0f, 135.0f);
@@ -66,16 +68,32 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Enhancements
                 case EnhancedVehicle.PrawnSuit:
                     speedometerRect.anchoredPosition = prawnSuitAnchoredPosition;
                     speedometerRect.localScale = prawnSuitLocalScale;
-                    speedometerRoot.AddComponent<VehicleHudElementLayout>().Configure(vehicle, VehicleHudElementLayout.Element.Speedometer);
+                    ConfigureLayout(speedometerRoot, VehicleHudElementLayout.Element.Speedometer);
+                    break;
+                case EnhancedVehicle.CustomVehicle:
+                    speedometerRect.anchoredPosition = customVehicleAnchoredPosition;
+                    speedometerRect.localScale = customVehicleLocalScale;
+                    ConfigureLayout(speedometerRoot, VehicleHudElementLayout.Element.Speedometer);
                     break;
                 case EnhancedVehicle.Cyclops:
                     break;
                 default:
                     speedometerRect.anchoredPosition = seamothAnchoredPosition;
                     speedometerRect.localScale = seamothLocalScale;
-                    speedometerRoot.AddComponent<VehicleHudElementLayout>().Configure(vehicle, VehicleHudElementLayout.Element.Speedometer);
+                    ConfigureLayout(speedometerRoot, VehicleHudElementLayout.Element.Speedometer);
                     break;
             }
+        }
+
+        private void ConfigureLayout(GameObject root, VehicleHudElementLayout.Element element)
+        {
+            VehicleHudElementLayout layout = root.GetComponent<VehicleHudElementLayout>();
+            if (!layout)
+            {
+                layout = root.AddComponent<VehicleHudElementLayout>();
+            }
+
+            layout.Configure(vehicle, element);
         }
 
         private void Awake()

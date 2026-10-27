@@ -1,5 +1,6 @@
 using System.Reflection;
 using BepInEx;
+using DaftAppleGames.VehicleEnhancements_SN.Integration;
 using DaftAppleGames.ModTools;
 using HarmonyLib;
 using Nautilus.Handlers;
@@ -8,12 +9,13 @@ using UnityEngine;
 
 namespace DaftAppleGames.VehicleEnhancements_SN
 {
+    [BepInDependency("com.mikjaw.subnautica.vehicleframework.mod", BepInDependency.DependencyFlags.SoftDependency)]
     [BepInPlugin(MyGuid, PluginName, VersionString)]
     public class VehicleEnhancementsPlugin_SN : BaseUnityPlugin
     {
         private const string MyGuid = "com.mroshaw.vehicleenhancements.sn";
         private const string PluginName = "Vehicle Enhancements SN";
-        private const string VersionString = "1.1.0";
+        private const string VersionString = "1.2.0";
         private const string AssetBundleName = "enhancedvehiclesassetbundle";
 
         internal static ModAssetBundleUtils ModAssetUtils;
@@ -39,9 +41,6 @@ namespace DaftAppleGames.VehicleEnhancements_SN
             ConfigFile.Load();
 #endif
             ModDebugLog = new ModLog(Logger, ConfigFile.DetailedLogging);
-#if !UNITY_EDITOR
-            OptionsPanelHandler.RegisterModOptions(new VehicleEnhancementsOptions(ConfigFile));
-#endif
             ModAssetUtils = new ModAssetBundleUtils(AssetBundleName, Assembly.GetExecutingAssembly(), true, ModDebugLog);
             ReversingBeepsFmodAsset = RegisterCustomSound("ReversingBeeps.wav");
             _thisVehicleIsReversingFmodAsset = RegisterCustomSound("ThisVehicleIsReversing.wav");
@@ -50,6 +49,14 @@ namespace DaftAppleGames.VehicleEnhancements_SN
             _thisCyclopsIsReversingFmodAsset = RegisterCustomSound("ThisCyclopsIsReversing.wav");
             Harmony.PatchAll();
             ModDebugLog.LogInfo($"{PluginName} {VersionString} loaded.");
+        }
+
+        private void Start()
+        {
+#if !UNITY_EDITOR
+            VehicleFrameworkIntegration.Initialize(Harmony);
+            OptionsPanelHandler.RegisterModOptions(new VehicleEnhancementsOptions(ConfigFile));
+#endif
         }
 
         internal static FMODAsset GetReversingVoiceAsset(ReversingVoice voice)

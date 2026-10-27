@@ -1,3 +1,5 @@
+using System;
+using DaftAppleGames.VehicleEnhancements_SN.Integration;
 using UnityEngine;
 
 namespace DaftAppleGames.VehicleEnhancements_SN.Enhancements
@@ -6,7 +8,8 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Enhancements
     {
         Seamoth,
         PrawnSuit,
-        Cyclops
+        Cyclops,
+        CustomVehicle
     }
 
     /// <summary>
@@ -14,10 +17,65 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Enhancements
     /// </summary>
     internal static class VehicleMotion
     {
+        private static Player customPlayer;
+        private static Vehicle customVehicle;
+        private static Transform customBody;
+        private static Rigidbody customRigidbody;
+        private static Func<bool> isCustomVehicleControlled;
+
+        internal static void ClearCustomVehicle()
+        {
+            customPlayer = null;
+            customVehicle = null;
+            customBody = null;
+            customRigidbody = null;
+            isCustomVehicleControlled = null;
+        }
+
+        internal static bool TryGetCustomVehicle(out Transform body, out Vector3 velocity)
+        {
+            body = null;
+            velocity = Vector3.zero;
+            Player player = Player.main;
+            Vehicle candidate = VehicleFrameworkIntegration.IsEnabled && player
+                ? VehicleFrameworkIntegration.GetVehicle(player)
+                : null;
+            if (!candidate)
+            {
+                ClearCustomVehicle();
+                return false;
+            }
+
+            if (customPlayer != player || customVehicle != candidate)
+            {
+                ClearCustomVehicle();
+                customPlayer = player;
+                customVehicle = candidate;
+                customBody = candidate.transform;
+                customRigidbody = candidate.useRigidbody;
+                isCustomVehicleControlled = VehicleFrameworkIntegration.BindControlPredicate(candidate);
+            }
+
+            if (!customVehicle || !customBody || !customRigidbody ||
+                isCustomVehicleControlled is null || !isCustomVehicleControlled())
+            {
+                return false;
+            }
+
+            body = customBody;
+            velocity = customRigidbody.velocity;
+            return true;
+        }
+
         internal static bool TryGet(EnhancedVehicle vehicle, out Transform vehicleTransform, out Vector3 velocity)
         {
             vehicleTransform = null;
             velocity = Vector3.zero;
+
+            if (vehicle == EnhancedVehicle.CustomVehicle)
+            {
+                return VehicleFrameworkIntegration.IsMonitorMode && TryGetCustomVehicle(out vehicleTransform, out velocity);
+            }
 
             Player player = Player.main;
             if (!player)

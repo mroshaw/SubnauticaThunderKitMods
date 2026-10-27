@@ -150,6 +150,22 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Enhancements
                             scale = ConfigFile.CyclopsSpeedometerUiScale;
                             return;
                     }
+                case EnhancedVehicle.CustomVehicle:
+                    switch (element)
+                    {
+                        case Element.Hsi:
+                            adjustment = new Vector2(ConfigFile.CustomVehicleHsiHorizontalAdjust, ConfigFile.CustomVehicleHsiVerticalAdjust);
+                            scale = ConfigFile.CustomVehicleHsiUiScale;
+                            return;
+                        case Element.TimeAndWeather:
+                            adjustment = new Vector2(ConfigFile.CustomVehicleTimeHorizontalAdjust, ConfigFile.CustomVehicleTimeVerticalAdjust);
+                            scale = ConfigFile.CustomVehicleTimeUiScale;
+                            return;
+                        default:
+                            adjustment = new Vector2(ConfigFile.CustomVehicleSpeedometerHorizontalAdjust, ConfigFile.CustomVehicleSpeedometerVerticalAdjust);
+                            scale = ConfigFile.CustomVehicleSpeedometerUiScale;
+                            return;
+                    }
                 default:
                     switch (element)
                     {

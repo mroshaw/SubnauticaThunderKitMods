@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Nautilus.Options;
+using DaftAppleGames.VehicleEnhancements_SN.Integration;
 using TMPro;
 using UnityEngine;
 using static DaftAppleGames.VehicleEnhancements_SN.VehicleEnhancementsPlugin_SN;
@@ -112,6 +113,39 @@ namespace DaftAppleGames.VehicleEnhancements_SN
             AddScaleSlider(313, nameof(config.CyclopsTimeUiScale), "Time/Weather: UI Scale", config.CyclopsTimeUiScale,
                 value => config.CyclopsTimeUiScale = value);
 
+            if (VehicleFrameworkIntegration.IsEnabled)
+            {
+                AddToggle(400, nameof(config.EnableCustomVehicleSpeedometer), "Speedometer", config.EnableCustomVehicleSpeedometer,
+                    value => config.EnableCustomVehicleSpeedometer = value);
+                AddToggle(401, nameof(config.EnableCustomVehicleHsi), "HSI", config.EnableCustomVehicleHsi,
+                    value => config.EnableCustomVehicleHsi = value);
+                AddToggle(402, nameof(config.EnableCustomVehicleTime), "Time and Weather", config.EnableCustomVehicleTime,
+                    value => config.EnableCustomVehicleTime = value);
+                AddVoiceChoice(403, nameof(config.CustomVehicleReversingVoice), config.CustomVehicleReversingVoice,
+                    value => config.CustomVehicleReversingVoice = value);
+                AddToggle(404, nameof(config.EnableCustomVehicleReversingBeeps), "Reversing Beeps", config.EnableCustomVehicleReversingBeeps,
+                    value => config.EnableCustomVehicleReversingBeeps = value);
+
+                AddPositionSlider(405, nameof(config.CustomVehicleSpeedometerHorizontalAdjust), "Speedometer: Horizontal Adjust", config.CustomVehicleSpeedometerHorizontalAdjust,
+                    false, value => config.CustomVehicleSpeedometerHorizontalAdjust = value);
+                AddPositionSlider(406, nameof(config.CustomVehicleSpeedometerVerticalAdjust), "Speedometer: Vertical Adjust", config.CustomVehicleSpeedometerVerticalAdjust,
+                    true, value => config.CustomVehicleSpeedometerVerticalAdjust = value);
+                AddScaleSlider(407, nameof(config.CustomVehicleSpeedometerUiScale), "Speedometer: UI Scale", config.CustomVehicleSpeedometerUiScale,
+                    value => config.CustomVehicleSpeedometerUiScale = value);
+                AddPositionSlider(408, nameof(config.CustomVehicleHsiHorizontalAdjust), "HSI: Horizontal Adjust", config.CustomVehicleHsiHorizontalAdjust,
+                    false, value => config.CustomVehicleHsiHorizontalAdjust = value);
+                AddPositionSlider(409, nameof(config.CustomVehicleHsiVerticalAdjust), "HSI: Vertical Adjust", config.CustomVehicleHsiVerticalAdjust,
+                    true, value => config.CustomVehicleHsiVerticalAdjust = value);
+                AddScaleSlider(410, nameof(config.CustomVehicleHsiUiScale), "HSI: UI Scale", config.CustomVehicleHsiUiScale,
+                    value => config.CustomVehicleHsiUiScale = value);
+                AddPositionSlider(411, nameof(config.CustomVehicleTimeHorizontalAdjust), "Time/Weather: Horizontal Adjust", config.CustomVehicleTimeHorizontalAdjust,
+                    false, value => config.CustomVehicleTimeHorizontalAdjust = value);
+                AddPositionSlider(412, nameof(config.CustomVehicleTimeVerticalAdjust), "Time/Weather: Vertical Adjust", config.CustomVehicleTimeVerticalAdjust,
+                    true, value => config.CustomVehicleTimeVerticalAdjust = value);
+                AddScaleSlider(413, nameof(config.CustomVehicleTimeUiScale), "Time/Weather: UI Scale", config.CustomVehicleTimeUiScale,
+                    value => config.CustomVehicleTimeUiScale = value);
+            }
+
             AddOption(500, ModSliderOption.Create(nameof(config.ReversingAudioVolume), "Reversing Audio Volume",
                 0.0f, 1.0f, config.ReversingAudioVolume, 0.1f, "{0:F2}", 0.05f),
                 value => config.ReversingAudioVolume = value);
@@ -151,6 +185,7 @@ namespace DaftAppleGames.VehicleEnhancements_SN
                 case 1: return "Seamoth";
                 case 2: return "Prawn Suit";
                 case 3: return "Cyclops";
+                case 4: return "Custom Vehicle";
                 default: return "General";
             }
         }

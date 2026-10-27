@@ -15,6 +15,8 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Enhancements
         [BoxGroup("HSI Settings")] [SerializeField, MinValue(0.1f)] private float pitchUnitsPerDegree = 2.6f;
         [BoxGroup("HSI Settings")][SerializeField, MinValue(0.0f)] private float smoothTime = 0.12f;
         
+        [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector2 customVehicleAnchoredPosition = new Vector2(-290.0f, 110.0f);
+        [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector3 customVehicleLocalScale = Vector3.one;
         [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector2 seamothAnchoredPosition = new Vector2(-290.0f, 110.0f);
         [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector3 seamothLocalScale = Vector3.one;
         [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector2 prawnSuitAnchoredPosition = new Vector2(-290.0f, 110.0f);
@@ -24,7 +26,9 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Enhancements
         [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector3 cyclopsLocalRotation = new Vector3(0.0f, 0.0f, 1.0f);
         [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector3 cyclopsLocalScale = new Vector3(0.5f, 0.5f, 0.5f);
 
-        private Vector2 hingeInitialPosition;
+        // Preserve the authored hinge baseline when VF clones an already-updated HUD.
+        [SerializeField, HideInInspector] private Vector2 hingeInitialPosition;
+        [SerializeField, HideInInspector] private bool hasHingeInitialPosition;
         private float smoothedPitch;
         private float smoothedRoll;
         private float pitchVelocity;
@@ -60,16 +64,32 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Enhancements
                 case EnhancedVehicle.PrawnSuit:
                     inclinometerRect.anchoredPosition = prawnSuitAnchoredPosition;
                     inclinometerRect.localScale = prawnSuitLocalScale;
-                    inclinometerRoot.AddComponent<VehicleHudElementLayout>().Configure(vehicle, VehicleHudElementLayout.Element.Hsi);
+                    ConfigureLayout(inclinometerRoot, VehicleHudElementLayout.Element.Hsi);
+                    break;
+                case EnhancedVehicle.CustomVehicle:
+                    inclinometerRect.anchoredPosition = customVehicleAnchoredPosition;
+                    inclinometerRect.localScale = customVehicleLocalScale;
+                    ConfigureLayout(inclinometerRoot, VehicleHudElementLayout.Element.Hsi);
                     break;
                 case EnhancedVehicle.Cyclops:
                     break;
                 default:
                     inclinometerRect.anchoredPosition = seamothAnchoredPosition;
                     inclinometerRect.localScale = seamothLocalScale;
-                    inclinometerRoot.AddComponent<VehicleHudElementLayout>().Configure(vehicle, VehicleHudElementLayout.Element.Hsi);
+                    ConfigureLayout(inclinometerRoot, VehicleHudElementLayout.Element.Hsi);
                     break;
             }
+        }
+
+        private void ConfigureLayout(GameObject root, VehicleHudElementLayout.Element element)
+        {
+            VehicleHudElementLayout layout = root.GetComponent<VehicleHudElementLayout>();
+            if (!layout)
+            {
+                layout = root.AddComponent<VehicleHudElementLayout>();
+            }
+
+            layout.Configure(vehicle, element);
         }
 
         private void Awake()
@@ -81,7 +101,11 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Enhancements
                 return;
             }
 
-            hingeInitialPosition = rollHinge.anchoredPosition;
+            if (!hasHingeInitialPosition)
+            {
+                hingeInitialPosition = rollHinge.anchoredPosition;
+                hasHingeInitialPosition = true;
+            }
             inclinometerRoot.SetActive(ConfigFile.IsHsiEnabled(vehicle));
             SetDisplay(0.0f, 0.0f);
             SetNumericDisplay(0.0f, 0.0f);

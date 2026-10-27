@@ -77,6 +77,24 @@ namespace DaftAppleGames.VehicleEnhancements_SN
         public float CyclopsTimeVerticalAdjust { get; set; } = 0.0f;
         public float CyclopsTimeUiScale { get; set; } = 1.0f;
 
+        public bool EnableCustomVehicleSpeedometer { get; set; } = true;
+        public bool EnableCustomVehicleHsi { get; set; } = true;
+        public bool EnableCustomVehicleTime { get; set; } = true;
+        public ReversingVoice CustomVehicleReversingVoice { get; set; } = ReversingVoice.ThisVehicleIsReversing;
+        public bool EnableCustomVehicleReversingBeeps { get; set; } = true;
+
+        public float CustomVehicleSpeedometerHorizontalAdjust { get; set; } = 0.0f;
+        public float CustomVehicleSpeedometerVerticalAdjust { get; set; } = 0.0f;
+        public float CustomVehicleSpeedometerUiScale { get; set; } = 1.0f;
+
+        public float CustomVehicleHsiHorizontalAdjust { get; set; } = 0.0f;
+        public float CustomVehicleHsiVerticalAdjust { get; set; } = 0.0f;
+        public float CustomVehicleHsiUiScale { get; set; } = 1.0f;
+
+        public float CustomVehicleTimeHorizontalAdjust { get; set; } = 0.0f;
+        public float CustomVehicleTimeVerticalAdjust { get; set; } = 0.0f;
+        public float CustomVehicleTimeUiScale { get; set; } = 1.0f;
+
         public float ReversingAudioVolume = 0.1f;
 
         internal ReversingVoice GetReversingVoice(EnhancedVehicle vehicle)
@@ -85,6 +103,7 @@ namespace DaftAppleGames.VehicleEnhancements_SN
             {
                 case EnhancedVehicle.PrawnSuit: return PrawnReversingVoice;
                 case EnhancedVehicle.Cyclops: return CyclopsReversingVoice;
+                case EnhancedVehicle.CustomVehicle: return CustomVehicleReversingVoice;
                 default: return SeamothReversingVoice;
             }
         }
@@ -95,6 +114,7 @@ namespace DaftAppleGames.VehicleEnhancements_SN
             {
                 case EnhancedVehicle.PrawnSuit: return EnablePrawnReversingBeeps;
                 case EnhancedVehicle.Cyclops: return EnableCyclopsReversingBeeps;
+                case EnhancedVehicle.CustomVehicle: return EnableCustomVehicleReversingBeeps;
                 default: return EnableSeamothReversingBeeps;
             }
         }
@@ -105,6 +125,7 @@ namespace DaftAppleGames.VehicleEnhancements_SN
             {
                 case EnhancedVehicle.PrawnSuit: return EnablePrawnSpeedometer;
                 case EnhancedVehicle.Cyclops: return EnableCyclopsSpeedometer;
+                case EnhancedVehicle.CustomVehicle: return EnableCustomVehicleSpeedometer;
                 default: return EnableSeamothSpeedometer;
             }
         }
@@ -115,6 +136,7 @@ namespace DaftAppleGames.VehicleEnhancements_SN
             {
                 case EnhancedVehicle.PrawnSuit: return EnablePrawnHsi;
                 case EnhancedVehicle.Cyclops: return EnableCyclopsHsi;
+                case EnhancedVehicle.CustomVehicle: return EnableCustomVehicleHsi;
                 default: return EnableSeamothHsi;
             }
         }
@@ -125,6 +147,7 @@ namespace DaftAppleGames.VehicleEnhancements_SN
             {
                 case EnhancedVehicle.PrawnSuit: return EnablePrawnTime;
                 case EnhancedVehicle.Cyclops: return EnableCyclopsTime;
+                case EnhancedVehicle.CustomVehicle: return EnableCustomVehicleTime;
                 default: return EnableSeamothTime;
             }
         }

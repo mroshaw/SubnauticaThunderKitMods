@@ -1070,6 +1070,8 @@ MonoBehaviour:
   needleSmoothTime: 0.12
   seamothAnchoredPosition: {x: 0, y: 110}
   seamothLocalScale: {x: 1, y: 1, z: 1}
+  customVehicleAnchoredPosition: {x: 0, y: 110}
+  customVehicleLocalScale: {x: 1, y: 1, z: 1}
   prawnSuitAnchoredPosition: {x: 0, y: 135}
   prawnSuitLocalScale: {x: 1, y: 1, z: 1}
   cyclopsHudLocation: 0
@@ -1114,6 +1116,8 @@ MonoBehaviour:
   smoothTime: 0.12
   seamothAnchoredPosition: {x: -290, y: 110}
   seamothLocalScale: {x: 1, y: 1, z: 1}
+  customVehicleAnchoredPosition: {x: -290, y: 110}
+  customVehicleLocalScale: {x: 1, y: 1, z: 1}
   prawnSuitAnchoredPosition: {x: -290, y: 110}
   prawnSuitLocalScale: {x: 1, y: 1, z: 1}
   cyclopsHudLocation: 0
@@ -1146,6 +1150,8 @@ MonoBehaviour:
     type: 3}
   seamothAnchoredPosition: {x: -250, y: 78.7}
   seamothLocalScale: {x: 1, y: 1, z: 1}
+  customVehicleAnchoredPosition: {x: -250, y: 78.7}
+  customVehicleLocalScale: {x: 1, y: 1, z: 1}
   prawnSuitAnchoredPosition: {x: -250, y: 78.7}
   prawnSuitLocalScale: {x: 1, y: 1, z: 1}
   cyclopsHudLocation: 0

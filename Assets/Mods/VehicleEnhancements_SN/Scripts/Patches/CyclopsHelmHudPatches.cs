@@ -7,13 +7,6 @@ using UnityEngine.UI;
 
 namespace DaftAppleGames.VehicleEnhancements_SN.Patches
 {
-    internal enum CyclopsHudLocation
-    {
-        Left,
-        UpperCenter,
-        Right
-    }
-
     [HarmonyPatch(typeof(CyclopsHelmHUDManager))] internal static class CyclopsHelmHudPatches
     {
         private const string RightHudCanvasName = "Canvas_RightHUD";
@@ -82,16 +75,10 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Patches
                 return;
             }
 
-            RectTransform speedometerCanvas = GetHudCanvas(
-                speedometerController.CyclopsHudLocation, leftCanvas, upperCenterCanvas, rightCanvas);
-            RectTransform hsiCanvas = GetHudCanvas(
-                hsiController.CyclopsHudLocation, leftCanvas, upperCenterCanvas, rightCanvas);
-            RectTransform timeCanvas = GetHudCanvas(
-                timeController.CyclopsHudLocation, leftCanvas, upperCenterCanvas, rightCanvas);
-            if (!speedometerCanvas || !hsiCanvas || !timeCanvas)
+            if (!leftCanvas || !upperCenterCanvas || !rightCanvas)
             {
                 VehicleEnhancementsPlugin_SN.ModDebugLog.LogError(
-                    "Could not find a selected Cyclops helm HUD canvas.");
+                    "Could not find the Cyclops helm HUD canvases.");
                 Object.Destroy(indicators);
                 return;
             }
@@ -102,24 +89,18 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Patches
             
             ConfigurePanel(
                 speedometer,
-                speedometerCanvas,
-                speedometerController.CyclopsLocalPosition,
+                leftCanvas, upperCenterCanvas, rightCanvas,
                 speedometerController.CyclopsLocalRotation,
-                speedometerController.CyclopsLocalScale,
                 VehicleHudElementLayout.Element.Speedometer);
             ConfigurePanel(
                 hsi,
-                hsiCanvas,
-                hsiController.CyclopsLocalPosition,
+                leftCanvas, upperCenterCanvas, rightCanvas,
                 hsiController.CyclopsLocalRotation,
-                hsiController.CyclopsLocalScale,
                 VehicleHudElementLayout.Element.Hsi);
             ConfigurePanel(
                 timeAndWeather,
-                timeCanvas,
-                timeController.CyclopsLocalPosition,
+                leftCanvas, upperCenterCanvas, rightCanvas,
                 timeController.CyclopsLocalRotation,
-                timeController.CyclopsLocalScale,
                 VehicleHudElementLayout.Element.TimeAndWeather);
         }
 
@@ -134,41 +115,21 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Patches
             }
         }
 
-        private static RectTransform GetHudCanvas(
-            CyclopsHudLocation location,
-            RectTransform leftCanvas,
-            RectTransform upperCenterCanvas,
-            RectTransform rightCanvas)
-        {
-            switch (location)
-            {
-                case CyclopsHudLocation.Left:
-                    return leftCanvas;
-                case CyclopsHudLocation.UpperCenter:
-                    return upperCenterCanvas;
-                case CyclopsHudLocation.Right:
-                    return rightCanvas;
-                default:
-                    return null;
-            }
-        }
-
         private static void ConfigurePanel(
             RectTransform panel,
-            RectTransform canvas,
-            Vector3 localPosition,
+            RectTransform leftCanvas,
+            RectTransform centerCanvas,
+            RectTransform rightCanvas,
             Vector3 localRotation,
-            Vector3 localScale,
             VehicleHudElementLayout.Element element)
         {
-            panel.SetParent(canvas, false);
+            panel.SetParent(leftCanvas, false);
             panel.anchorMin = new Vector2(0.5f, 0.5f);
             panel.anchorMax = new Vector2(0.5f, 0.5f);
             panel.pivot = new Vector2(0.5f, 0.5f);
-            panel.localPosition = localPosition;
             panel.localRotation = Quaternion.Euler(localRotation);
-            panel.localScale = localScale;
-            panel.gameObject.AddComponent<VehicleHudElementLayout>().Configure(EnhancedVehicle.Cyclops, element);
+            panel.gameObject.AddComponent<VehicleHudElementLayout>().Configure(EnhancedVehicle.Cyclops, element,
+                leftCanvas, centerCanvas, rightCanvas);
         }
         
         /// <summary>

@@ -34,13 +34,14 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Integration
                 return;
             }
 
+            bool isControlling = VehicleFrameworkIntegration.IsMonitorMode &&
+                                 VehicleMotion.TryGetCustomVehicle(out _, out _);
             bool hasFeatures = ConfigFile.IsSpeedometerEnabled(EnhancedVehicle.CustomVehicle) ||
                                ConfigFile.IsHsiEnabled(EnhancedVehicle.CustomVehicle) ||
                                ConfigFile.IsTimeAndWeatherEnabled(EnhancedVehicle.CustomVehicle) ||
                                ConfigFile.AreReversingBeepsEnabled(EnhancedVehicle.CustomVehicle) ||
                                ConfigFile.GetReversingVoice(EnhancedVehicle.CustomVehicle) != ReversingVoice.None;
-            bool show = VehicleFrameworkIntegration.IsMonitorMode &&
-                        VehicleMotion.TryGetCustomVehicle(out _, out _) && hasFeatures;
+            bool show = isControlling && hasFeatures;
             if (indicators.activeSelf != show)
             {
                 indicators.SetActive(show);

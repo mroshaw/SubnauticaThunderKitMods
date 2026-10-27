@@ -1,14 +1,21 @@
+using System.Collections.Generic;
 using DaftAppleGames.VehicleEnhancements_SN.Enhancements;
 using Nautilus.Json;
 
 namespace DaftAppleGames.VehicleEnhancements_SN
 {
+    internal enum HudLocation
+    {
+        Left,
+        Center,
+        Right
+    }
+
     internal enum ReversingVoice
     {
         ThisVehicleIsReversing,
         ThisPrawnSuitIsReversing,
         None,
-        // Append new voices to preserve values already stored in config files.
         ThisSeaMothIsReversing,
         ThisCyclopsIsReversing
     }
@@ -18,10 +25,10 @@ namespace DaftAppleGames.VehicleEnhancements_SN
     /// </summary>
     internal class ModConfigFile : ConfigFile
     {
-        internal const float MinimumHudAdjust = -200.0f;
-        internal const float MaximumHudAdjust = 200.0f;
+        internal const float MinimumHudAdjust = -700.0f;
+        internal const float MaximumHudAdjust = 700.0f;
         internal const float MinimumHudScale = 0.1f;
-        internal const float MaximumHudScale = 3.0f;
+        internal const float MaximumHudScale = 4.0f;
 
         public bool EnableSeamothSpeedometer = true;
         public bool EnableSeamothHsi = true;
@@ -29,16 +36,19 @@ namespace DaftAppleGames.VehicleEnhancements_SN
         public ReversingVoice SeamothReversingVoice = ReversingVoice.ThisSeaMothIsReversing;
         public bool EnableSeamothReversingBeeps = true;
 
+        public HudLocation SeamothSpeedometerLocation { get; set; } = HudLocation.Right;
         public float SeamothSpeedometerHorizontalAdjust { get; set; } = 0.0f;
-        public float SeamothSpeedometerVerticalAdjust { get; set; } = 0.0f;
+        public float SeamothSpeedometerVerticalAdjust { get; set; } = 110.0f;
         public float SeamothSpeedometerUiScale { get; set; } = 1.0f;
 
-        public float SeamothHsiHorizontalAdjust { get; set; } = 0.0f;
-        public float SeamothHsiVerticalAdjust { get; set; } = 0.0f;
+        public HudLocation SeamothHsiLocation { get; set; } = HudLocation.Right;
+        public float SeamothHsiHorizontalAdjust { get; set; } = -290.0f;
+        public float SeamothHsiVerticalAdjust { get; set; } = 110.0f;
         public float SeamothHsiUiScale { get; set; } = 1.0f;
 
-        public float SeamothTimeHorizontalAdjust { get; set; } = 0.0f;
-        public float SeamothTimeVerticalAdjust { get; set; } = 0.0f;
+        public HudLocation SeamothTimeLocation { get; set; } = HudLocation.Left;
+        public float SeamothTimeHorizontalAdjust { get; set; } = -250.0f;
+        public float SeamothTimeVerticalAdjust { get; set; } = 78.7f;
         public float SeamothTimeUiScale { get; set; } = 1.0f;
 
         public bool EnablePrawnSpeedometer = true;
@@ -47,16 +57,19 @@ namespace DaftAppleGames.VehicleEnhancements_SN
         public ReversingVoice PrawnReversingVoice = ReversingVoice.ThisPrawnSuitIsReversing;
         public bool EnablePrawnReversingBeeps = true;
 
+        public HudLocation PrawnSpeedometerLocation { get; set; } = HudLocation.Right;
         public float PrawnSpeedometerHorizontalAdjust { get; set; } = 0.0f;
-        public float PrawnSpeedometerVerticalAdjust { get; set; } = 0.0f;
+        public float PrawnSpeedometerVerticalAdjust { get; set; } = 135.0f;
         public float PrawnSpeedometerUiScale { get; set; } = 1.0f;
 
-        public float PrawnHsiHorizontalAdjust { get; set; } = 0.0f;
-        public float PrawnHsiVerticalAdjust { get; set; } = 0.0f;
+        public HudLocation PrawnHsiLocation { get; set; } = HudLocation.Right;
+        public float PrawnHsiHorizontalAdjust { get; set; } = -290.0f;
+        public float PrawnHsiVerticalAdjust { get; set; } = 110.0f;
         public float PrawnHsiUiScale { get; set; } = 1.0f;
 
-        public float PrawnTimeHorizontalAdjust { get; set; } = 0.0f;
-        public float PrawnTimeVerticalAdjust { get; set; } = 0.0f;
+        public HudLocation PrawnTimeLocation { get; set; } = HudLocation.Left;
+        public float PrawnTimeHorizontalAdjust { get; set; } = -250.0f;
+        public float PrawnTimeVerticalAdjust { get; set; } = 78.7f;
         public float PrawnTimeUiScale { get; set; } = 1.0f;
 
         public bool EnableCyclopsSpeedometer = true;
@@ -65,37 +78,46 @@ namespace DaftAppleGames.VehicleEnhancements_SN
         public ReversingVoice CyclopsReversingVoice = ReversingVoice.ThisCyclopsIsReversing;
         public bool EnableCyclopsReversingBeeps = true;
 
-        public float CyclopsSpeedometerHorizontalAdjust { get; set; } = 0.0f;
+        public HudLocation CyclopsSpeedometerLocation { get; set; } = HudLocation.Left;
+        public float CyclopsSpeedometerHorizontalAdjust { get; set; } = 390.0f;
         public float CyclopsSpeedometerVerticalAdjust { get; set; } = 0.0f;
-        public float CyclopsSpeedometerUiScale { get; set; } = 1.0f;
+        public float CyclopsSpeedometerUiScale { get; set; } = 1.3f;
 
-        public float CyclopsHsiHorizontalAdjust { get; set; } = 0.0f;
-        public float CyclopsHsiVerticalAdjust { get; set; } = 0.0f;
-        public float CyclopsHsiUiScale { get; set; } = 1.0f;
+        public HudLocation CyclopsHsiLocation { get; set; } = HudLocation.Left;
+        public float CyclopsHsiHorizontalAdjust { get; set; } = 650.0f;
+        public float CyclopsHsiVerticalAdjust { get; set; } = 110.0f;
+        public float CyclopsHsiUiScale { get; set; } = 0.5f;
 
-        public float CyclopsTimeHorizontalAdjust { get; set; } = 0.0f;
-        public float CyclopsTimeVerticalAdjust { get; set; } = 0.0f;
+        public HudLocation CyclopsTimeLocation { get; set; } = HudLocation.Left;
+        public float CyclopsTimeHorizontalAdjust { get; set; } = -85.0f;
+        public float CyclopsTimeVerticalAdjust { get; set; } = -385.0f;
         public float CyclopsTimeUiScale { get; set; } = 1.0f;
 
-        public bool EnableCustomVehicleSpeedometer { get; set; } = true;
-        public bool EnableCustomVehicleHsi { get; set; } = true;
-        public bool EnableCustomVehicleTime { get; set; } = true;
-        public ReversingVoice CustomVehicleReversingVoice { get; set; } = ReversingVoice.ThisVehicleIsReversing;
-        public bool EnableCustomVehicleReversingBeeps { get; set; } = true;
-
-        public float CustomVehicleSpeedometerHorizontalAdjust { get; set; } = 0.0f;
-        public float CustomVehicleSpeedometerVerticalAdjust { get; set; } = 0.0f;
-        public float CustomVehicleSpeedometerUiScale { get; set; } = 1.0f;
-
-        public float CustomVehicleHsiHorizontalAdjust { get; set; } = 0.0f;
-        public float CustomVehicleHsiVerticalAdjust { get; set; } = 0.0f;
-        public float CustomVehicleHsiUiScale { get; set; } = 1.0f;
-
-        public float CustomVehicleTimeHorizontalAdjust { get; set; } = 0.0f;
-        public float CustomVehicleTimeVerticalAdjust { get; set; } = 0.0f;
-        public float CustomVehicleTimeUiScale { get; set; } = 1.0f;
-
         public float ReversingAudioVolume = 0.1f;
+
+        public Dictionary<string, CustomVehicleSettings> CustomVehicleProfiles { get; set; } =
+            new Dictionary<string, CustomVehicleSettings>();
+
+        private static readonly CustomVehicleSettings defaultCustomVehicleSettings = new CustomVehicleSettings();
+        private CustomVehicleSettings currentCustomVehicleSettings;
+
+        internal CustomVehicleSettings CurrentCustomVehicleSettings => currentCustomVehicleSettings ?? defaultCustomVehicleSettings;
+
+        internal void SetCustomVehicleType(string identifier)
+        {
+            currentCustomVehicleSettings = string.IsNullOrEmpty(identifier) ? null : GetOrCreateCustomVehicleSettings(identifier);
+        }
+
+        internal CustomVehicleSettings GetOrCreateCustomVehicleSettings(string identifier)
+        {
+            if (!CustomVehicleProfiles.TryGetValue(identifier, out CustomVehicleSettings settings))
+            {
+                settings = new CustomVehicleSettings();
+                CustomVehicleProfiles.Add(identifier, settings);
+            }
+
+            return settings;
+        }
 
         internal ReversingVoice GetReversingVoice(EnhancedVehicle vehicle)
         {
@@ -103,7 +125,7 @@ namespace DaftAppleGames.VehicleEnhancements_SN
             {
                 case EnhancedVehicle.PrawnSuit: return PrawnReversingVoice;
                 case EnhancedVehicle.Cyclops: return CyclopsReversingVoice;
-                case EnhancedVehicle.CustomVehicle: return CustomVehicleReversingVoice;
+                case EnhancedVehicle.CustomVehicle: return CurrentCustomVehicleSettings.ReversingVoice;
                 default: return SeamothReversingVoice;
             }
         }
@@ -114,7 +136,7 @@ namespace DaftAppleGames.VehicleEnhancements_SN
             {
                 case EnhancedVehicle.PrawnSuit: return EnablePrawnReversingBeeps;
                 case EnhancedVehicle.Cyclops: return EnableCyclopsReversingBeeps;
-                case EnhancedVehicle.CustomVehicle: return EnableCustomVehicleReversingBeeps;
+                case EnhancedVehicle.CustomVehicle: return CurrentCustomVehicleSettings.EnableReversingBeeps;
                 default: return EnableSeamothReversingBeeps;
             }
         }
@@ -125,7 +147,7 @@ namespace DaftAppleGames.VehicleEnhancements_SN
             {
                 case EnhancedVehicle.PrawnSuit: return EnablePrawnSpeedometer;
                 case EnhancedVehicle.Cyclops: return EnableCyclopsSpeedometer;
-                case EnhancedVehicle.CustomVehicle: return EnableCustomVehicleSpeedometer;
+                case EnhancedVehicle.CustomVehicle: return CurrentCustomVehicleSettings.EnableSpeedometer;
                 default: return EnableSeamothSpeedometer;
             }
         }
@@ -136,7 +158,7 @@ namespace DaftAppleGames.VehicleEnhancements_SN
             {
                 case EnhancedVehicle.PrawnSuit: return EnablePrawnHsi;
                 case EnhancedVehicle.Cyclops: return EnableCyclopsHsi;
-                case EnhancedVehicle.CustomVehicle: return EnableCustomVehicleHsi;
+                case EnhancedVehicle.CustomVehicle: return CurrentCustomVehicleSettings.EnableHsi;
                 default: return EnableSeamothHsi;
             }
         }
@@ -147,10 +169,11 @@ namespace DaftAppleGames.VehicleEnhancements_SN
             {
                 case EnhancedVehicle.PrawnSuit: return EnablePrawnTime;
                 case EnhancedVehicle.Cyclops: return EnableCyclopsTime;
-                case EnhancedVehicle.CustomVehicle: return EnableCustomVehicleTime;
+                case EnhancedVehicle.CustomVehicle: return CurrentCustomVehicleSettings.EnableTime;
                 default: return EnableSeamothTime;
             }
         }
+
 
         public bool DetailedLogging = false;
     }

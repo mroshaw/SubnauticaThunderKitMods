@@ -1068,16 +1068,7 @@ MonoBehaviour:
   minimumVerticalNeedleAngle: 180
   maximumVerticalNeedleAngle: 0
   needleSmoothTime: 0.12
-  seamothAnchoredPosition: {x: 0, y: 110}
-  seamothLocalScale: {x: 1, y: 1, z: 1}
-  customVehicleAnchoredPosition: {x: 0, y: 110}
-  customVehicleLocalScale: {x: 1, y: 1, z: 1}
-  prawnSuitAnchoredPosition: {x: 0, y: 135}
-  prawnSuitLocalScale: {x: 1, y: 1, z: 1}
-  cyclopsHudLocation: 0
-  cyclopsLocalPosition: {x: 390, y: 0, z: 0}
   cyclopsLocalRotation: {x: 0, y: 0, z: 2}
-  cyclopsLocalScale: {x: 1.3, y: 1.3, z: 1.3}
 --- !u!114 &6219988445626901703
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1114,16 +1105,7 @@ MonoBehaviour:
   rollText: {fileID: 5550304788245442938}
   pitchUnitsPerDegree: 2.6
   smoothTime: 0.12
-  seamothAnchoredPosition: {x: -290, y: 110}
-  seamothLocalScale: {x: 1, y: 1, z: 1}
-  customVehicleAnchoredPosition: {x: -290, y: 110}
-  customVehicleLocalScale: {x: 1, y: 1, z: 1}
-  prawnSuitAnchoredPosition: {x: -290, y: 110}
-  prawnSuitLocalScale: {x: 1, y: 1, z: 1}
-  cyclopsHudLocation: 0
-  cyclopsLocalPosition: {x: 650, y: 110, z: 0}
   cyclopsLocalRotation: {x: 0, y: 0, z: 1}
-  cyclopsLocalScale: {x: 0.5, y: 0.5, z: 0.5}
 --- !u!114 &8818688959980339929
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1148,16 +1130,7 @@ MonoBehaviour:
   rainyWeatherSprite: {fileID: 21300000, guid: 04af614d1c42e7241b3a6b77011a7f73, type: 3}
   lightningStormWeatherSprite: {fileID: 21300000, guid: 70e5c2a7b3334e646a34c31377a838c0,
     type: 3}
-  seamothAnchoredPosition: {x: -250, y: 78.7}
-  seamothLocalScale: {x: 1, y: 1, z: 1}
-  customVehicleAnchoredPosition: {x: -250, y: 78.7}
-  customVehicleLocalScale: {x: 1, y: 1, z: 1}
-  prawnSuitAnchoredPosition: {x: -250, y: 78.7}
-  prawnSuitLocalScale: {x: 1, y: 1, z: 1}
-  cyclopsHudLocation: 0
-  cyclopsLocalPosition: {x: -85, y: -385, z: 0}
   cyclopsLocalRotation: {x: 0, y: 0, z: 1}
-  cyclopsLocalScale: {x: 1, y: 1, z: 1}
 --- !u!1 &4743132722026177057
 GameObject:
   m_ObjectHideFlags: 0

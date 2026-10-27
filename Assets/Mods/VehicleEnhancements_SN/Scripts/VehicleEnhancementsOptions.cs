@@ -19,10 +19,14 @@ namespace DaftAppleGames.VehicleEnhancements_SN
 
         private readonly ModConfigFile config;
         private readonly SortedDictionary<int, OptionItem> orderedOptions = new SortedDictionary<int, OptionItem>();
+        private readonly Dictionary<int, string> vehicleHeadings = new Dictionary<int, string>();
+        private readonly List<int> generatedOrders = new List<int>();
+        private bool applyingCustomVehicleLayout;
 
         internal VehicleEnhancementsOptions(ModConfigFile config) : base(MenuName)
         {
             this.config = config;
+            ModConfigFile defaults = new ModConfigFile();
             AddToggle(100, nameof(config.EnableSeamothSpeedometer), "Speedometer", config.EnableSeamothSpeedometer,
                 value => config.EnableSeamothSpeedometer = value);
             AddToggle(101, nameof(config.EnableSeamothHsi), "HSI", config.EnableSeamothHsi,
@@ -34,24 +38,30 @@ namespace DaftAppleGames.VehicleEnhancements_SN
             AddToggle(104, nameof(config.EnableSeamothReversingBeeps), "Reversing Beeps", config.EnableSeamothReversingBeeps,
                 value => config.EnableSeamothReversingBeeps = value);
 
-            AddPositionSlider(105, nameof(config.SeamothSpeedometerHorizontalAdjust), "Speedometer: Horizontal Adjust", config.SeamothSpeedometerHorizontalAdjust,
-                false, value => config.SeamothSpeedometerHorizontalAdjust = value);
-            AddPositionSlider(106, nameof(config.SeamothSpeedometerVerticalAdjust), "Speedometer: Vertical Adjust", config.SeamothSpeedometerVerticalAdjust,
-                true, value => config.SeamothSpeedometerVerticalAdjust = value);
-            AddScaleSlider(107, nameof(config.SeamothSpeedometerUiScale), "Speedometer: UI Scale", config.SeamothSpeedometerUiScale,
-                value => config.SeamothSpeedometerUiScale = value);
-            AddPositionSlider(108, nameof(config.SeamothHsiHorizontalAdjust), "HSI: Horizontal Adjust", config.SeamothHsiHorizontalAdjust,
-                false, value => config.SeamothHsiHorizontalAdjust = value);
-            AddPositionSlider(109, nameof(config.SeamothHsiVerticalAdjust), "HSI: Vertical Adjust", config.SeamothHsiVerticalAdjust,
-                true, value => config.SeamothHsiVerticalAdjust = value);
-            AddScaleSlider(110, nameof(config.SeamothHsiUiScale), "HSI: UI Scale", config.SeamothHsiUiScale,
-                value => config.SeamothHsiUiScale = value);
-            AddPositionSlider(111, nameof(config.SeamothTimeHorizontalAdjust), "Time/Weather: Horizontal Adjust", config.SeamothTimeHorizontalAdjust,
-                false, value => config.SeamothTimeHorizontalAdjust = value);
-            AddPositionSlider(112, nameof(config.SeamothTimeVerticalAdjust), "Time/Weather: Vertical Adjust", config.SeamothTimeVerticalAdjust,
-                true, value => config.SeamothTimeVerticalAdjust = value);
-            AddScaleSlider(113, nameof(config.SeamothTimeUiScale), "Time/Weather: UI Scale", config.SeamothTimeUiScale,
-                value => config.SeamothTimeUiScale = value);
+            AddLocationChoice(105, nameof(config.SeamothSpeedometerLocation), "Speedometer: Location", config.SeamothSpeedometerLocation,
+                value => config.SeamothSpeedometerLocation = value);
+            AddPositionSlider(106, nameof(config.SeamothSpeedometerHorizontalAdjust), "Speedometer: Horizontal Adjust", config.SeamothSpeedometerHorizontalAdjust,
+                false, value => config.SeamothSpeedometerHorizontalAdjust = value, defaults.SeamothSpeedometerHorizontalAdjust);
+            AddPositionSlider(107, nameof(config.SeamothSpeedometerVerticalAdjust), "Speedometer: Vertical Adjust", config.SeamothSpeedometerVerticalAdjust,
+                true, value => config.SeamothSpeedometerVerticalAdjust = value, defaults.SeamothSpeedometerVerticalAdjust);
+            AddScaleSlider(108, nameof(config.SeamothSpeedometerUiScale), "Speedometer: UI Scale", config.SeamothSpeedometerUiScale,
+                value => config.SeamothSpeedometerUiScale = value, defaults.SeamothSpeedometerUiScale);
+            AddLocationChoice(109, nameof(config.SeamothHsiLocation), "HSI: Location", config.SeamothHsiLocation,
+                value => config.SeamothHsiLocation = value);
+            AddPositionSlider(110, nameof(config.SeamothHsiHorizontalAdjust), "HSI: Horizontal Adjust", config.SeamothHsiHorizontalAdjust,
+                false, value => config.SeamothHsiHorizontalAdjust = value, defaults.SeamothHsiHorizontalAdjust);
+            AddPositionSlider(111, nameof(config.SeamothHsiVerticalAdjust), "HSI: Vertical Adjust", config.SeamothHsiVerticalAdjust,
+                true, value => config.SeamothHsiVerticalAdjust = value, defaults.SeamothHsiVerticalAdjust);
+            AddScaleSlider(112, nameof(config.SeamothHsiUiScale), "HSI: UI Scale", config.SeamothHsiUiScale,
+                value => config.SeamothHsiUiScale = value, defaults.SeamothHsiUiScale);
+            AddLocationChoice(113, nameof(config.SeamothTimeLocation), "Time/Weather: Location", config.SeamothTimeLocation,
+                value => config.SeamothTimeLocation = value);
+            AddPositionSlider(114, nameof(config.SeamothTimeHorizontalAdjust), "Time/Weather: Horizontal Adjust", config.SeamothTimeHorizontalAdjust,
+                false, value => config.SeamothTimeHorizontalAdjust = value, defaults.SeamothTimeHorizontalAdjust);
+            AddPositionSlider(115, nameof(config.SeamothTimeVerticalAdjust), "Time/Weather: Vertical Adjust", config.SeamothTimeVerticalAdjust,
+                true, value => config.SeamothTimeVerticalAdjust = value, defaults.SeamothTimeVerticalAdjust);
+            AddScaleSlider(116, nameof(config.SeamothTimeUiScale), "Time/Weather: UI Scale", config.SeamothTimeUiScale,
+                value => config.SeamothTimeUiScale = value, defaults.SeamothTimeUiScale);
 
             AddToggle(200, nameof(config.EnablePrawnSpeedometer), "Speedometer", config.EnablePrawnSpeedometer,
                 value => config.EnablePrawnSpeedometer = value);
@@ -64,24 +74,30 @@ namespace DaftAppleGames.VehicleEnhancements_SN
             AddToggle(204, nameof(config.EnablePrawnReversingBeeps), "Reversing Beeps", config.EnablePrawnReversingBeeps,
                 value => config.EnablePrawnReversingBeeps = value);
 
-            AddPositionSlider(205, nameof(config.PrawnSpeedometerHorizontalAdjust), "Speedometer: Horizontal Adjust", config.PrawnSpeedometerHorizontalAdjust,
-                false, value => config.PrawnSpeedometerHorizontalAdjust = value);
-            AddPositionSlider(206, nameof(config.PrawnSpeedometerVerticalAdjust), "Speedometer: Vertical Adjust", config.PrawnSpeedometerVerticalAdjust,
-                true, value => config.PrawnSpeedometerVerticalAdjust = value);
-            AddScaleSlider(207, nameof(config.PrawnSpeedometerUiScale), "Speedometer: UI Scale", config.PrawnSpeedometerUiScale,
-                value => config.PrawnSpeedometerUiScale = value);
-            AddPositionSlider(208, nameof(config.PrawnHsiHorizontalAdjust), "HSI: Horizontal Adjust", config.PrawnHsiHorizontalAdjust,
-                false, value => config.PrawnHsiHorizontalAdjust = value);
-            AddPositionSlider(209, nameof(config.PrawnHsiVerticalAdjust), "HSI: Vertical Adjust", config.PrawnHsiVerticalAdjust,
-                true, value => config.PrawnHsiVerticalAdjust = value);
-            AddScaleSlider(210, nameof(config.PrawnHsiUiScale), "HSI: UI Scale", config.PrawnHsiUiScale,
-                value => config.PrawnHsiUiScale = value);
-            AddPositionSlider(211, nameof(config.PrawnTimeHorizontalAdjust), "Time/Weather: Horizontal Adjust", config.PrawnTimeHorizontalAdjust,
-                false, value => config.PrawnTimeHorizontalAdjust = value);
-            AddPositionSlider(212, nameof(config.PrawnTimeVerticalAdjust), "Time/Weather: Vertical Adjust", config.PrawnTimeVerticalAdjust,
-                true, value => config.PrawnTimeVerticalAdjust = value);
-            AddScaleSlider(213, nameof(config.PrawnTimeUiScale), "Time/Weather: UI Scale", config.PrawnTimeUiScale,
-                value => config.PrawnTimeUiScale = value);
+            AddLocationChoice(205, nameof(config.PrawnSpeedometerLocation), "Speedometer: Location", config.PrawnSpeedometerLocation,
+                value => config.PrawnSpeedometerLocation = value);
+            AddPositionSlider(206, nameof(config.PrawnSpeedometerHorizontalAdjust), "Speedometer: Horizontal Adjust", config.PrawnSpeedometerHorizontalAdjust,
+                false, value => config.PrawnSpeedometerHorizontalAdjust = value, defaults.PrawnSpeedometerHorizontalAdjust);
+            AddPositionSlider(207, nameof(config.PrawnSpeedometerVerticalAdjust), "Speedometer: Vertical Adjust", config.PrawnSpeedometerVerticalAdjust,
+                true, value => config.PrawnSpeedometerVerticalAdjust = value, defaults.PrawnSpeedometerVerticalAdjust);
+            AddScaleSlider(208, nameof(config.PrawnSpeedometerUiScale), "Speedometer: UI Scale", config.PrawnSpeedometerUiScale,
+                value => config.PrawnSpeedometerUiScale = value, defaults.PrawnSpeedometerUiScale);
+            AddLocationChoice(209, nameof(config.PrawnHsiLocation), "HSI: Location", config.PrawnHsiLocation,
+                value => config.PrawnHsiLocation = value);
+            AddPositionSlider(210, nameof(config.PrawnHsiHorizontalAdjust), "HSI: Horizontal Adjust", config.PrawnHsiHorizontalAdjust,
+                false, value => config.PrawnHsiHorizontalAdjust = value, defaults.PrawnHsiHorizontalAdjust);
+            AddPositionSlider(211, nameof(config.PrawnHsiVerticalAdjust), "HSI: Vertical Adjust", config.PrawnHsiVerticalAdjust,
+                true, value => config.PrawnHsiVerticalAdjust = value, defaults.PrawnHsiVerticalAdjust);
+            AddScaleSlider(212, nameof(config.PrawnHsiUiScale), "HSI: UI Scale", config.PrawnHsiUiScale,
+                value => config.PrawnHsiUiScale = value, defaults.PrawnHsiUiScale);
+            AddLocationChoice(213, nameof(config.PrawnTimeLocation), "Time/Weather: Location", config.PrawnTimeLocation,
+                value => config.PrawnTimeLocation = value);
+            AddPositionSlider(214, nameof(config.PrawnTimeHorizontalAdjust), "Time/Weather: Horizontal Adjust", config.PrawnTimeHorizontalAdjust,
+                false, value => config.PrawnTimeHorizontalAdjust = value, defaults.PrawnTimeHorizontalAdjust);
+            AddPositionSlider(215, nameof(config.PrawnTimeVerticalAdjust), "Time/Weather: Vertical Adjust", config.PrawnTimeVerticalAdjust,
+                true, value => config.PrawnTimeVerticalAdjust = value, defaults.PrawnTimeVerticalAdjust);
+            AddScaleSlider(216, nameof(config.PrawnTimeUiScale), "Time/Weather: UI Scale", config.PrawnTimeUiScale,
+                value => config.PrawnTimeUiScale = value, defaults.PrawnTimeUiScale);
 
             AddToggle(300, nameof(config.EnableCyclopsSpeedometer), "Speedometer", config.EnableCyclopsSpeedometer,
                 value => config.EnableCyclopsSpeedometer = value);
@@ -94,57 +110,30 @@ namespace DaftAppleGames.VehicleEnhancements_SN
             AddToggle(304, nameof(config.EnableCyclopsReversingBeeps), "Reversing Beeps", config.EnableCyclopsReversingBeeps,
                 value => config.EnableCyclopsReversingBeeps = value);
 
-            AddPositionSlider(305, nameof(config.CyclopsSpeedometerHorizontalAdjust), "Speedometer: Horizontal Adjust", config.CyclopsSpeedometerHorizontalAdjust,
-                false, value => config.CyclopsSpeedometerHorizontalAdjust = value);
-            AddPositionSlider(306, nameof(config.CyclopsSpeedometerVerticalAdjust), "Speedometer: Vertical Adjust", config.CyclopsSpeedometerVerticalAdjust,
-                true, value => config.CyclopsSpeedometerVerticalAdjust = value);
-            AddScaleSlider(307, nameof(config.CyclopsSpeedometerUiScale), "Speedometer: UI Scale", config.CyclopsSpeedometerUiScale,
-                value => config.CyclopsSpeedometerUiScale = value);
-            AddPositionSlider(308, nameof(config.CyclopsHsiHorizontalAdjust), "HSI: Horizontal Adjust", config.CyclopsHsiHorizontalAdjust,
-                false, value => config.CyclopsHsiHorizontalAdjust = value);
-            AddPositionSlider(309, nameof(config.CyclopsHsiVerticalAdjust), "HSI: Vertical Adjust", config.CyclopsHsiVerticalAdjust,
-                true, value => config.CyclopsHsiVerticalAdjust = value);
-            AddScaleSlider(310, nameof(config.CyclopsHsiUiScale), "HSI: UI Scale", config.CyclopsHsiUiScale,
-                value => config.CyclopsHsiUiScale = value);
-            AddPositionSlider(311, nameof(config.CyclopsTimeHorizontalAdjust), "Time/Weather: Horizontal Adjust", config.CyclopsTimeHorizontalAdjust,
-                false, value => config.CyclopsTimeHorizontalAdjust = value);
-            AddPositionSlider(312, nameof(config.CyclopsTimeVerticalAdjust), "Time/Weather: Vertical Adjust", config.CyclopsTimeVerticalAdjust,
-                true, value => config.CyclopsTimeVerticalAdjust = value);
-            AddScaleSlider(313, nameof(config.CyclopsTimeUiScale), "Time/Weather: UI Scale", config.CyclopsTimeUiScale,
-                value => config.CyclopsTimeUiScale = value);
-
-            if (VehicleFrameworkIntegration.IsEnabled)
-            {
-                AddToggle(400, nameof(config.EnableCustomVehicleSpeedometer), "Speedometer", config.EnableCustomVehicleSpeedometer,
-                    value => config.EnableCustomVehicleSpeedometer = value);
-                AddToggle(401, nameof(config.EnableCustomVehicleHsi), "HSI", config.EnableCustomVehicleHsi,
-                    value => config.EnableCustomVehicleHsi = value);
-                AddToggle(402, nameof(config.EnableCustomVehicleTime), "Time and Weather", config.EnableCustomVehicleTime,
-                    value => config.EnableCustomVehicleTime = value);
-                AddVoiceChoice(403, nameof(config.CustomVehicleReversingVoice), config.CustomVehicleReversingVoice,
-                    value => config.CustomVehicleReversingVoice = value);
-                AddToggle(404, nameof(config.EnableCustomVehicleReversingBeeps), "Reversing Beeps", config.EnableCustomVehicleReversingBeeps,
-                    value => config.EnableCustomVehicleReversingBeeps = value);
-
-                AddPositionSlider(405, nameof(config.CustomVehicleSpeedometerHorizontalAdjust), "Speedometer: Horizontal Adjust", config.CustomVehicleSpeedometerHorizontalAdjust,
-                    false, value => config.CustomVehicleSpeedometerHorizontalAdjust = value);
-                AddPositionSlider(406, nameof(config.CustomVehicleSpeedometerVerticalAdjust), "Speedometer: Vertical Adjust", config.CustomVehicleSpeedometerVerticalAdjust,
-                    true, value => config.CustomVehicleSpeedometerVerticalAdjust = value);
-                AddScaleSlider(407, nameof(config.CustomVehicleSpeedometerUiScale), "Speedometer: UI Scale", config.CustomVehicleSpeedometerUiScale,
-                    value => config.CustomVehicleSpeedometerUiScale = value);
-                AddPositionSlider(408, nameof(config.CustomVehicleHsiHorizontalAdjust), "HSI: Horizontal Adjust", config.CustomVehicleHsiHorizontalAdjust,
-                    false, value => config.CustomVehicleHsiHorizontalAdjust = value);
-                AddPositionSlider(409, nameof(config.CustomVehicleHsiVerticalAdjust), "HSI: Vertical Adjust", config.CustomVehicleHsiVerticalAdjust,
-                    true, value => config.CustomVehicleHsiVerticalAdjust = value);
-                AddScaleSlider(410, nameof(config.CustomVehicleHsiUiScale), "HSI: UI Scale", config.CustomVehicleHsiUiScale,
-                    value => config.CustomVehicleHsiUiScale = value);
-                AddPositionSlider(411, nameof(config.CustomVehicleTimeHorizontalAdjust), "Time/Weather: Horizontal Adjust", config.CustomVehicleTimeHorizontalAdjust,
-                    false, value => config.CustomVehicleTimeHorizontalAdjust = value);
-                AddPositionSlider(412, nameof(config.CustomVehicleTimeVerticalAdjust), "Time/Weather: Vertical Adjust", config.CustomVehicleTimeVerticalAdjust,
-                    true, value => config.CustomVehicleTimeVerticalAdjust = value);
-                AddScaleSlider(413, nameof(config.CustomVehicleTimeUiScale), "Time/Weather: UI Scale", config.CustomVehicleTimeUiScale,
-                    value => config.CustomVehicleTimeUiScale = value);
-            }
+            AddLocationChoice(305, nameof(config.CyclopsSpeedometerLocation), "Speedometer: Location", config.CyclopsSpeedometerLocation,
+                value => config.CyclopsSpeedometerLocation = value);
+            AddPositionSlider(306, nameof(config.CyclopsSpeedometerHorizontalAdjust), "Speedometer: Horizontal Adjust", config.CyclopsSpeedometerHorizontalAdjust,
+                false, value => config.CyclopsSpeedometerHorizontalAdjust = value, defaults.CyclopsSpeedometerHorizontalAdjust);
+            AddPositionSlider(307, nameof(config.CyclopsSpeedometerVerticalAdjust), "Speedometer: Vertical Adjust", config.CyclopsSpeedometerVerticalAdjust,
+                true, value => config.CyclopsSpeedometerVerticalAdjust = value, defaults.CyclopsSpeedometerVerticalAdjust);
+            AddScaleSlider(308, nameof(config.CyclopsSpeedometerUiScale), "Speedometer: UI Scale", config.CyclopsSpeedometerUiScale,
+                value => config.CyclopsSpeedometerUiScale = value, defaults.CyclopsSpeedometerUiScale);
+            AddLocationChoice(309, nameof(config.CyclopsHsiLocation), "HSI: Location", config.CyclopsHsiLocation,
+                value => config.CyclopsHsiLocation = value);
+            AddPositionSlider(310, nameof(config.CyclopsHsiHorizontalAdjust), "HSI: Horizontal Adjust", config.CyclopsHsiHorizontalAdjust,
+                false, value => config.CyclopsHsiHorizontalAdjust = value, defaults.CyclopsHsiHorizontalAdjust);
+            AddPositionSlider(311, nameof(config.CyclopsHsiVerticalAdjust), "HSI: Vertical Adjust", config.CyclopsHsiVerticalAdjust,
+                true, value => config.CyclopsHsiVerticalAdjust = value, defaults.CyclopsHsiVerticalAdjust);
+            AddScaleSlider(312, nameof(config.CyclopsHsiUiScale), "HSI: UI Scale", config.CyclopsHsiUiScale,
+                value => config.CyclopsHsiUiScale = value, defaults.CyclopsHsiUiScale);
+            AddLocationChoice(313, nameof(config.CyclopsTimeLocation), "Time/Weather: Location", config.CyclopsTimeLocation,
+                value => config.CyclopsTimeLocation = value);
+            AddPositionSlider(314, nameof(config.CyclopsTimeHorizontalAdjust), "Time/Weather: Horizontal Adjust", config.CyclopsTimeHorizontalAdjust,
+                false, value => config.CyclopsTimeHorizontalAdjust = value, defaults.CyclopsTimeHorizontalAdjust);
+            AddPositionSlider(315, nameof(config.CyclopsTimeVerticalAdjust), "Time/Weather: Vertical Adjust", config.CyclopsTimeVerticalAdjust,
+                true, value => config.CyclopsTimeVerticalAdjust = value, defaults.CyclopsTimeVerticalAdjust);
+            AddScaleSlider(316, nameof(config.CyclopsTimeUiScale), "Time/Weather: UI Scale", config.CyclopsTimeUiScale,
+                value => config.CyclopsTimeUiScale = value, defaults.CyclopsTimeUiScale);
 
             AddOption(500, ModSliderOption.Create(nameof(config.ReversingAudioVolume), "Reversing Audio Volume",
                 0.0f, 1.0f, config.ReversingAudioVolume, 0.1f, "{0:F2}", 0.05f),
@@ -161,20 +150,173 @@ namespace DaftAppleGames.VehicleEnhancements_SN
         /// </summary>
         public override void BuildModOptions(uGUI_TabbedControlsPanel panel, int modsTabIndex, IReadOnlyCollection<OptionItem> options)
         {
+            RebuildVehicleOptions();
             panel.AddHeading(modsTabIndex, MenuName);
+            List<OptionItem> generalOptions = new List<OptionItem>();
             int previousSection = -1;
             foreach (KeyValuePair<int, OptionItem> entry in orderedOptions)
             {
                 int section = entry.Key / 100;
+                if (section == 5)
+                {
+                    generalOptions.Add(entry.Value);
+                    continue;
+                }
+
                 if (section != previousSection)
                 {
-                    // Stock game headings stay inside the single collapsible Nautilus mod section.
-                    GameObject heading = panel.controls.AddHeading(panel.GetParent(modsTabIndex), GetSectionName(section));
-                    heading.GetComponentInChildren<TextMeshProUGUI>().fontStyle |= FontStyles.Bold;
+                    string name = vehicleHeadings.TryGetValue(section, out string vehicleName) ? vehicleName : GetSectionName(section);
+                    AddSectionHeading(panel, modsTabIndex, name);
                     previousSection = section;
                 }
 
                 entry.Value.AddToPanel(panel, modsTabIndex);
+            }
+
+            AddSectionHeading(panel, modsTabIndex, "General");
+            foreach (OptionItem option in generalOptions)
+            {
+                option.AddToPanel(panel, modsTabIndex);
+            }
+        }
+
+        private static void AddSectionHeading(uGUI_TabbedControlsPanel panel, int modsTabIndex, string name)
+        {
+            // Stock game headings stay inside the single collapsible Nautilus mod section.
+            GameObject heading = panel.controls.AddHeading(panel.GetParent(modsTabIndex), name);
+            heading.GetComponentInChildren<TextMeshProUGUI>().fontStyle |= FontStyles.Bold;
+        }
+
+        private void RebuildVehicleOptions()
+        {
+            foreach (int order in generatedOrders)
+            {
+                RemoveItem(orderedOptions[order].Id);
+                orderedOptions.Remove(order);
+            }
+
+            generatedOrders.Clear();
+            vehicleHeadings.Clear();
+            if (!VehicleFrameworkIntegration.IsEnabled)
+            {
+                return;
+            }
+
+            int section = 6;
+            foreach (KeyValuePair<string, string> vehicle in VehicleFrameworkIntegration.GetRegisteredVehicles())
+            {
+                vehicleHeadings.Add(section, vehicle.Value);
+                AddVehicleProfile(section * 100, vehicle.Key, config.GetOrCreateCustomVehicleSettings(vehicle.Key));
+                section++;
+            }
+        }
+
+        private void AddVehicleProfile(int order, string identifier, CustomVehicleSettings settings)
+        {
+            CustomVehicleSettings defaults = new CustomVehicleSettings();
+            string prefix = "CustomVehicleProfile." + identifier + ".";
+            AddToggle(order, prefix + nameof(settings.EnableSpeedometer), "Speedometer", settings.EnableSpeedometer,
+                value => settings.EnableSpeedometer = value);
+            AddToggle(order + 1, prefix + nameof(settings.EnableHsi), "HSI", settings.EnableHsi,
+                value => settings.EnableHsi = value);
+            AddToggle(order + 2, prefix + nameof(settings.EnableTime), "Time and Weather", settings.EnableTime,
+                value => settings.EnableTime = value);
+            AddVoiceChoice(order + 3, prefix + nameof(settings.ReversingVoice), settings.ReversingVoice,
+                value => settings.ReversingVoice = value);
+            AddToggle(order + 4, prefix + nameof(settings.EnableReversingBeeps), "Reversing Beeps", settings.EnableReversingBeeps,
+                value => settings.EnableReversingBeeps = value);
+            AddLocationChoice(order + 5, prefix + nameof(settings.SpeedometerLocation), "Speedometer: Location", settings.SpeedometerLocation,
+                value => settings.SpeedometerLocation = value);
+            AddPositionSlider(order + 6, prefix + nameof(settings.SpeedometerHorizontalAdjust), "Speedometer: Horizontal Adjust",
+                settings.SpeedometerHorizontalAdjust, false, value => settings.SpeedometerHorizontalAdjust = value, defaults.SpeedometerHorizontalAdjust);
+            AddPositionSlider(order + 7, prefix + nameof(settings.SpeedometerVerticalAdjust), "Speedometer: Vertical Adjust",
+                settings.SpeedometerVerticalAdjust, true, value => settings.SpeedometerVerticalAdjust = value, defaults.SpeedometerVerticalAdjust);
+            AddScaleSlider(order + 8, prefix + nameof(settings.SpeedometerUiScale), "Speedometer: UI Scale",
+                settings.SpeedometerUiScale, value => settings.SpeedometerUiScale = value, defaults.SpeedometerUiScale);
+            AddLocationChoice(order + 9, prefix + nameof(settings.HsiLocation), "HSI: Location", settings.HsiLocation,
+                value => settings.HsiLocation = value);
+            AddPositionSlider(order + 10, prefix + nameof(settings.HsiHorizontalAdjust), "HSI: Horizontal Adjust",
+                settings.HsiHorizontalAdjust, false, value => settings.HsiHorizontalAdjust = value, defaults.HsiHorizontalAdjust);
+            AddPositionSlider(order + 11, prefix + nameof(settings.HsiVerticalAdjust), "HSI: Vertical Adjust",
+                settings.HsiVerticalAdjust, true, value => settings.HsiVerticalAdjust = value, defaults.HsiVerticalAdjust);
+            AddScaleSlider(order + 12, prefix + nameof(settings.HsiUiScale), "HSI: UI Scale",
+                settings.HsiUiScale, value => settings.HsiUiScale = value, defaults.HsiUiScale);
+            AddLocationChoice(order + 13, prefix + nameof(settings.TimeLocation), "Time/Weather: Location", settings.TimeLocation,
+                value => settings.TimeLocation = value);
+            AddPositionSlider(order + 14, prefix + nameof(settings.TimeHorizontalAdjust), "Time/Weather: Horizontal Adjust",
+                settings.TimeHorizontalAdjust, false, value => settings.TimeHorizontalAdjust = value, defaults.TimeHorizontalAdjust);
+            AddPositionSlider(order + 15, prefix + nameof(settings.TimeVerticalAdjust), "Time/Weather: Vertical Adjust",
+                settings.TimeVerticalAdjust, true, value => settings.TimeVerticalAdjust = value, defaults.TimeVerticalAdjust);
+            AddScaleSlider(order + 16, prefix + nameof(settings.TimeUiScale), "Time/Weather: UI Scale",
+                settings.TimeUiScale, value => settings.TimeUiScale = value, defaults.TimeUiScale);
+
+            ModButtonOption applyLayout = ModButtonOption.Create(prefix + "ApplyLayoutToAll",
+                "Apply layout to all custom", args => ApplyLayoutToAllCustomVehicles(settings),
+                "Copy this vehicle's instrument locations, position offsets and UI scales to all other custom vehicles.");
+            AddItem(applyLayout);
+            orderedOptions.Add(order + 17, applyLayout);
+
+            for (int offset = 0; offset < 18; offset++)
+            {
+                generatedOrders.Add(order + offset);
+            }
+        }
+
+        private void ApplyLayoutToAllCustomVehicles(CustomVehicleSettings source)
+        {
+            foreach (CustomVehicleSettings settings in config.CustomVehicleProfiles.Values)
+            {
+                settings.CopyLayoutFrom(source);
+            }
+
+            // Refresh open controls without saving the config for every slider and choice callback.
+            applyingCustomVehicleLayout = true;
+            try
+            {
+                foreach (int section in vehicleHeadings.Keys)
+                {
+                    int order = section * 100;
+                    RefreshLocationChoice(order + 5, source.SpeedometerLocation);
+                    RefreshSlider(order + 6, source.SpeedometerHorizontalAdjust);
+                    RefreshSlider(order + 7, source.SpeedometerVerticalAdjust);
+                    RefreshSlider(order + 8, source.SpeedometerUiScale);
+                    RefreshLocationChoice(order + 9, source.HsiLocation);
+                    RefreshSlider(order + 10, source.HsiHorizontalAdjust);
+                    RefreshSlider(order + 11, source.HsiVerticalAdjust);
+                    RefreshSlider(order + 12, source.HsiUiScale);
+                    RefreshLocationChoice(order + 13, source.TimeLocation);
+                    RefreshSlider(order + 14, source.TimeHorizontalAdjust);
+                    RefreshSlider(order + 15, source.TimeVerticalAdjust);
+                    RefreshSlider(order + 16, source.TimeUiScale);
+                }
+            }
+            finally
+            {
+                applyingCustomVehicleLayout = false;
+                config.Save();
+            }
+        }
+
+        private void RefreshLocationChoice(int order, HudLocation location)
+        {
+            ModChoiceOption<string> option = (ModChoiceOption<string>)orderedOptions[order];
+            if (option.Choice)
+            {
+                option.Choice.value = (int)location;
+            }
+        }
+
+        private void RefreshSlider(int order, float value)
+        {
+            ModSliderOption option = (ModSliderOption)orderedOptions[order];
+            option.Value = value;
+            if (option.OptionGameObject)
+            {
+                uGUI_SnappingSlider slider = option.OptionGameObject.GetComponentInChildren<uGUI_SnappingSlider>(true);
+                if (slider)
+                {
+                    slider.unsnappedValue = value;
+                }
             }
         }
 
@@ -185,7 +327,6 @@ namespace DaftAppleGames.VehicleEnhancements_SN
                 case 1: return "Seamoth";
                 case 2: return "Prawn Suit";
                 case 3: return "Cyclops";
-                case 4: return "Custom Vehicle";
                 default: return "General";
             }
         }
@@ -208,19 +349,35 @@ namespace DaftAppleGames.VehicleEnhancements_SN
             orderedOptions.Add(order, option);
         }
 
-        private void AddPositionSlider(int order, string id, string label, float value, bool vertical, Action<float> setValue)
+        private void AddLocationChoice(int order, string id, string label, HudLocation location, Action<HudLocation> setValue)
         {
-            string tooltip = vertical
-                ? "Offset from the default position in UI units. Positive moves up."
-                : "Offset from the default position in UI units. Positive moves right.";
-            AddOption(order, ModSliderOption.Create(id, label, ModConfigFile.MinimumHudAdjust, ModConfigFile.MaximumHudAdjust,
-                value, 0.0f, "{0:F0}", 1.0f, tooltip), setValue);
+            ModChoiceOption<string> option = ModChoiceOption<string>.Create(id, label,
+                new[] { "Left", "Center", "Right" }, Mathf.Clamp((int)location, 0, 2));
+            option.OnChanged += (sender, args) =>
+            {
+                setValue((HudLocation)args.Index);
+                if (!applyingCustomVehicleLayout)
+                {
+                    config.Save();
+                }
+            };
+            AddItem(option);
+            orderedOptions.Add(order, option);
         }
 
-        private void AddScaleSlider(int order, string id, string label, float value, Action<float> setValue)
+        private void AddPositionSlider(int order, string id, string label, float value, bool vertical, Action<float> setValue, float defaultValue)
+        {
+            string tooltip = vertical
+                ? "Offset from the selected location in UI units. Positive moves up."
+                : "Offset from the selected location in UI units. Positive moves right.";
+            AddOption(order, ModSliderOption.Create(id, label, ModConfigFile.MinimumHudAdjust, ModConfigFile.MaximumHudAdjust,
+                value, defaultValue, "{0:F1}", 1.0f, tooltip), setValue);
+        }
+
+        private void AddScaleSlider(int order, string id, string label, float value, Action<float> setValue, float defaultValue)
         {
             AddOption(order, ModSliderOption.Create(id, label, ModConfigFile.MinimumHudScale, ModConfigFile.MaximumHudScale,
-                value, 1.0f, "{0:F2}x", 0.05f, "Multiplier on the default size. Combines with any scaling already applied by the game."), setValue);
+                value, defaultValue, "{0:F2}x", 0.05f, "Scale within the selected location. Inherits any scaling applied by the game."), setValue);
         }
 
         private void AddOption<T, TEventArgs>(int order, ModOption<T, TEventArgs> option, Action<T> setValue)
@@ -229,7 +386,10 @@ namespace DaftAppleGames.VehicleEnhancements_SN
             option.OnChanged += (sender, args) =>
             {
                 setValue(args.Value);
-                config.Save();
+                if (!applyingCustomVehicleLayout)
+                {
+                    config.Save();
+                }
             };
             AddItem(option);
             orderedOptions.Add(order, option);

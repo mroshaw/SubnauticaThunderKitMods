@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using BepInEx;
 using BepInEx.Bootstrap;
@@ -19,6 +21,10 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Integration
         private static MethodInfo isPlayerControlling;
         private static Type hudType;
         private static FieldInfo hudRoot;
+        private static FieldInfo vehicleTypes;
+        private static FieldInfo entryName;
+        private static FieldInfo entryTechType;
+        private static PropertyInfo vehicleTechType;
 
         internal static bool IsEnabled { get; private set; }
         internal static bool IsMonitorMode => !XRSettings.enabled;
@@ -42,6 +48,12 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Integration
                 Type vehicleType = assembly.GetType("VehicleFramework.ModVehicle", true);
                 Type extensions = assembly.GetType("VehicleFramework.Extensions.ExtensionMethods", true);
                 Type builder = assembly.GetType("VehicleFramework.VehicleBuilding.HUDBuilder", true);
+                Type manager = assembly.GetType("VehicleFramework.Admin.VehicleManager", true);
+                Type entry = assembly.GetType("VehicleFramework.VehicleBuilding.VehicleEntry", true);
+                vehicleTypes = manager.GetField("vehicleTypes", BindingFlags.Static | BindingFlags.NonPublic);
+                entryName = entry.GetField("name");
+                entryTechType = entry.GetField("techType");
+                vehicleTechType = vehicleType.GetProperty("TechType");
                 hudType = assembly.GetType("VehicleFramework.MiscComponents.UGUI_VehicleHUD", true);
                 hudRoot = hudType.GetField("root");
                 isPlayerControlling = vehicleType.GetMethod("IsPlayerControlling", Type.EmptyTypes);
@@ -65,6 +77,33 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Integration
         }
 
         internal static Vehicle GetVehicle(Player player) => getVehicle(player);
+
+        internal static string GetVehicleIdentifier(Vehicle vehicle) =>
+            ((TechType)vehicleTechType.GetValue(vehicle)).AsString();
+
+        internal static List<KeyValuePair<string, string>> GetRegisteredVehicles()
+        {
+            Dictionary<string, string> names = new Dictionary<string, string>();
+            if (IsEnabled)
+            {
+                foreach (object entry in (IEnumerable)vehicleTypes.GetValue(null))
+                {
+                    TechType techType = (TechType)entryTechType.GetValue(entry);
+                    if (techType != TechType.None)
+                    {
+                        names[techType.AsString()] = (string)entryName.GetValue(entry);
+                    }
+                }
+            }
+
+            List<KeyValuePair<string, string>> vehicles = new List<KeyValuePair<string, string>>(names);
+            vehicles.Sort((left, right) =>
+            {
+                int nameOrder = StringComparer.OrdinalIgnoreCase.Compare(left.Value, right.Value);
+                return nameOrder != 0 ? nameOrder : StringComparer.Ordinal.Compare(left.Key, right.Key);
+            });
+            return vehicles;
+        }
 
         internal static Func<bool> BindControlPredicate(Vehicle vehicle) =>
             (Func<bool>)Delegate.CreateDelegate(typeof(Func<bool>), vehicle, isPlayerControlling);

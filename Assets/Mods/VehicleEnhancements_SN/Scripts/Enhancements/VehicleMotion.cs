@@ -1,6 +1,7 @@
 using System;
 using DaftAppleGames.VehicleEnhancements_SN.Integration;
 using UnityEngine;
+using static DaftAppleGames.VehicleEnhancements_SN.VehicleEnhancementsPlugin_SN;
 
 namespace DaftAppleGames.VehicleEnhancements_SN.Enhancements
 {
@@ -30,6 +31,7 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Enhancements
             customBody = null;
             customRigidbody = null;
             isCustomVehicleControlled = null;
+            ConfigFile.SetCustomVehicleType(null);
         }
 
         internal static bool TryGetCustomVehicle(out Transform body, out Vector3 velocity)
@@ -54,6 +56,7 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Enhancements
                 customBody = candidate.transform;
                 customRigidbody = candidate.useRigidbody;
                 isCustomVehicleControlled = VehicleFrameworkIntegration.BindControlPredicate(candidate);
+                ConfigFile.SetCustomVehicleType(VehicleFrameworkIntegration.GetVehicleIdentifier(candidate));
             }
 
             if (!customVehicle || !customBody || !customRigidbody ||

@@ -51,6 +51,7 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Enhancements
                 return;
             }
 
+            FmodAudioDiagnostics.LogState($"ReversingAudioController.Awake: {name}#{GetInstanceID()}, vehicle={vehicle}");
             ConfigureEmitter(reversingBeepsEmitter, ReversingBeepsFmodAsset);
             UpdateVoiceSelection();
             CreateLowPassDsp(out reversingBeepsLowPass);
@@ -254,6 +255,7 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Enhancements
 
         private void CreateLowPassDsp(out DSP lowPass)
         {
+            FmodAudioDiagnostics.LogState($"Before low-pass DSP creation: {name}#{GetInstanceID()}, vehicle={vehicle}");
             RESULT result = RuntimeManager.CoreSystem.createDSPByType(DSP_TYPE.LOWPASS, out lowPass);
             if (result != RESULT.OK || !lowPass.hasHandle())
             {
@@ -261,8 +263,12 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Enhancements
                 return;
             }
 
-            lowPass.setParameterFloat((int)DSP_LOWPASS.CUTOFF, cabinLowPassCutoff);
-            lowPass.setParameterFloat((int)DSP_LOWPASS.RESONANCE, cabinLowPassResonance);
+            RESULT cutoffResult = lowPass.setParameterFloat((int)DSP_LOWPASS.CUTOFF, cabinLowPassCutoff);
+            RESULT resonanceResult = lowPass.setParameterFloat((int)DSP_LOWPASS.RESONANCE, cabinLowPassResonance);
+            if (ConfigFile.DetailedLogging)
+            {
+                ModDebugLog.LogDebug($"[FMOD diagnostics] Low-pass DSP for {name}#{GetInstanceID()}: create={result}; cutoff={cutoffResult}; resonance={resonanceResult}.");
+            }
         }
 
         private static void ReleaseLowPassDsp(

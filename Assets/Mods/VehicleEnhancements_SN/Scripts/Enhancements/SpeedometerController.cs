@@ -1,4 +1,3 @@
-using DaftAppleGames.VehicleEnhancements_SN.Patches;
 using TMPro;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -22,16 +21,7 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Enhancements
         [BoxGroup("Speedometer Settings")] [SerializeField] private float maximumVerticalNeedleAngle = 0.0f;
         [BoxGroup("Speedometer Settings")] [SerializeField, MinValue(0.0f)] private float needleSmoothTime = 0.12f;
 
-        [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector2 customVehicleAnchoredPosition = new Vector2(0.0f, 110.0f);
-        [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector3 customVehicleLocalScale = Vector3.one;
-        [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector2 seamothAnchoredPosition = new Vector2(0.0f, 110.0f);
-        [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector3 seamothLocalScale = Vector3.one;
-        [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector2 prawnSuitAnchoredPosition = new Vector2(0.0f, 135.0f);
-        [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector3 prawnSuitLocalScale = Vector3.one;
-        [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private CyclopsHudLocation cyclopsHudLocation = CyclopsHudLocation.Right;
-        [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector3 cyclopsLocalPosition = new Vector3(-50.0f, 0.0f, 0.0f);
         [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector3 cyclopsLocalRotation = new Vector3(0.0f, 0.0f, 1.0f);
-        [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector3 cyclopsLocalScale = new Vector3(1.3f, 1.3f, 1.3f);
         
         private float smoothedSpeed;
         private float speedVelocity;
@@ -41,13 +31,7 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Enhancements
         private int lastDisplayedVerticalSpeedTenths = int.MinValue;
         private EnhancedVehicle vehicle;
 
-        internal CyclopsHudLocation CyclopsHudLocation => cyclopsHudLocation;
-
-        internal Vector3 CyclopsLocalPosition => cyclopsLocalPosition;
-
         internal Vector3 CyclopsLocalRotation => cyclopsLocalRotation;
-
-        internal Vector3 CyclopsLocalScale => cyclopsLocalScale;
 
         internal void Configure(EnhancedVehicle selectedVehicle)
         {
@@ -63,25 +47,9 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Enhancements
                 return;
             }
 
-            switch (vehicle)
+            if (vehicle != EnhancedVehicle.Cyclops)
             {
-                case EnhancedVehicle.PrawnSuit:
-                    speedometerRect.anchoredPosition = prawnSuitAnchoredPosition;
-                    speedometerRect.localScale = prawnSuitLocalScale;
-                    ConfigureLayout(speedometerRoot, VehicleHudElementLayout.Element.Speedometer);
-                    break;
-                case EnhancedVehicle.CustomVehicle:
-                    speedometerRect.anchoredPosition = customVehicleAnchoredPosition;
-                    speedometerRect.localScale = customVehicleLocalScale;
-                    ConfigureLayout(speedometerRoot, VehicleHudElementLayout.Element.Speedometer);
-                    break;
-                case EnhancedVehicle.Cyclops:
-                    break;
-                default:
-                    speedometerRect.anchoredPosition = seamothAnchoredPosition;
-                    speedometerRect.localScale = seamothLocalScale;
-                    ConfigureLayout(speedometerRoot, VehicleHudElementLayout.Element.Speedometer);
-                    break;
+                ConfigureLayout(speedometerRoot, VehicleHudElementLayout.Element.Speedometer);
             }
         }
 

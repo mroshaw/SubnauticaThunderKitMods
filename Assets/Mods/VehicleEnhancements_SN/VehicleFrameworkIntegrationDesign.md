@@ -1,6 +1,8 @@
 # Optional VehicleFramework integration
 
-Design proposal, created 26 October 2026; assumptions clarified 27 October 2026. No runtime implementation is included in this change.
+Design proposal, created 26 October 2026; assumptions clarified 27 October 2026.
+
+**Current per-vehicle configuration decision:** installed, registered VF vehicle types have independent options only. The shared Custom Vehicle defaults group and per-profile inheritance toggle are removed. Each custom instrument uses its component-authored Custom Anchored Position and Scale as its base, with the individual vehicle offsets and scale multiplier applied afterward. This supersedes the shared-options behavior described in the historical MVP below.
 
 **Baseline revision, 27 October 2026:** Nexus release 2.0.8 reports `Loading [VehicleFramework 2.0.7.301]` in `Player.log`, matching the DLL's embedded `BepInPlugin` attribute. The user confirmed that upstream `PluginInfo` retains 2.0.7 and has raised a bug ticket. At the user's direction, the minimum supported VF version is now **2.0.7**, checked with `new Version(2, 0, 7)` against registered BepInEx plugin metadata. No exact-build exception, hashing, alternate API paths or additional compatibility checks are introduced.
 
@@ -259,7 +261,7 @@ This is a separate implementation phase using the same generic VF integration. I
 
 1. **Use the existing VR mode and HUD path.** Follow VF 2.0.7's use of `UnityEngine.XR.XRSettings.enabled` and its `HUDBuilder.BuildVRHUD` path. Keep the same startup version check and existing Harmony instance. Use the normal builder callback to set up the HUD after VF finishes construction.
 2. **Construct indicators for the separate VR HUD path.** The inspected VF code clones `VRVehicleCanvas/Seamoth`, where current VE code does not attach indicators. In this VR phase, use the existing prefab helper to attach/configure indicators beneath VF's resulting VR HUD root. This is the normal VR construction path, not a fallback for monitor support. Confirm the root and base placement in a headset; inherit native activation/scaling and adjust existing layout only where testing demonstrates a need.
-3. **Keep one indicator instance per native root and one settings group.** Reuse the **Custom Vehicle** options, including position/scale adjustments, voice and beeps. VR can have separately authored base placement, but the user's saved adjustments remain shared; do not add a VR-specific menu or enable toggle.
+3. **Keep one indicator instance per native root and reuse per-vehicle settings.** Reuse each registered vehicle type's options, including position/scale adjustments, voice and beeps. VR can have separately authored base placement, but each type's saved adjustments apply in both monitor and VR modes; do not add a VR-specific menu or enable toggle.
 4. **Keep vehicle data independent of head tracking.** Continue reading attitude and velocity from the vehicle body. Looking around, leaning, recentering the headset or using Odyssey's cameras must not change instrument readings or reversing detection. Keep reversing audio positioned relative to the vehicle and verify it through the game's existing audio listener; do not add another listener or a separate audio system.
 5. **Enable the existing custom-vehicle path in VR.** After headset gameplay checks pass, remove the initial VR exclusion and its limitation log. Retain the minimal piloting check and inherit native HUD visibility and existing cleanup, just as in monitor mode. Do not introduce VR-specific PDA/pause or audio visibility handling.
 
@@ -270,7 +272,7 @@ Use Odyssey with VF 2.0.7 and record the headset/VR setup tested. Additional VR 
 - Board Odyssey, walk inside, sit at the helm and stand up: exactly one indicator set appears only while piloting, and reversing audio stops on exit.
 - Confirm both eyes see readable, comfortably placed indicators without clipping, flicker or overlap with VF's HUD. Look around, lean and recenter; the panels should follow the intended native HUD behavior.
 - Drive forward/backward, ascend/descend and pitch/roll the hull. Move the headset independently and switch Odyssey cameras: readings remain tied to the vehicle, with no head-driven reversing sounds.
-- Open/close the PDA, change the shared position/scale and audio options, and exercise the VF HUD variants available in VR. Confirm the controls work and no duplicate indicators or emitters appear.
+- Open/close the PDA, change the vehicle-specific position/scale and audio options, and exercise the VF HUD variants available in VR. Confirm the controls work and no duplicate indicators or emitters appear.
 - Save/load, return to the menu and load again, and switch between custom and vanilla vehicles. Check for stale panels, continuing audio or errors in the game log.
 - Restart in ordinary monitor mode and confirm the same build and saved settings still behave correctly.
 
@@ -280,11 +282,11 @@ VR support is enabled in the delivered mod after these manual checks pass. Until
 
 #### Goal and scope
 
-Generate an options subheading for each installed, registered VF vehicle type, such as **Odyssey**, with the same instruments, layout and reversing-audio options as the MVP's **Custom Vehicle** group. Settings apply to all instances of that type. A vehicle does not need to be spawned or unlocked for its options to appear.
+Generate an options subheading for each installed, registered VF vehicle type, such as **Odyssey**, with the same instruments, layout and reversing-audio options as the vanilla vehicle groups. Settings apply to all instances of that type. A vehicle does not need to be spawned or unlocked for its options to appear.
 
 Use registered vehicle types rather than BepInEx plugin names: one vehicle mod may register several types, and a plugin dependency alone does not identify its vehicles. Discovery only supplies settings sections; generic vehicle support remains unchanged and requires no per-mod adapter.
 
-This is a proposed enhancement, not part of the MVP. Retain **Custom Vehicle** as the shared defaults group. Each named vehicle section offers **Use Custom Vehicle defaults** (initially enabled). Turning it off enables that vehicle type's own copy of the same option set. This extra choice belongs only to this enhancement; it does not change the agreed MVP options.
+Each named vehicle section edits that type's settings directly. Do not create a shared Custom Vehicle defaults group or an inheritance toggle. Start each instrument from its controller component's Custom Anchored Position and Scale; add the vehicle-specific position offsets and multiply the authored scale by its UI scale setting. New profiles use neutral offsets of 0 and a scale multiplier of 1.
 
 #### Discovery and menu construction
 
@@ -298,7 +300,7 @@ Registration may finish after VE's startup options registration. Building the li
 
 Store profiles in VE's existing JSON configuration, keyed by the registered TechType's **string identifier**, not its numeric value, localized label, hull nickname or VF registration index. Use a display name only for the heading. Match the currently controlled vehicle through its registered TechType using the existing game/vehicle information. Confirm the normal VF 2.0.7 identifier mapping during implementation; no plugin-to-vehicle ownership map is required.
 
-A small serializable `CustomVehicleSettings` class can hold the existing option set, with a dictionary of type identifiers to settings and a per-profile use-defaults flag. Introduce it in this enhancement when multiple profiles create a concrete need; do not refactor the MVP into a profile framework in advance. Existing shared custom settings remain the defaults, and old JSON files continue to work unchanged.
+A small serializable `CustomVehicleSettings` class holds the existing option set, with a dictionary of type identifiers to settings. Existing per-vehicle values remain in use. Obsolete shared custom settings and inheritance flags in old JSON files are ignored; they do not affect newly created profiles.
 
 Resolve the effective settings when the controlled vehicle changes and when the user changes its options. Pass those settings through the existing config/controller boundary; retain the same cloned HUD objects, native visibility and motion calculations. Changing Odyssey's profile must not change another type's settings. Global volume and logging remain global.
 
@@ -307,7 +309,7 @@ Only registered vehicle types appear in the menu, and all custom sections remain
 #### Manual gameplay checks
 
 - Install Odyssey and a second VF vehicle: both named sections appear without spawning either vehicle. Multiple instances of Odyssey share one profile and one section.
-- Keep default inheritance enabled: both types use the shared Custom Vehicle values. Override Odyssey, change its layout/audio settings and switch vehicles: only Odyssey uses the override.
-- Save/restart and reopen options: choices persist. Return a vehicle to shared defaults and confirm subsequent shared changes apply to it.
+- Confirm there is no shared defaults group or inheritance toggle. New profiles use component-authored custom positions and scales. Change Odyssey's layout/audio settings and switch vehicles: only Odyssey changes, and returning to zero offsets and a scale multiplier of 1 restores its authored base layout.
+- Save/restart and reopen options: independent vehicle choices persist.
 - Remove/reinstall one vehicle mod between game launches: its section disappears/reappears and its saved profile is retained. Restart without VF: all custom sections are absent and vanilla options still work.
 - Open options before and after normal vehicle registration completes: later entries appear on the next panel build, with no duplicated controls or repeated save handlers.

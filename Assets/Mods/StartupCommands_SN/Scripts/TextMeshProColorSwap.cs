@@ -4,6 +4,10 @@ using UnityEngine.UI;
 
 namespace DaftAppleGames.ModUtils
 {
+    /// <summary>
+    /// Changes command dialog button text colours in response to UI events.
+    /// </summary>
+    // Keep this prefab component in the mod assembly: merging ModTools changes its assembly identity.
     public class TextMeshProColorSwap : MonoBehaviour
     {
         [SerializeField] private bool resetToWhiteOnDisable;

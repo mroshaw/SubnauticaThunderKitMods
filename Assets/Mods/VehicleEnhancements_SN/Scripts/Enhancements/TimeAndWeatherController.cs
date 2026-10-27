@@ -1,4 +1,3 @@
-using DaftAppleGames.VehicleEnhancements_SN.Patches;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
@@ -22,16 +21,7 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Enhancements
         [BoxGroup("Time and Weather Settings")] [SerializeField, Required] private Sprite rainyWeatherSprite;
         [BoxGroup("Time and Weather Settings")] [SerializeField, Required] private Sprite lightningStormWeatherSprite;
 
-        [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector2 customVehicleAnchoredPosition = new Vector2(-250.0f, 78.7f);
-        [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector3 customVehicleLocalScale = Vector3.one;
-        [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector2 seamothAnchoredPosition = new Vector2(-250.0f, 78.7f);
-        [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector3 seamothLocalScale = Vector3.one;
-        [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector2 prawnSuitAnchoredPosition = new Vector2(-250.0f, 78.7f);
-        [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector3 prawnSuitLocalScale = Vector3.one;
-        [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private CyclopsHudLocation cyclopsHudLocation = CyclopsHudLocation.Left;
-        [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector3 cyclopsLocalPosition = new Vector3(-85.0f, -385.0f, 0.0f);
         [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector3 cyclopsLocalRotation = new Vector3(0.0f, 0.0f, 1.0f);
-        [BoxGroup("Vehicle HUD Positioning")] [SerializeField] private Vector3 cyclopsLocalScale = Vector3.one;
 
         private RectTransform previousMoon;
         private RectTransform nextMoon;
@@ -40,13 +30,7 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Enhancements
         private WeatherManager weatherManager;
         private EnhancedVehicle vehicle;
 
-        internal CyclopsHudLocation CyclopsHudLocation => cyclopsHudLocation;
-
-        internal Vector3 CyclopsLocalPosition => cyclopsLocalPosition;
-
         internal Vector3 CyclopsLocalRotation => cyclopsLocalRotation;
-
-        internal Vector3 CyclopsLocalScale => cyclopsLocalScale;
 
         internal void Configure(EnhancedVehicle selectedVehicle)
         {
@@ -62,25 +46,9 @@ namespace DaftAppleGames.VehicleEnhancements_SN.Enhancements
                 return;
             }
 
-            switch (vehicle)
+            if (vehicle != EnhancedVehicle.Cyclops)
             {
-                case EnhancedVehicle.PrawnSuit:
-                    timeAndWeatherRect.anchoredPosition = prawnSuitAnchoredPosition;
-                    timeAndWeatherRect.localScale = prawnSuitLocalScale;
-                    ConfigureLayout(timeAndWeatherRoot, VehicleHudElementLayout.Element.TimeAndWeather);
-                    break;
-                case EnhancedVehicle.CustomVehicle:
-                    timeAndWeatherRect.anchoredPosition = customVehicleAnchoredPosition;
-                    timeAndWeatherRect.localScale = customVehicleLocalScale;
-                    ConfigureLayout(timeAndWeatherRoot, VehicleHudElementLayout.Element.TimeAndWeather);
-                    break;
-                case EnhancedVehicle.Cyclops:
-                    break;
-                default:
-                    timeAndWeatherRect.anchoredPosition = seamothAnchoredPosition;
-                    timeAndWeatherRect.localScale = seamothLocalScale;
-                    ConfigureLayout(timeAndWeatherRoot, VehicleHudElementLayout.Element.TimeAndWeather);
-                    break;
+                ConfigureLayout(timeAndWeatherRoot, VehicleHudElementLayout.Element.TimeAndWeather);
             }
         }
 

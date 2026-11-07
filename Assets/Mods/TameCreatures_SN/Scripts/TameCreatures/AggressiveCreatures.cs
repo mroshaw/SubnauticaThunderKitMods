@@ -128,6 +128,9 @@ namespace DaftAppleGames.TameCreatures_SN.TameCreatures
                 case TechType.Shocker:
                     isFriendlyToPlayer = ConfigFile.TameAmpEels;
                     return true;
+                case TechType.Crash:
+                    isFriendlyToPlayer = ConfigFile.TameCrashFish;
+                    return true;
                 default:
                     isFriendlyToPlayer = false;
                     return false;

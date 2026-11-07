@@ -63,6 +63,9 @@ namespace DaftAppleGames.TameCreatures_SN
         [Toggle("Tame River Prowlers", Tooltip = "Toggle this ON to tame River Prowlers."), OnChange(nameof(OnTameRiverProwlersChanged))]
         public bool TameRiverProwlers = true;
         
+        [Toggle("Tame Crash Fish", Tooltip = "Toggle this ON to tame River Prowlers."), OnChange(nameof(OnTameCrashFishChanged))]
+        public bool TameCrashFish = true;
+        
         /// <summary>
         /// Enable detailed logging
         /// </summary>
@@ -156,5 +159,12 @@ namespace DaftAppleGames.TameCreatures_SN
         {
             AggressiveCreatures.SetPlayerFriendlinessOnAll(TechType.SpineEel, eventArgs.Value);
         }
+        
+        private void OnTameCrashFishChanged(ToggleChangedEventArgs eventArgs)
+        {
+            AggressiveCreatures.SetPlayerFriendlinessOnAll(TechType.Crash, eventArgs.Value);
+        }
+        
+        
     }
 }

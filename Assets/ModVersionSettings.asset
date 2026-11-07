@@ -178,7 +178,7 @@ MonoBehaviour:
     currentPublishedVersion:
       major: 0
       minor: 0
-      patch: 3
+      patch: 4
     publishingSites: -1
     nexusMods:
       fileGroupId: 8196627
@@ -205,11 +205,11 @@ MonoBehaviour:
     version:
       major: 1
       minor: 2
-      patch: 2
+      patch: 3
     currentPublishedVersion:
       major: 1
       minor: 2
-      patch: 2
+      patch: 3
     publishingSites: -1
     nexusMods:
       fileGroupId: 2435107
@@ -266,12 +266,12 @@ MonoBehaviour:
     manifest: {fileID: 11400000, guid: b68049d16d1d6a04a8fca4cf75afe0f4, type: 2}
     version:
       major: 1
-      minor: 0
-      patch: 1
+      minor: 1
+      patch: 0
     currentPublishedVersion:
       major: 1
-      minor: 0
-      patch: 1
+      minor: 1
+      patch: 0
     publishingSites: -1
     nexusMods:
       fileGroupId: 8131314
@@ -301,7 +301,7 @@ MonoBehaviour:
       patch: 0
     currentPublishedVersion:
       major: 1
-      minor: 1
+      minor: 2
       patch: 0
     publishingSites: -1
     nexusMods:

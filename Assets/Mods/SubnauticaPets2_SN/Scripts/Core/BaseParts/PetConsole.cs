@@ -29,12 +29,11 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
         [SerializeField] private TMP_InputField petNameTextInput;
         [SerializeField] private TMP_Text versionText;
 
-        [Header("Scroll View Settings")] [SerializeField] private GameObject babySnowStalkerTemplate;
-        [SerializeField] private GameObject babyPenlingTemplate;
-        [SerializeField] private GameObject adultPengwingTemplate;
-        [SerializeField] private GameObject pinnacaridTemplate;
-        [SerializeField] private GameObject blueTrivalveTemplate;
-        [SerializeField] private GameObject yellowTrivalveTemplate;
+        [Header("Scroll View Settings")]
+        [SerializeField] private GameObject alienRobotTemplate;
+        [SerializeField] private GameObject caveCrawlerTemplate;
+        [SerializeField] private GameObject bloodCrawlerTemplate;
+        [SerializeField] private GameObject crabSquidTemplate;
 
         [SerializeField] private GameObject catTemplate;
         [SerializeField] private GameObject dogTemplate;
@@ -463,24 +462,21 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
         }
 
         /// <summary>
-        ///     Retrieve the appropriate template Game Object for the scroll list
+        /// Retrieve the appropriate template Game Object for the scroll list
         /// </summary>
         private GameObject GetScrollListTemplate(string petType)
         {
             switch (petType)
             {
-                case "PenglingBabyPet":
-                    return babyPenlingTemplate;
-                case "PengwingAdultPet":
-                    return adultPengwingTemplate;
-                case "PinnacaridPet":
-                    return pinnacaridTemplate;
-                case "SnowstalkerBabyPet":
-                    return babySnowStalkerTemplate;
-                case "TrivalveBluePet":
-                    return blueTrivalveTemplate;
-                case "TrivalveYellowPet":
-                    return yellowTrivalveTemplate;
+                case "AlienRobotPet":
+                    return alienRobotTemplate;
+                case "CaveCrawlerPet":
+                    return caveCrawlerTemplate;
+                case "BloodCrawlerPet":
+                    return bloodCrawlerTemplate;
+                case "CrabSquidPet":
+                    return crabSquidTemplate;
+                
                 case "CatPet":
                     return catTemplate;
                 case "DogPet":
@@ -494,7 +490,7 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
                 case "WalrusPet":
                     return walrusTemplate;
                 default:
-                    ModDebugLog.LogError($"GetScrollListTemplate: Unknown pet type: {petType}");
+                    ModDebugLog.LogDebug( $"GetScrollListTemplate: Unknown pet type: {petType}");
                     return null;
             }
         }

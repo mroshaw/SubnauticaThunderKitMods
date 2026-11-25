@@ -700,7 +700,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.00031036744, y: -0.000037654303}
+  m_AnchoredPosition: {x: -0.0027517732, y: 0.0060658613}
   m_SizeDelta: {x: -5, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &6907137085822293922
@@ -1231,8 +1231,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2570400316360129096}
   m_HandleRect: {fileID: 1991220338418382314}
   m_Direction: 2
-  m_Value: 1
-  m_Size: 1
+  m_Value: 0
+  m_Size: 0.99999493
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3530,12 +3530,14 @@ MonoBehaviour:
   syncButton: {fileID: 1795405360}
   petNameTextInput: {fileID: 7520750656821345678}
   versionText: {fileID: 627619448}
-  babySnowStalkerTemplate: {fileID: 0}
-  babyPenlingTemplate: {fileID: 0}
-  adultPengwingTemplate: {fileID: 0}
-  pinnacaridTemplate: {fileID: 0}
-  blueTrivalveTemplate: {fileID: 0}
-  yellowTrivalveTemplate: {fileID: 0}
+  alienRobotTemplate: {fileID: 2631739323183164444, guid: 5e1925540ea0a124d83c63b552455a89,
+    type: 3}
+  caveCrawlerTemplate: {fileID: 2631739323183164444, guid: daa1ecd5dd89f7048885d839ed0d5f0d,
+    type: 3}
+  bloodCrawlerTemplate: {fileID: 2631739323183164444, guid: 5057ca4e0c1dc894c929a44802a55fd5,
+    type: 3}
+  crabSquidTemplate: {fileID: 2631739323183164444, guid: 592e7d9d199a2474c90d30c046703100,
+    type: 3}
   catTemplate: {fileID: 528336634209241991}
   dogTemplate: {fileID: 3567411817023336572}
   rabbitTemplate: {fileID: 2522736202911414612}

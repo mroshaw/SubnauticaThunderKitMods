@@ -17,9 +17,6 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
         private static readonly AccessTools.FieldRef<GhostCrafter, PowerRelay> PowerRelayField =
             AccessTools.FieldRefAccess<GhostCrafter, PowerRelay>("powerRelay");
 
-        private static readonly AccessTools.FieldRef<GhostCrafter, Base> BaseField =
-            AccessTools.FieldRefAccess<GhostCrafter, Base>("baseComp");
-
         // This is the base root of the base n which the fabricator was created
         public Base Base { get; set; }
 
@@ -113,7 +110,6 @@ namespace DaftAppleGames.SubnauticaPets.BaseParts
             }
 
             PowerRelayField(ghostCrafter) = powerRelay;
-            BaseField(ghostCrafter) = Base;
         }
 
         /// <summary>
